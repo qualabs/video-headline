@@ -1,0 +1,104 @@
+version: '2'
+
+services:
+  video-hub:
+    build: .
+    container_name: video-hub
+    restart: always
+    command: '/start_app.sh'
+    stdin_open: true
+    tty: true
+    ports:
+      - 80:80
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_HOST=${PROD_DATABASE_HOST}
+      - DATABASE_PORT=${PROD_DATABASE_PORT}
+      - DATABASE_USER=${PROD_DATABASE_USER}
+      - DATABASE_PASSWORD=${PROD_DATABASE_PASSWORD}
+      - REDIS_HOST=${PROD_REDIS_HOST}
+      - AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${PROD_AWS_DEFAULT_REGION}
+      - AWS_MEDIA_CONVERT_ROLE=${PROD_AWS_MEDIA_CONVERT_ROLE}
+
+  celery:
+    build: .
+    container_name: celery
+    restart: always
+    command: 'celery -A video_hub worker -l info -Q default'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_HOST=${PROD_DATABASE_HOST}
+      - DATABASE_PORT=${PROD_DATABASE_PORT}
+      - DATABASE_USER=${PROD_DATABASE_USER}
+      - DATABASE_PASSWORD=${PROD_DATABASE_PASSWORD}
+      - REDIS_HOST=${PROD_REDIS_HOST}
+      - AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${PROD_AWS_DEFAULT_REGION}
+
+  celery-transcode:
+    build: .
+    container_name: celery-transcode
+    restart: always
+    command: 'celery -A video_hub worker -l info -Q transcode'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_HOST=${PROD_DATABASE_HOST}
+      - DATABASE_PORT=${PROD_DATABASE_PORT}
+      - DATABASE_USER=${PROD_DATABASE_USER}
+      - DATABASE_PASSWORD=${PROD_DATABASE_PASSWORD}
+      - REDIS_HOST=${PROD_REDIS_HOST}
+      - AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${PROD_AWS_DEFAULT_REGION}
+
+  celery-beat:
+    build: .
+    container_name: celery-beat
+    restart: always
+    command: 'celery -A video_hub beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_HOST=${PROD_DATABASE_HOST}
+      - DATABASE_PORT=${PROD_DATABASE_PORT}
+      - DATABASE_USER=${PROD_DATABASE_USER}
+      - DATABASE_PASSWORD=${PROD_DATABASE_PASSWORD}
+      - REDIS_HOST=${PROD_REDIS_HOST}
+      - AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${PROD_AWS_DEFAULT_REGION}
+
+  db:
+    image: postgres:10.6
+    container_name: db
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+      - ./docker-commands/db_init:/docker-entrypoint-initdb.d/
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    volumes:
+      - redis-data:/data
+
+volumes:
+  pgdata:
+  redis-data:

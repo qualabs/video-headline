@@ -1,0 +1,146 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+.menu-sidebar {
+  width: 280px;
+  background: $base-color;
+
+  .new-video {
+    background-color: $upload-video-color;
+  }
+
+  hr {
+      margin-top: 0;
+      margin-bottom: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .menu-links {
+    @include font-Headers;
+    li {
+      display: grid;
+
+      i {
+        position: relative;
+        .badge {
+          background-color: $danger-color;
+          border-radius: 20px;
+          color: white;
+
+          padding: 1px 4px;
+          font-size: 12px;
+
+          position: absolute; /* Position the badge within the relatively positioned button */
+          top: -8px;
+          right: -5px;
+        }
+      }
+    }
+    
+    a:focus {
+      outline:none !important;
+      box-shadow:none !important;
+    }
+
+    .btn{
+      color: $font-color-menu;
+
+      padding: 5px 25px;
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0;
+      text-align: left;
+
+      cursor: pointer;
+
+      &:hover{
+        text-decoration: none;
+        background: $base-color-dark;
+      }
+    }
+
+    .channels{
+      padding: 5px 40px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .user {
+      color: $font-color-menu;
+      padding: 5px 25px;
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0;
+
+      &.btn:hover {
+        background: $base-color-dark;
+      }
+    }
+  }
+
+  .menu-header {
+    background: $base-color;
+    text-align: center;
+    height: 96px;
+    img {
+      padding: 5px 0 0;
+      height: 90px;
+    }
+  }
+}
+
+.dropdown {
+    display: inline-block;
+    width: 100%;
+    user-select: none;
+
+    .dropdown__trigger{
+      font-size: 15px;
+      color: $font-color-menu;
+      width: 100px;
+      cursor: pointer;
+
+      width: auto;
+
+      .selected-operator {
+        font-weight: bold;
+        color: white;
+        margin: auto;
+
+        i.pull-right {
+          float: right;
+          padding-top: 4px;
+        }
+      }
+    }
+
+    .dropdown__content {
+        z-index: 9999;
+        display: none;
+        position: absolute;
+        background-color: $color-1;
+        margin-top: 10px;
+        width: 280px;
+        right: 0;
+        box-shadow: rgba(0, 0, 0, 0.15) 2px 2px 4px;
+        max-height: 260px;
+        overflow: auto;
+
+        a {
+          color: white;
+          padding: 10px 40px;
+          text-decoration: none;
+          display: block;
+
+          &:hover {
+            background-color: $base-color-light;
+          }
+        }
+    }
+
+    &.dropdown--active {
+      .dropdown__content {
+          display: block;
+      }
+    }
+}

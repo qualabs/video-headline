@@ -1,0 +1,30 @@
+{
+    "name": "infrastructure",
+    "version": "0.1.0",
+    "license": "Apache-2.0",
+    "private": true,
+    "bin": "bin/qhub-app.ts",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w",
+        "test": "jest",
+        "cdk": "cdk"
+    },
+    "devDependencies": {
+        "@types/jest": "^26.0.10",
+        "@types/node": "^10.17.60",
+        "aws-cdk": "2.99.0",
+        "constructs": "^10.0.0",
+        "jest": "^26.4.2",
+        "prettier": "2.5.1",
+        "ts-jest": "^26.2.0",
+        "ts-node": "^10.8.1",
+        "typescript": "^4.6.3"
+    },
+    "dependencies": {
+        "aws-cdk-lib": "2.99.0",
+        "cdk-ecr-deployment": "^2.0.10",
+        "constructs": "^10.0.0",
+        "source-map-support": "^0.5.16"
+    }
+}

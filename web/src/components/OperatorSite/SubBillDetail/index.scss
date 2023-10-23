@@ -1,0 +1,34 @@
+.li {
+  display: inline-flex;
+  margin-right: 10px;
+}
+
+.alert-summary {
+  color: red !important;    
+}
+
+.alert-info {
+  background-color: #A3CDF0 !important;
+  &, & hr{
+    border-color:  darken(#A3CDF0, 5%) !important;
+  }
+}
+
+.stats .progress {
+  background-color: #ffffff !important;
+  height: 15px;
+  width: 350px;
+  margin: 0;
+  border-radius: 5px;
+  border-color: transparent;
+  box-shadow: 0px 0px 4px #00000056;
+
+  .progress-bar {
+    background-color: #36b4a7ab !important;
+    display: inline-block;
+    height: 100%;
+    border-radius: 5px;
+
+    transition: width .4s ease-in-out;
+  }
+}

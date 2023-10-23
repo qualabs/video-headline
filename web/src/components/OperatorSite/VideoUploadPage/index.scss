@@ -1,0 +1,22 @@
+@import 'styles/_colors.scss';
+
+.denied {
+  position: absolute;
+  top: 96px;
+  bottom: 0;
+  border-radius: 5px;
+  border-color: $color-2;
+
+  .denied-icon {
+    position:relative;
+    top: calc(40% - 10px); /* 50% - 3/4 of icon height */
+    p {
+      font-size: 20px;
+      margin: 10px;
+    }
+    i {
+      color: $upload-video-color;
+    }
+
+  }
+}

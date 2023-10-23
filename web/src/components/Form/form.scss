@@ -1,0 +1,120 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+.form {
+  div[class^="rw"], .form-control {
+    background-color: #f2f2f2;
+    &:focus {
+      box-shadow: none;
+      border-color: $font-color-light;
+      background-color: #f2f2f2 !important;
+    }
+  }
+
+  div[class^="rw"]:hover {
+    background-color: #f2f2f2;
+  }
+
+  .rw-state-focus > .rw-widget-container, .rw-list-option.rw-state-focus {
+    box-shadow: none;
+    border-color: $font-color-light;
+  }
+
+  .form-group {
+
+    padding-bottom: 10px;
+
+    .input-group {
+      padding: 0;
+
+      img {
+        height: 200px;
+      }
+
+
+      input, select {
+        margin: 0 auto;
+        padding: 8px;
+
+        box-shadow: none;
+        background-color: #f3f2f2;
+        border: 1px solid $font-color-light;
+        border-radius: 4px;
+      }
+
+      // Input with errors
+      &.input-group-error {
+        input, select {
+          border: 1px solid $danger-color;
+        }
+      }
+      .warning {
+        font-size: 12px;
+        color: $color-1-dark;
+      }
+
+      .react-toggle {
+        margin-bottom: -5px;  /* Optimized with a zoomed-in screen ruler! */
+
+        &.react-toggle--checked .react-toggle-track {
+          background-color: $base-color;
+        }
+
+        &.react-toggle--focus .react-toggle-thumb {
+          box-shadow: 0 0 2px 3px $color-1;
+        }
+
+        &:active:not(.react-toggle--disabled) .react-toggle-thumb {
+          box-shadow: 0 0 2px 3px $color-1-dark;
+        }
+      }
+    }
+
+    .rw-multiselect-tag {
+      margin-top: -3px;
+    }
+
+    &.form-group-inline {
+      display: inline-block;
+      margin-right: 10px;
+      .error {
+        margin-left: 5px;
+        display: inline-block;
+      }
+    }
+  }
+
+  // FieldArrays
+  .fieldarray {
+    .fieldarray-item {
+      background-color: $color-1-light;
+      label, p, h1, h2, h3, button{
+        color:$font-color-dark;
+      }
+
+      padding: 5px 20px;
+      margin: 5px 0;
+      border-radius: 5px;
+
+      button {
+        color: $danger-color;
+      }
+
+      & .input-group-widget {
+        max-width: 300px;
+      }
+      .rw-list-option.rw-state-selected,
+      .rw-list-option.rw-state-selected:hover{
+        background-color: $color-1-light;
+        border-color: $color-1-light;
+        color: $font-color-dark;
+      }
+    }
+  }
+
+  .error {
+    padding-top: 2px;
+    font-size: 13px;
+    color: $danger-color-light;
+  }
+}

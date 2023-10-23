@@ -1,0 +1,134 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+.table {
+  .operations {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .filters {
+      .search {
+        float: left;
+
+        input {
+          padding: 8px;
+          width: 300px;
+          box-shadow: none;
+          background-color: #f3f2f2;
+          border: 1px solid $font-color-light;
+          border-radius: 4px;
+          @include font-Text-and-Icons;
+
+          @include media-device-md {
+            width: 100%
+          }
+          &:focus {
+            box-shadow: none;
+            border-color: $font-color-light;
+          }
+        }
+        button {
+          margin-left: 10px;
+        }
+      }
+      
+      @include media-device-md {
+        width: 100%
+      }
+    }
+  }
+
+  .actions {
+    float: right;
+    
+    div {
+      display: inline-block;
+
+      @include media-device-md {
+        margin-top: 10px;
+        width: 300px;
+      }
+      @include media-device-sm {
+        width: 100%;
+      }
+    }
+  }
+
+  .table-item-subcomponent {
+    // Subtables or other components inisde of a row item
+    padding: 10px 0 30px 40px;
+    @include box-shadow;
+    border-radius: 5px;
+
+    .rt-thead {
+      // For table inception :P
+      background-color: $font-color-light !important;
+    }
+  }
+
+  .ReactTable {
+    margin-top: 10px;
+    border: none;
+
+    .rt-thead {
+      background-color: $base-color;
+      box-shadow: none;
+    }
+
+    .rt-th {
+      text-align: center;
+      color: white;
+      white-space: pre-wrap;
+      align-items: stretch;
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &.-sort-asc {
+        box-shadow: inset 0 4px 0 0 $color-1;
+      }
+
+      &.-sort-desc {
+        box-shadow: inset 0 -4px 0 0 $color-1;
+      }
+    }
+
+    .rt-expander:after {
+      border-top: 7px solid $base-color;
+    }
+
+    .rt-tr {
+      align-items: center;
+
+      .rt-td {
+        text-align: center;
+        white-space: pre-wrap;
+        border-right: none;
+
+        img {
+          max-width: 100%;
+        }
+      }
+    }
+
+    .pagination-bottom{
+      .-pagination{
+        margin-top: 30px;
+        border-top: 0;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.no-data {
+  .pagination-bottom{
+    .-pagination{
+      margin-top: 100px !important;
+    }
+  }
+}

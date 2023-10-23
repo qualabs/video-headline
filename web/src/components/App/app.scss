@@ -1,0 +1,132 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+body {
+  color: $font-color;
+  background: $background-color !important;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6{
+  @include font-Headers;
+}
+
+p, a, label, strong, small, span, ul, li, input, option, select, div {
+  @include font-Text;
+}
+
+p, a, label, strong, span, ul, li, input, option, select {
+  color: $font-color;
+  font-size: 15px;
+}
+
+input, option, select {
+  color: $font-color-dark;
+}
+
+
+ul, li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+
+.pull-right {
+  float: right;
+}
+
+.summary {
+  .warning {
+    color: $warning-color;
+  }
+  .error {
+    color: $danger-color;
+  }
+  .properties {
+    li {
+      padding: 5px 0;
+    }
+
+    .property {
+      font-weight: bold;
+      padding-right: 10px;
+    }
+  }
+
+  .images {
+    .image-item {
+      width: fit-content;
+      margin: 0 5px;
+      img {
+        height: 200px;
+      }
+    }
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid $font-color-light;
+  @include box-shadow;
+  padding: 20px;
+  margin: 5px 0;
+}
+
+.btn-primary {
+  background-color: $success-color !important;
+  border-color: $success-color !important;
+
+  &:hover {
+    background-color: $success-color-dark !important;
+    border-color: $success-color-dark !important;
+  }
+}
+
+.btn-danger {
+  background-color: $upload-video-color !important;
+  border-color: $upload-video-color !important;
+
+  &:hover {
+    background-color: $upload-video-color-dark !important;
+    border-color: $upload-video-color-dark !important;
+  }
+}
+
+
+.btn-outline-danger {
+  color: $upload-video-color !important;
+  border-color: $upload-video-color !important;
+
+  &:hover {
+    background-color: $upload-video-color !important;
+    color: white !important;
+  }
+}
+
+.btn-outline-info {
+  color: $color-2 !important;
+  border-color: $color-2 !important;
+
+  &:hover {
+    background-color: $color-2 !important;
+    color: white !important;
+  }
+}
+
+button.btn {
+  &:focus{
+    outline: 0;
+    box-shadow: 0 0 0 0.1rem rgba($font-color-light, .30) !important;
+  }
+}
+
+input {
+  background-color: #f2f2f2 !important;
+  &:focus {
+    box-shadow: none !important;
+    border-color: $font-color-light !important;
+    background-color: #f2f2f2 !important;
+  }
+}

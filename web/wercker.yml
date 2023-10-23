@@ -1,0 +1,29 @@
+box: node
+setup-test:
+  steps:
+    - npm-install
+    - script:
+        name: build css
+        code: npm run build-css
+    - npm-test
+    - script:
+        name: echo nodejs information
+        code: |
+          echo "node version $(node -v) running"
+          echo "npm version $(npm -v) running"
+build-web:
+  steps:
+    - script:
+        name: build
+        code: npm run build-web
+    - script:
+        name: copy
+        code: cp -r build/* "$WERCKER_OUTPUT_DIR"
+build-dual:
+  steps:
+    - script:
+        name: build
+        code: npm run build-dual
+    - script:
+        name: copy
+        code: cp -r build/* "$WERCKER_OUTPUT_DIR"

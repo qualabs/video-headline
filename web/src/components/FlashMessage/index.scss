@@ -1,0 +1,52 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+#root > .flash-message-container {
+  position: fixed;
+  top: 0;
+}
+
+.flash-message-container {
+  width: stretch;
+  position: absolute;
+  z-index: 9999;
+  height: 28px;
+  font-weight: bold !important;
+  user-select: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  @include box-shadow;
+
+  &.error{
+      background-color: $danger-color;
+  }
+
+  &.success{
+      background-color: $success-color;
+  }
+
+  &.warning{
+      background-color: $warning-color;
+  }
+
+  span {
+    margin-left: 3%;
+    font-weight: bold;
+    color: $font-color-menu;
+
+  }
+
+  .button {
+    background-color: inherit;
+    border: none;
+    color: $font-color-menu;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 2%;
+    outline: none;
+  }
+
+}

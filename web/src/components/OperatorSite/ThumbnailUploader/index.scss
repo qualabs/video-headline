@@ -1,0 +1,86 @@
+@import 'styles/_colors.scss';
+
+.image-dropzone {
+    align-items: center;
+
+    .image-dropzone-input {
+        overflow: hidden;
+        width: 300px;
+    }
+
+
+    .div-delete-thumb {
+        width: 100%;
+        padding-left: 5px;
+        text-align: center;
+
+        #thumbnail-preview {
+            height: 200px;
+        }
+
+        .btn-delete-thumb {
+            span {
+                color: $font-color;
+                margin-left: 5px;
+            }
+
+            &:hover {
+                color: $danger-color;
+            }
+        }
+
+    }
+}
+
+.thumb-dropzone {
+    position:relative;
+    padding-top: 20px;
+    bottom: 0;
+    border-radius: 5px;
+    border-color: $font-color;
+    border-style: dashed;
+    border-width: 1px;
+
+    &:hover{
+      background-color: rgba(#DADBDB, 0.6);
+    }
+
+    .dropzone-icon {
+        position:relative;
+
+        img, #thumbnail-preview {
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        i {
+            &.upload-icon {
+                @keyframes cloud {
+                    0% {
+                        transform: translateY(0px);
+                    }
+                    50% {
+                        transform: translateY(-15px);
+                    }
+                    100% {
+                        transform: translateY(0px);
+                    }
+                }
+                animation-name: cloud;
+                animation-duration: 4s;
+                animation-iteration-count: infinite;
+                color: $upload-video-color;
+            }
+        }
+    }
+
+    .dropzone-input {
+      cursor: pointer;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0px;
+      left: 0;
+      opacity: 0;
+    }
+  }

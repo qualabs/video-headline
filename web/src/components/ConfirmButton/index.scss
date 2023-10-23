@@ -1,0 +1,37 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+.react-confirm-alert-overlay {
+  animation: none;
+
+  opacity: 1;
+
+  .custom-ui {
+    width: 500px;
+    padding: 25px;
+
+    text-align: center;
+
+    background: $color-1-light;
+
+    @include box-shadow;
+
+    &,
+    p {
+      color: #fff !important;
+    }
+  }
+
+  .custom-ui > h1 {
+    margin-top: 0;
+  }
+
+  .custom-ui > button {
+    width: 160px;
+    margin: 10px;
+  }
+}
+
+.without-hover {
+  pointer-events: none;
+}

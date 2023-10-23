@@ -1,0 +1,36 @@
+/* Base Colors */
+$base-color: #222626;
+$color-1: #5A937D;
+$color-2: #469696;
+$upload-video-color: #c1526f; 
+
+$background-color: #E6E6E6;
+$font-color: #474747;
+$font-color-menu: #ffffff;
+$success-color: #5A937D;
+$warning-color: #B57628;
+$danger-color: #e03737;
+$info-color: #40b3ff;
+$secondary-color: #a7a7a7;
+
+/* Base Colors Dark */
+$base-color-dark: darken($base-color, 10%);
+$background-color-dark: darken($background-color, 10%);
+$font-color-dark: darken($font-color, 10%);
+$color-1-dark: darken($color-1,10%);
+$color-2-dark: darken($color-2,10%);
+$success-color-dark: darken($success-color, 10%);
+$danger-color-dark: darken($danger-color, 10%);
+$warning-color-dark: darken($warning-color, 10%);
+$upload-video-color-dark: darken($upload-video-color, 10%);
+
+
+/* Base Colors Light */
+$base-color-light: lighten($base-color, 15%);
+$background-color-light: lighten($background-color, 15%);
+$font-color-light: lighten($font-color, 15%);
+$color-1-light: lighten($color-1,15%);
+$color-2-light: lighten($color-2,15%);
+$success-color-light: lighten($success-color, 10%);
+$danger-color-light: lighten($danger-color, 15%);
+$warning-color-light: lighten($warning-color, 10%);

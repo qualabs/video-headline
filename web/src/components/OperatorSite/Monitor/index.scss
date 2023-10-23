@@ -1,0 +1,21 @@
+@import 'styles/_misc.scss';
+
+.li {
+  display: inline-flex;
+  margin-right: 10px;
+}
+
+.alert-summary {
+  color: red !important;    
+}
+
+.alert-info {
+  background-color: #A3CDF0 !important;
+  &, & hr{
+    border-color:  darken(#A3CDF0, 5%) !important;
+  }
+}
+
+.text-sm .dashboard-value{
+  font-size: 33px !important;
+}

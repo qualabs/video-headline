@@ -1,0 +1,5 @@
+# Ignore artifacts:
+build
+cdk.out
+node_modules
+yarn.lock

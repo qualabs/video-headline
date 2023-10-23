@@ -1,0 +1,127 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+body.annon-page {
+  background-color: $base-color;
+}
+
+.annon-form {
+  flex-basis: auto;
+  color: $font-color-menu;
+  background-color: $base-color;
+  border-radius: 5px;
+  box-shadow: 0px 0px 8px 0px black;
+  padding: 10px;
+
+  label, a {
+    color: $font-color-menu;
+    text-decoration: none;
+  }
+
+  .form {
+    margin: 20px;
+
+    h2 {
+      margin-top: 0;
+    }
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  input {
+    font-size: 20px;
+    margin: 0 auto;
+    height: 48px;
+  }
+
+  .register-form {
+    .rw-dropdown-list{
+      width: auto;
+      margin: 0 auto;
+
+      .rw-widget-container {
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+      }
+
+      .rw-btn-select {
+        padding: 10px 10px;
+      }
+    }
+  }
+
+  .forgot-link {
+    margin: auto;
+    margin-bottom: 3%;
+    text-align: right;
+  }
+
+  a:hover {
+  color: $color-1-light;
+  }
+
+  .btn-primary {
+    width: 318px;
+  }
+
+  .form-error {
+    max-width: 318px;
+    color: $danger-color;
+    font-size: 15px;
+  }
+}
+
+.index {
+  img {
+    width: 225px;
+    margin: 0 0 0 15px;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  text-align: center;
+  font-size: 20px;
+
+  @include media-device-sm {
+    max-height: 100vmax;
+  }
+
+  .flash-message-container {
+    width: inherit;
+  }
+}
+
+.Aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Aligner-item {
+  max-width: 50%;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  @include media-device-lg {
+    justify-content: center;
+    width: 450px;
+  }
+
+}
+
+.error {
+  color: red;
+}

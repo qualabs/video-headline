@@ -1,0 +1,56 @@
+#root,
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000;
+}
+body {
+  font-family: sans-serif;
+}
+.App {
+  margin: 0 10px;
+  height: 100%;
+}
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: #fff;
+}
+.App-title {
+  font-size: 1.5em;
+}
+.App-intro {
+  font-size: large;
+}
+.App-form {
+  padding: 10px 0;
+}
+.App-form .form-group {
+  display: block;
+  padding: 5px 0;
+}
+.App-form .form-group input {
+  width: 700px;
+}
+.App-form .form-group input,
+.App-form .form-group select {
+  margin-left: 5px;
+}
+.App-form .form-group p {
+  margin: 0;
+  padding: 0;
+}
+.App-form button {
+  width: 80px;
+}
+.video-player {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+/*# sourceMappingURL=main.647bdbb8.chunk.css.map */

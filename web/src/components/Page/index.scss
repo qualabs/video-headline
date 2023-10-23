@@ -1,0 +1,59 @@
+@import 'styles/_colors.scss';
+@import 'styles/_misc.scss';
+
+.page {
+  height: 100%;
+  .content {
+    margin-top: 1rem;
+  }
+  .page-header {
+    padding: 24px 0;
+    color: $font-color;
+    background-color: $background-color-dark;
+    @include box-shadow;
+    h1 {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  a:focus {
+    outline:none !important;
+    box-shadow: inset 0px 4px 5px 0px rgba(0,0,0,0.07);
+  }
+
+  .menu-button {
+    @media only screen and (max-width: 489px){
+      display: inline-block;
+      padding: 10px 10px;
+      border: 0px;
+      i {
+        padding-right: 0px;
+      }
+    }
+    @media only screen and (min-width: 490px){
+      display: none;
+    }
+  }
+
+  .content-sidebar {
+    min-width: 150px;
+  }
+
+  .navbar-menu {
+    @include box-shadow;
+    text-align: left;
+    margin: 0;
+    ul {
+      margin: 0;
+    }
+    li {
+      display: inline-block;
+
+      .btn-secondary {
+        padding: 10px 25px 10px 0;
+      }
+    }
+  }
+}

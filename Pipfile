@@ -1,0 +1,39 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "==2.1.5"
+requests = "*"
+django-solo = "*"
+pillow = "*"
+django-debug-toolbar = "*"
+django-related-admin = "*"
+ptpython = "*"
+djangorestframework = "==3.10.3"
+django-rest-knox = "*"
+drf-generators = "*"
+django-extensions = "*"
+django-fernet-fields = "*"
+werkzeug = "*"
+django-filter = "*"
+"psycopg2-binary" = "*"
+django-rest-swagger = "*"
+tblib = "*"
+graypy = "*"
+uwsgi = "*"
+boto3 = "*"
+celery = "==4.3.0rc1"
+redis = "*"
+django-celery-beat = "*"
+django-fsm = "*"
+elastic-apm = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

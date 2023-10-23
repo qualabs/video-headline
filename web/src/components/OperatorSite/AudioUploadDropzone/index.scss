@@ -1,0 +1,50 @@
+@import 'styles/_colors.scss';
+
+.dropzone {
+  position: absolute;
+  top: 96px;
+  bottom: 0;
+  border-radius: 5px;
+  border-color: $color-2;
+
+  &:hover{
+    background-color: rgba(#DADBDB, 0.6);
+  }
+
+  .dropzone-icon {
+    position:relative;
+    top: calc(40% - 10px); /* 50% - 3/4 of icon height */
+
+    i {
+      @keyframes cloud {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+      animation-name: cloud;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      color: $upload-video-color;
+    }
+
+    p {
+      font-size: 20px;
+    }
+  }
+
+  .dropzone-input {
+    cursor: pointer;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top:0;
+    left: 0;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,350 @@
+{
+    "TimecodeConfig": {
+        "Source": "SYSTEMCLOCK"
+    },
+    "OutputGroups": [
+        {
+            "OutputGroupSettings": {
+                "HlsGroupSettings": {
+                    "TimedMetadataId3Frame": "PRIV",
+                    "CaptionLanguageMappings": [],
+                    "Destination": {
+                        "DestinationRefId": "Replace me"
+                    },
+                    "IvSource": "FOLLOWS_SEGMENT_NUMBER",
+                    "IndexNSegments": 7,
+                    "InputLossAction": "EMIT_OUTPUT",
+                    "ManifestDurationFormat": "FLOATING_POINT",
+                    "CodecSpecification": "RFC_4281",
+                    "IvInManifest": "INCLUDE",
+                    "TimedMetadataId3Period": 2,
+                    "ProgramDateTimePeriod": 2,
+                    "SegmentLength": 10,
+                    "CaptionLanguageSetting": "OMIT",
+                    "ProgramDateTime": "INCLUDE",
+                    "HlsCdnSettings": {
+                        "HlsBasicPutSettings": {
+                            "ConnectionRetryInterval": 1,
+                            "FilecacheDuration": 300,
+                            "NumRetries": 10
+                        }
+                    },
+                    "TsFileMode": "SEGMENTED_FILES",
+                    "StreamInfResolution": "INCLUDE",
+                    "ClientCache": "ENABLED",
+                    "AdMarkers": [
+                        "ELEMENTAL_SCTE35"
+                    ],
+                    "KeepSegments": 360,
+                    "SegmentationMode": "USE_SEGMENT_DURATION",
+                    "OutputSelection": "MANIFESTS_AND_SEGMENTS",
+                    "ManifestCompression": "NONE",
+                    "DirectoryStructure": "SINGLE_DIRECTORY",
+                    "Mode": "LIVE"
+                }
+            },
+            "Outputs": [
+                {
+                    "VideoDescriptionName": "video_1080p30",
+                    "AudioDescriptionNames": [
+                        "audio"
+                    ],
+                    "CaptionDescriptionNames": [],
+                    "OutputSettings": {
+                        "HlsOutputSettings": {
+                            "NameModifier": "_1080p30",
+                            "HlsSettings": {
+                                "StandardHlsSettings": {
+                                    "M3u8Settings": {
+                                        "PcrControl": "PCR_EVERY_PES_PACKET",
+                                        "TimedMetadataBehavior": "NO_PASSTHROUGH",
+                                        "PmtPid": "480",
+                                        "Scte35Pid": "500",
+                                        "VideoPid": "481",
+                                        "ProgramNum": 1,
+                                        "AudioPids": "492-498",
+                                        "AudioFramesPerPes": 4,
+                                        "EcmPid": "8182",
+                                        "Scte35Behavior": "PASSTHROUGH"
+                                    },
+                                    "AudioRenditionSets": "PROGRAM_AUDIO"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "VideoDescriptionName": "video_720p30",
+                    "AudioDescriptionNames": [
+                        "audio"
+                    ],
+                    "CaptionDescriptionNames": [],
+                    "OutputSettings": {
+                        "HlsOutputSettings": {
+                            "NameModifier": "_720p30",
+                            "HlsSettings": {
+                                "StandardHlsSettings": {
+                                    "M3u8Settings": {
+                                        "PcrControl": "PCR_EVERY_PES_PACKET",
+                                        "TimedMetadataBehavior": "NO_PASSTHROUGH",
+                                        "PmtPid": "480",
+                                        "Scte35Pid": "500",
+                                        "VideoPid": "481",
+                                        "ProgramNum": 1,
+                                        "AudioPids": "492-498",
+                                        "AudioFramesPerPes": 4,
+                                        "EcmPid": "8182",
+                                        "Scte35Behavior": "PASSTHROUGH"
+                                    },
+                                    "AudioRenditionSets": "PROGRAM_AUDIO"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "VideoDescriptionName": "video_360p30",
+                    "AudioDescriptionNames": [
+                        "audio"
+                    ],
+                    "CaptionDescriptionNames": [],
+                    "OutputSettings": {
+                        "HlsOutputSettings": {
+                            "NameModifier": "_360p30",
+                            "HlsSettings": {
+                                "StandardHlsSettings": {
+                                    "M3u8Settings": {
+                                        "PcrControl": "PCR_EVERY_PES_PACKET",
+                                        "TimedMetadataBehavior": "NO_PASSTHROUGH",
+                                        "PmtPid": "480",
+                                        "Scte35Pid": "500",
+                                        "VideoPid": "481",
+                                        "ProgramNum": 1,
+                                        "AudioPids": "492-498",
+                                        "AudioFramesPerPes": 4,
+                                        "EcmPid": "8182",
+                                        "Scte35Behavior": "PASSTHROUGH"
+                                    },
+                                    "AudioRenditionSets": "PROGRAM_AUDIO"
+                                }
+                            }
+                        }
+                    }
+                },{
+                    "VideoDescriptionName": "video_360_6p30",
+                    "AudioDescriptionNames": [
+                        "audio"
+                    ],
+                    "CaptionDescriptionNames": [],
+                    "OutputSettings": {
+                        "HlsOutputSettings": {
+                            "NameModifier": "_360_6p30",
+                            "HlsSettings": {
+                                "StandardHlsSettings": {
+                                    "M3u8Settings": {
+                                        "PcrControl": "PCR_EVERY_PES_PACKET",
+                                        "TimedMetadataBehavior": "NO_PASSTHROUGH",
+                                        "PmtPid": "480",
+                                        "Scte35Pid": "500",
+                                        "VideoPid": "481",
+                                        "ProgramNum": 1,
+                                        "AudioPids": "492-498",
+                                        "AudioFramesPerPes": 4,
+                                        "EcmPid": "8182",
+                                        "Scte35Behavior": "PASSTHROUGH"
+                                    },
+                                    "AudioRenditionSets": "PROGRAM_AUDIO"
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
+            "Name": "S3"
+        }
+    ],
+    "GlobalConfiguration": {
+        "SupportLowFramerateInputs": "DISABLED",
+        "OutputTimingSource": "SYSTEM_CLOCK",
+        "InputEndAction": "SWITCH_AND_LOOP_INPUTS"
+    },
+    "CaptionDescriptions": [],
+    "VideoDescriptions": [
+        {
+            "CodecSettings": {
+                "H264Settings": {
+                    "Syntax": "DEFAULT",
+                    "FramerateNumerator": 30,
+                    "Profile": "HIGH",
+                    "GopSize": 2,
+                    "AfdSignaling": "NONE",
+                    "FramerateControl": "SPECIFIED",
+                    "ColorMetadata": "INSERT",
+                    "FlickerAq": "ENABLED",
+                    "LookAheadRateControl": "HIGH",
+                    "FramerateDenominator": 1,
+                    "Bitrate": 4500000,
+                    "TimecodeInsertion": "PIC_TIMING_SEI",
+                    "NumRefFrames": 3,
+                    "EntropyEncoding": "CABAC",
+                    "GopSizeUnits": "SECONDS",
+                    "Level": "H264_LEVEL_AUTO",
+                    "GopBReference": "ENABLED",
+                    "AdaptiveQuantization": "HIGH",
+                    "GopNumBFrames": 3,
+                    "ScanType": "PROGRESSIVE",
+                    "ParControl": "INITIALIZE_FROM_SOURCE",
+                    "Slices": 1,
+                    "SpatialAq": "ENABLED",
+                    "TemporalAq": "ENABLED",
+                    "RateControlMode": "CBR",
+                    "SceneChangeDetect": "ENABLED",
+                    "GopClosedCadence": 1
+                }
+            },
+            "Name": "video_1080p30",
+            "Sharpness": 100,
+            "Height": 1080,
+            "Width": 1920,
+            "ScalingBehavior": "DEFAULT",
+            "RespondToAfd": "NONE"
+        },
+        {
+            "CodecSettings": {
+                "H264Settings": {
+                    "Syntax": "DEFAULT",
+                    "FramerateNumerator": 30,
+                    "Profile": "HIGH",
+                    "GopSize": 2,
+                    "AfdSignaling": "NONE",
+                    "FramerateControl": "SPECIFIED",
+                    "ColorMetadata": "INSERT",
+                    "FlickerAq": "ENABLED",
+                    "LookAheadRateControl": "HIGH",
+                    "FramerateDenominator": 1,
+                    "Bitrate": 2500000,
+                    "TimecodeInsertion": "PIC_TIMING_SEI",
+                    "NumRefFrames": 3,
+                    "EntropyEncoding": "CABAC",
+                    "GopSizeUnits": "SECONDS",
+                    "Level": "H264_LEVEL_AUTO",
+                    "GopBReference": "ENABLED",
+                    "AdaptiveQuantization": "HIGH",
+                    "GopNumBFrames": 3,
+                    "ScanType": "PROGRESSIVE",
+                    "ParControl": "INITIALIZE_FROM_SOURCE",
+                    "Slices": 1,
+                    "SpatialAq": "ENABLED",
+                    "TemporalAq": "ENABLED",
+                    "RateControlMode": "CBR",
+                    "SceneChangeDetect": "ENABLED",
+                    "GopClosedCadence": 1
+                }
+            },
+            "Name": "video_720p30",
+            "Sharpness": 100,
+            "Height": 720,
+            "Width": 1280,
+            "ScalingBehavior": "DEFAULT",
+            "RespondToAfd": "NONE"
+        },
+        {
+            "CodecSettings": {
+                "H264Settings": {
+                    "Syntax": "DEFAULT",
+                    "FramerateNumerator": 30,
+                    "Profile": "HIGH",
+                    "GopSize": 2,
+                    "AfdSignaling": "NONE",
+                    "FramerateControl": "SPECIFIED",
+                    "ColorMetadata": "INSERT",
+                    "FlickerAq": "ENABLED",
+                    "LookAheadRateControl": "HIGH",
+                    "FramerateDenominator": 1,
+                    "Bitrate": 1200000,
+                    "TimecodeInsertion": "PIC_TIMING_SEI",
+                    "NumRefFrames": 3,
+                    "EntropyEncoding": "CABAC",
+                    "GopSizeUnits": "SECONDS",
+                    "Level": "H264_LEVEL_AUTO",
+                    "GopBReference": "ENABLED",
+                    "AdaptiveQuantization": "HIGH",
+                    "GopNumBFrames": 3,
+                    "ScanType": "PROGRESSIVE",
+                    "ParControl": "INITIALIZE_FROM_SOURCE",
+                    "Slices": 1,
+                    "SpatialAq": "ENABLED",
+                    "TemporalAq": "ENABLED",
+                    "RateControlMode": "CBR",
+                    "SceneChangeDetect": "ENABLED",
+                    "GopClosedCadence": 1
+                }
+            },
+            "Name": "video_360p30",
+            "Sharpness": 100,
+            "Height": 360,
+            "Width": 640,
+            "ScalingBehavior": "DEFAULT",
+            "RespondToAfd": "NONE"
+        },
+        {
+            "CodecSettings": {
+                "H264Settings": {
+                    "Syntax": "DEFAULT",
+                    "FramerateNumerator": 30,
+                    "Profile": "HIGH",
+                    "GopSize": 2,
+                    "AfdSignaling": "NONE",
+                    "FramerateControl": "SPECIFIED",
+                    "ColorMetadata": "INSERT",
+                    "FlickerAq": "ENABLED",
+                    "LookAheadRateControl": "HIGH",
+                    "FramerateDenominator": 1,
+                    "Bitrate": 600000,
+                    "TimecodeInsertion": "PIC_TIMING_SEI",
+                    "NumRefFrames": 3,
+                    "EntropyEncoding": "CABAC",
+                    "GopSizeUnits": "SECONDS",
+                    "Level": "H264_LEVEL_AUTO",
+                    "GopBReference": "ENABLED",
+                    "AdaptiveQuantization": "HIGH",
+                    "GopNumBFrames": 3,
+                    "ScanType": "PROGRESSIVE",
+                    "ParControl": "INITIALIZE_FROM_SOURCE",
+                    "Slices": 1,
+                    "SpatialAq": "ENABLED",
+                    "TemporalAq": "ENABLED",
+                    "RateControlMode": "CBR",
+                    "SceneChangeDetect": "ENABLED",
+                    "GopClosedCadence": 1
+                }
+            },
+            "Name": "video_360_6p30",
+            "Sharpness": 100,
+            "Height": 360,
+            "Width": 640,
+            "ScalingBehavior": "DEFAULT",
+            "RespondToAfd": "NONE"
+        }
+    ],
+    "AudioDescriptions": [
+        {
+            "CodecSettings": {
+                "AacSettings": {
+                    "Profile": "LC",
+                    "InputType": "NORMAL",
+                    "RateControlMode": "CBR",
+                    "Spec": "MPEG4",
+                    "SampleRate": 48000,
+                    "Bitrate": 192000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "RawFormat": "NONE"
+                }
+            },
+            "LanguageCodeControl": "FOLLOW_INPUT",
+            "AudioTypeControl": "FOLLOW_INPUT",
+            "Name": "audio",
+            "AudioSelectorName": "audio"
+        }
+    ]
+}

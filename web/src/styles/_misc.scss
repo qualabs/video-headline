@@ -1,0 +1,161 @@
+@import 'styles/_colors.scss';
+
+@mixin font-Headers {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+@mixin font-Text {
+  font-family: 'Poppins', sans-serif;
+}
+
+@mixin font-Text-and-Icons {
+  font-family: 'Font Awesome 5 Pro', 'Poppins', sans-serif;
+}
+
+// @mixin btn {
+//   font-size: 16px;
+//
+//   display: inline-block;
+//
+//   padding: 10px 0;
+//
+//   text-decoration: none;
+//   color: $font-color;
+//   border: 0;
+//   border-radius: 3px;
+//   background: none;
+//   transition: background-color 0.1s;
+//
+//   i {
+//     padding-right: 5px;
+//   }
+//   &:enabled {
+//     &:hover {
+//       text-decoration: underline;
+//     }
+//   }
+//   &:focus {
+//     outline: 0;
+//   }
+// }
+
+// @mixin btn-solid {
+//   border: 1px solid;
+//   padding: 10px 25px;
+//   &:enabled {
+//     &:hover {
+//       text-decoration: none;
+//     }
+//   }
+// }
+//
+// @mixin btn-primary {
+//   @include btn-solid;
+//   &:enabled {
+//     border-color: $base-color;
+//     color: $base-color;
+//
+//     &:hover {
+//       color: white;
+//       background: $base-color;
+//     }
+//   }
+// }
+//
+// @mixin btn-color-1 {
+//   @include btn-solid;
+//   &:enabled {
+//     border-color: $color-1;
+//     color: $color-1;
+//
+//     &:hover {
+//       color: white;
+//       background: $color-1;
+//     }
+//   }
+// }
+//
+// @mixin btn-color-2 {
+//   @include btn-solid;
+//   &:enabled {
+//     border-color: $color-2;
+//     color: $color-2;
+//
+//     &:hover {
+//       color: white;
+//       background: $color-2;
+//     }
+//   }
+// }
+//
+// @mixin btn-secondary {
+//   padding: 10px 25px;
+// }
+//
+// @mixin btn-white {
+//   @include btn-solid;
+//   &:enabled {
+//     border-color: white;
+//     color: white;
+//
+//     &:hover {
+//       color: $font-color;
+//       background: white;
+//     }
+//   }
+// }
+//
+// @mixin btn-danger {
+//   @include btn-solid;
+//   &:enabled {
+//     border-color: $danger-color;
+//     color: $danger-color;
+//
+//     &:hover {
+//       color: white;
+//       background: $danger-color;
+//     }
+//   }
+// }
+
+@mixin box-shadow {
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.30);
+}
+
+@mixin box-shadow-lg {
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+@mixin media-device-lg {
+  @media only screen and (max-width: 991px){
+  // screen and (max-height: 991px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin media-device-md {
+  @media only screen and (max-width: 768px){
+  // screen and (max-height: 767px) and (orientation: landscape)  {
+    @content;
+  }
+}
+
+@mixin media-device-sm {
+  @media only screen and (max-width: 489px),
+  screen and (max-height: 489px) and (orientation: landscape){
+    @content;
+  }
+}
+
+@mixin scroll-y {
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 15px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    background: darken($background-color-dark, 50%);
+  }
+}

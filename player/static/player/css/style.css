@@ -1,0 +1,15 @@
+body {
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-allowed {
+  color: white;
+  text-align: center;
+  max-width: 50%;
+  font-weight: bold;
+  font-size: 1.5em;
+}

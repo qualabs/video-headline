@@ -1,0 +1,35 @@
+{
+  "name": "qhub-player",
+  "homepage": ".",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "qualabs-player-web": "https://github.com/qualabs/video-headline-videojs.git",
+    "query-string": "^6.9.0",
+    "react": "^16.2.0",
+    "react-app-polyfill": "^1.0.4",
+    "react-dom": "^16.2.0",
+    "react-scripts": "2.0.3",
+    "ua-parser-js": "^0.7.20"
+  },
+  "devDependencies": {
+    "renamer": "^0.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "rename-js": "renamer --regex --find 'main\\.[^\\.]+\\.js' --replace 'main.js' build/static/js/*.js",
+    "rename-css": "renamer --regex --find 'main\\.[^\\.]+\\.css' --replace 'main.css' build/static/css/*.css",
+    "rename-files": "npm run rename-js && npm run rename-css",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
