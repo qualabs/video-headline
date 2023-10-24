@@ -5,7 +5,7 @@ import json
 import re
 import os
 from botocore.exceptions import BotoCoreError
-from cloudfront import get_cloudfront_client
+from utils.cloudfront import get_cloudfront_client
 
 
 def get_s3_client(aws_account):
