@@ -10,18 +10,20 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 ## Table of Contents
 
 - [Getting started](#getting-started)
-
-  - [Prerequisites](#prerequisites)
-  - [AWS Configuration](#AWS-configuration)
-  - [Running the application](#running-the-application)
-
-  * [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
-- [Production Environment Tasks (optional)](#production-environment-tasks)
-- [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
+  - [Global configuration (local and AWS environment)](#global-configuration-local-and-aws-environment)
+    - [Prerequisites](#prerequisites)
+    - [Create .env file](#create-.env-file)
+    - [AWS Configuration](#aws-configuration)
+  - [Running the application in local environment](#running-the-application-in-local-environment)
+    - [Set up and running the application](#set-up-and-running-the-application)
+    - [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
+  - [Running the application in AWS environment](#running-the-application-in-aws-environment)
+  - [Production Environment Tasks (optional)](#production-environment-tasks)
+  - [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
 
 ## Getting started
-
-### Prerequisites
+### Global configuration (local and AWS environment)
+#### Prerequisites
 
 - AWS Account: Necessary for hosting and delivering video content.
 - Docker and Docker compose: Video Headline runs inside Docker containers, so it is necessary to have Docker and Docker Compose installed.
@@ -29,32 +31,39 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 - Python: Necessary for running Django and other Python-based tools.
 - AWS CLI: Useful for configuring and managing AWS services from the command line.
 
-### Create .env file
+#### Create .env file
 
 Create a .env file at the root of the project with all the variables defined in the .env-example file and their respective values.
 
-### AWS Configuration
+#### AWS Configuration
+Video Headline requires some IAM roles and permissiones. To automate the configuration, there's CDK code to create a Stack with all the requirements.
 
-1. Go to infrastructure directory and execute `yarn cdk deploy AwsConfigurationStack`.
-   This will deploy:
+To deploy this stack, follow this steps:
+1. Navigate to the infrastructure directory.
+2. Run the command: `yarn cdk deploy AwsConfigurationStack`.
 
-- Api User with the following Permissions:
+This deployment will set up:
+
+- Api User with permissions for:
   - S3
   - Sns
   - MediaConvert
   - MediaLive
   - Cloudfront
   - Cloudwatch
-- Media Convert Role with the following permissions:
+- Media Convert Role with permissions for:
   - Api Gateway
   - S3
-- Media Live Role with the following permissions:
+- Media Live Role with permissions for:
   - MediaLive
   - Cloudwatch
 
-2. **Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
+### Running the application in local environment
+To set up the project locally, follow the instructions provided below. For AWS deployment, refer to the README within the Infrastructure folder.
 
-### Running the application
+**Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
+
+#### Set up and running the application
 
 Follow these steps to set up and run the application locally:
 
@@ -64,7 +73,7 @@ Follow these steps to set up and run the application locally:
 4. Create a superuser for admin access running `python manage.py createsuperuser`.
 5. Go to `http://localhost:8010/admin` and log in with the superuser credentials.
 
-### AWS Services Configuration in the Admin Web
+#### AWS Services Configuration in the Admin Web
 
 1. **CloudFront Configuration:** In the Global configuration, inside is the `CloudFront Configuration, apply the settings located in `configuration/configuration.samples/cloud_front_configuration.sample`.
 2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` named `default`, using the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
@@ -84,6 +93,9 @@ Follow these steps to set up and run the application locally:
 7. **Superuser Association:** Assign the newly created Organization to the superuser to enable authentication via the User web (`http://localhost:3000/`). This can be done from the user detail section in the admin panel.
 
 ![¡](docs/auth.png)
+
+### Running the application in AWS environment
+For AWS deployment, refer to the [README](infrastructure/README.md) within the Infrastructure folder.
 
 ### Production Environment Tasks (optional)
 
