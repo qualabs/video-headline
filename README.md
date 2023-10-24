@@ -36,21 +36,25 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 Create a .env file at the root of the project with all the variables defined in the .env-example file and their respective values.
 
 #### AWS Configuration
+Video Headline requires some IAM roles and permissiones. To automate the configuration, there's CDK code to create a Stack with all the requirements.
 
-Go to infrastructure directory and execute `yarn cdk deploy AwsConfigurationStack`.
-   This will deploy:
+To deploy this stack, follow this steps:
+1. Navigate to the infrastructure directory.
+2. Run the command: `yarn cdk deploy AwsConfigurationStack`.
 
-- Api User with the following Permissions:
+This deployment will set up:
+
+- Api User with permissions for:
   - S3
   - Sns
   - MediaConvert
   - MediaLive
   - Cloudfront
   - Cloudwatch
-- Media Convert Role with the following permissions:
+- Media Convert Role with permissions for:
   - Api Gateway
   - S3
-- Media Live Role with the following permissions:
+- Media Live Role with permissions for:
   - MediaLive
   - Cloudwatch
 
@@ -91,7 +95,7 @@ Follow these steps to set up and run the application locally:
 ![¡](docs/auth.png)
 
 ### Running the application in AWS environment
-For AWS deployment, refer to the README within the Infrastructure folder.
+For AWS deployment, refer to the [README](infrastructure/README.md) within the Infrastructure folder.
 
 ### Production Environment Tasks (optional)
 

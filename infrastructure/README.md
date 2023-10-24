@@ -1,4 +1,4 @@
-# Welcome to Qhub CDK TypeScript project!
+# Video Headline CDK Deployment
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ## Getting started
@@ -39,8 +39,6 @@ that gets executed is the one that is copied to the container.
 -   `yarn cdk synth` emits the synthesized CloudFormation template
 ## Configuring HTTPS
 If you want to configure https with a certificate you can put your certificate arn in `/lib/utils/aws.ts`. (https://github.com/qualabs/video-headline/blob/cca91831ef0130ea1fefa53084b949308d55c57e/infrastructure/lib/utils/aws.ts#L25).
-## Architecture Diagram (Includes QhubTracking)
-![Architecture Diagram](architecture.png)
 
 # Remove
 
