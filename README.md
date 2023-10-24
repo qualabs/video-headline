@@ -12,15 +12,15 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 - [Getting started](#getting-started)
 
   - [Prerequisites](#prerequisites)
-  - [AWS Configuration](#AWS-configuration)
-  - [Running the application](#running-the-application)
-
-  * [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
+  - [Create .env file](#create-.env-file)
+  - [AWS Configuration](#aws-configuration)
+  - [Running the application in local environment](#running-the-application-in-local-environment)
+    - [Set up and running the application](#set-up-and-running-the-application)
+    - [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
 - [Production Environment Tasks (optional)](#production-environment-tasks)
 - [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
 
 ## Getting started
-
 ### Prerequisites
 
 - AWS Account: Necessary for hosting and delivering video content.
@@ -35,7 +35,7 @@ Create a .env file at the root of the project with all the variables defined in 
 
 ### AWS Configuration
 
-1. Go to infrastructure directory and execute `yarn cdk deploy AwsConfigurationStack`.
+Go to infrastructure directory and execute `yarn cdk deploy AwsConfigurationStack`.
    This will deploy:
 
 - Api User with the following Permissions:
@@ -52,9 +52,12 @@ Create a .env file at the root of the project with all the variables defined in 
   - MediaLive
   - Cloudwatch
 
-2. **Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
+### Running the application in local environment
+To set up the project locally, follow the instructions provided below. For AWS deployment, refer to the README within the Infrastructure folder.
 
-### Running the application
+**Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
+
+#### Set up and running the application
 
 Follow these steps to set up and run the application locally:
 
@@ -64,7 +67,7 @@ Follow these steps to set up and run the application locally:
 4. Create a superuser for admin access running `python manage.py createsuperuser`.
 5. Go to `http://localhost:8010/admin` and log in with the superuser credentials.
 
-### AWS Services Configuration in the Admin Web
+#### AWS Services Configuration in the Admin Web
 
 1. **CloudFront Configuration:** In the Global configuration, inside is the `CloudFront Configuration, apply the settings located in `configuration/configuration.samples/cloud_front_configuration.sample`.
 2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` named `default`, using the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
