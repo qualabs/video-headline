@@ -10,18 +10,20 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 ## Table of Contents
 
 - [Getting started](#getting-started)
-
-  - [Prerequisites](#prerequisites)
-  - [Create .env file](#create-.env-file)
-  - [AWS Configuration](#aws-configuration)
+  - [Global configuration (local and AWS environment)](#global-configuration-local-and-aws-environment)
+    - [Prerequisites](#prerequisites)
+    - [Create .env file](#create-.env-file)
+    - [AWS Configuration](#aws-configuration)
   - [Running the application in local environment](#running-the-application-in-local-environment)
     - [Set up and running the application](#set-up-and-running-the-application)
     - [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
-- [Production Environment Tasks (optional)](#production-environment-tasks)
-- [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
+  - [Running the application in AWS environment](#running-the-application-in-aws-environment)
+  - [Production Environment Tasks (optional)](#production-environment-tasks)
+  - [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
 
 ## Getting started
-### Prerequisites
+### Global configuration (local and AWS environment)
+#### Prerequisites
 
 - AWS Account: Necessary for hosting and delivering video content.
 - Docker and Docker compose: Video Headline runs inside Docker containers, so it is necessary to have Docker and Docker Compose installed.
@@ -29,11 +31,11 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 - Python: Necessary for running Django and other Python-based tools.
 - AWS CLI: Useful for configuring and managing AWS services from the command line.
 
-### Create .env file
+#### Create .env file
 
 Create a .env file at the root of the project with all the variables defined in the .env-example file and their respective values.
 
-### AWS Configuration
+#### AWS Configuration
 
 Go to infrastructure directory and execute `yarn cdk deploy AwsConfigurationStack`.
    This will deploy:
@@ -87,6 +89,9 @@ Follow these steps to set up and run the application locally:
 7. **Superuser Association:** Assign the newly created Organization to the superuser to enable authentication via the User web (`http://localhost:3000/`). This can be done from the user detail section in the admin panel.
 
 ![¡](docs/auth.png)
+
+### Running the application in AWS environment
+For AWS deployment, refer to the README within the Infrastructure folder.
 
 ### Production Environment Tasks (optional)
 
