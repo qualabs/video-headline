@@ -140,12 +140,27 @@ def delete_channel(channel_id, account_id):
     aws_account = AWSAccount.objects.get(account_id=account_id)
     media_live = get_media_live(aws_account)
     try:
-        waiter = media_live.get_waiter("channel_deleted")
         media_live.delete_channel(ChannelId=channel_id)
-        waiter.wait(ChannelId=channel_id)
+        check_channel_status.delay(channel_id, account_id)
     except Exception as e:
         raise Exception("Error deleting channel")
 
+@shared_task
+def check_channel_status(channel_id, account_id):
+    try:
+        aws_account = AWSAccount.objects.get(account_id=account_id)
+        media_live = get_media_live(aws_account)
+        channel = media_live.describe_channel(ChannelId=channel_id)
+        state = channel["State"]
+
+        if state == "DELETED":
+            # channel was deleted, continue with delete input
+            return 
+        else:
+            # channel was not deleted, check status again
+            return check_channel_status.apply_async(args=(channel_id, account_id), countdown=5)
+    except Exception as e:
+        check_channel_status.retry(exc=e)
 
 @shared_task
 def _delete_channel(channel_id, account_id):
