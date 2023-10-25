@@ -3,11 +3,12 @@ import queryString from 'query-string'
 export const MENU_STATE_CHANGE = 'menu_state_change'
 
 export function APIUrl (path: string, args: Object) {
+  const reactAppVideoHubApi = process.env.REACT_APP_VIDEO_HUB_API ? process.env.REACT_APP_VIDEO_HUB_API : '/api/v1/'
   const params = queryString.stringify({
     ...args.queryParams,
     format: 'json'
   })
-  return `${process.env.REACT_APP_VIDEO_HUB_API}${path}?${params}`
+  return `${reactAppVideoHubApi}${path}?${params}`
 }
 
 export function externalAPIUrl (path: string, args: Object) {
