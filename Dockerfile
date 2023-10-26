@@ -11,6 +11,19 @@ RUN npm install
 COPY web/ .
 RUN npm run build
 
+
+# Build de player iframe
+FROM node:10 as player
+
+RUN mkdir /code/
+WORKDIR /code
+COPY package.json package.json
+RUN npm install
+COPY playerReact/ .
+RUN npm run build
+RUN npm run rename-files
+
+
 # Core Build
 
 FROM python:3.7-slim-stretch
