@@ -143,7 +143,7 @@ Follow the steps below to set up ESLint for linting React code in Visual Studio 
     "[javascriptreact]": {
     	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
 	  },
-	  "[jsonc]": {
+	  "[json]": {
     	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     }
     ```
