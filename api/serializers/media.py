@@ -51,10 +51,13 @@ class MediaSerializer(serializers.ModelSerializer):
         _, media_url, _ = obj.get_urls()
         return media_url
 
+
 class CreateMediaSerializer(serializers.ModelSerializer):
     content_type = serializers.CharField(required=True)
     video_id = serializers.CharField(required=False)
-    channel_id = serializers.PrimaryKeyRelatedField(queryset=Channel.objects, required=False, default=None)
+    channel_id = serializers.PrimaryKeyRelatedField(
+        queryset=Channel.objects, required=False, default=None
+    )
 
     class Meta:
         model = Media
@@ -77,7 +80,9 @@ class CreateMediaSerializer(serializers.ModelSerializer):
 
             organization = user.organization
             if data not in organization.channels.all():
-                raise ValidationError('The channel does not belong to your organization.')
+                raise ValidationError(
+                    'The channel does not belong to your organization.'
+                )
 
         return data
 
@@ -100,8 +105,7 @@ class CreateMediaSerializer(serializers.ModelSerializer):
 class UpdateMediaSerializer(serializers.ModelSerializer):
     channel = serializers.PrimaryKeyRelatedField(queryset=Channel.objects)
     tags = serializers.ManyRelatedField(
-        required=False,
-        child_relation=serializers.CharField()
+        required=False, child_relation=serializers.CharField()
     )
 
     class Meta:
@@ -113,7 +117,7 @@ class UpdateMediaSerializer(serializers.ModelSerializer):
             'ads_vast_url',
             'enable_ads',
             'autoplay',
-            'has_thumbnail'
+            'has_thumbnail',
         )
 
     def validate(self, data):
@@ -131,8 +135,7 @@ class UpdateMediaSerializer(serializers.ModelSerializer):
                 for tag in tags_tmp:
                     try:
                         tag_object, created = Tag.objects.get_or_create(
-                            name=tag,
-                            organization=user.organization
+                            name=tag, organization=user.organization
                         )
                         tags_array.append(tag_object)
                     except MultipleObjectsReturned:
@@ -143,7 +146,9 @@ class UpdateMediaSerializer(serializers.ModelSerializer):
             channel = data.get('channel')
             organization = user.organization
             if channel not in organization.channels.all():
-                raise ValidationError('The channel does not belong to your organization.')
+                raise ValidationError(
+                    'The channel does not belong to your organization.'
+                )
         else:
             raise ValidationError('The video must belong to a channel.')
 
@@ -151,8 +156,9 @@ class UpdateMediaSerializer(serializers.ModelSerializer):
 
 
 class PartialUpdateMediaSerializer(UpdateMediaSerializer):
-    channel = serializers.PrimaryKeyRelatedField(required=False,
-                                                 queryset=Channel.objects)
+    channel = serializers.PrimaryKeyRelatedField(
+        required=False, queryset=Channel.objects
+    )
 
     def validate(self, data):
         request = self.context.get("request")
@@ -168,8 +174,7 @@ class PartialUpdateMediaSerializer(UpdateMediaSerializer):
                 for tag in tags_tmp:
                     try:
                         tag_object, created = Tag.objects.get_or_create(
-                            name=tag,
-                            organization=user.organization
+                            name=tag, organization=user.organization
                         )
                         tags_array.append(tag_object)
                     except MultipleObjectsReturned:
@@ -181,9 +186,11 @@ class PartialUpdateMediaSerializer(UpdateMediaSerializer):
             channel = data.get('channel')
             organization = user.organization
             if channel not in organization.channels.all():
-                raise ValidationError('The channel does not belong to your organization.')
+                raise ValidationError(
+                    'The channel does not belong to your organization.'
+                )
         return data
 
 
-class ThumbnailMediaSerializer (serializers.Serializer):
+class ThumbnailMediaSerializer(serializers.Serializer):
     content_type = serializers.CharField(required=True)

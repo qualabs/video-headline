@@ -4,8 +4,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from api.filters import LiveVideoCutsFilter
-from api.serializers.cuts import LiveVideoCutSerializer, UpdateLiveVideoCutSerializer, \
-    CreateLiveVideoCutSerializer
+from api.serializers.cuts import (
+    LiveVideoCutSerializer,
+    UpdateLiveVideoCutSerializer,
+    CreateLiveVideoCutSerializer,
+)
 from video.models import LiveVideoCut
 
 
@@ -20,8 +23,9 @@ class LiveVideoCutsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return LiveVideoCut.objects.filter(live__organization_id=user.organization_id).order_by(
-            'initial_time')
+        return LiveVideoCut.objects.filter(
+            live__organization_id=user.organization_id
+        ).order_by('initial_time')
 
     def get_serializer_class(self):
         serializer_class = {
@@ -52,7 +56,9 @@ class LiveVideoCutsViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         try:
-            cut = serializer.update(self.get_object(), serializer.validated_data)
+            cut = serializer.update(
+                self.get_object(), serializer.validated_data
+            )
         except IntegrityError as e:
             raise ValidationError(str(e))
 
@@ -63,9 +69,13 @@ class LiveVideoCutsViewSet(viewsets.ModelViewSet):
         cut = self.get_object()
         if cut.state in [LiveVideoCut.State.EXECUTING]:
             raise ValidationError(
-                'You cannot delete a cut that is being executed.')
+                'You cannot delete a cut that is being executed.'
+            )
         if cut.state in [LiveVideoCut.State.PERFORMED]:
             raise ValidationError(
-                'You cannot delete a cut that has already been executed.')
+                'You cannot delete a cut that has already been executed.'
+            )
 
-        return super(LiveVideoCutsViewSet, self).destroy(self, request, *args, **kwargs)
+        return super(LiveVideoCutsViewSet, self).destroy(
+            self, request, *args, **kwargs
+        )

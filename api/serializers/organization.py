@@ -27,5 +27,5 @@ class OrganizationSerializer(serializers.ModelSerializer):
             'security_enabled',
             'aws_account',
             'bucket_name',
-            'cf_distribution_ids'
-            )
+            'cf_distribution_ids',
+        )

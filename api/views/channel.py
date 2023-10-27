@@ -6,21 +6,24 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
 
-from api.serializers import ChannelSerializer, CreateChannelSerializer, MediaSerializer
+from api.serializers import (
+    ChannelSerializer,
+    CreateChannelSerializer,
+    MediaSerializer,
+)
 from organization.models import Channel
 
 
 class ChannelViewSet(viewsets.ModelViewSet):
     serializer_class = ChannelSerializer
-    search_fields = (
-        'name',
-        'organization__name'
-    )
+    search_fields = ('name', 'organization__name')
 
     def get_queryset(self):
         user = self.request.user
 
-        return Channel.objects.filter(organization_id=user.organization_id).order_by('pk')
+        return Channel.objects.filter(
+            organization_id=user.organization_id
+        ).order_by('pk')
 
     def get_serializer_class(self):
         serializer_class = {
@@ -46,13 +49,21 @@ class ChannelViewSet(viewsets.ModelViewSet):
             channel = Channel.objects.create(
                 name=input_serializer.validated_data['name'],
                 organization=organization,
-                allowed_domains=input_serializer.validated_data.pop('allowed_domains', []),
-                ads_vast_url=input_serializer.validated_data.pop('ads_vast_url', ''),
-                autoplay=input_serializer.validated_data.pop('autoplay', False)
+                allowed_domains=input_serializer.validated_data.pop(
+                    'allowed_domains', []
+                ),
+                ads_vast_url=input_serializer.validated_data.pop(
+                    'ads_vast_url', ''
+                ),
+                autoplay=input_serializer.validated_data.pop(
+                    'autoplay', False
+                ),
             )
 
         except IntegrityError:
-            raise ValidationError({'non_field_errors': ['Error creating the channel']})
+            raise ValidationError(
+                {'non_field_errors': ['Error creating the channel']}
+            )
 
         serialized = ChannelSerializer(channel)
 
@@ -64,7 +75,9 @@ class ChannelViewSet(viewsets.ModelViewSet):
         data = channel.videos.all()
         page = self.paginate_queryset(data)
 
-        serializer = MediaSerializer(page, many=True, context={'request': request})
+        serializer = MediaSerializer(
+            page, many=True, context={'request': request}
+        )
         paginated_serializer = self.get_paginated_response(serializer.data)
 
         return Response(paginated_serializer.data)

@@ -4,7 +4,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from knox.views import LoginView as KnoxLoginView
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated
 
 from api.exceptions import WrongPassword
 from hub_auth.models import Account
@@ -27,7 +27,9 @@ class LoginView(KnoxLoginView):
 class AccountViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AccountSerializer
     permission_classes = (OnlySuperusersPermission,)
-    queryset = Account.objects.prefetch_related('organization').all().order_by('id')
+    queryset = (
+        Account.objects.prefetch_related('organization').all().order_by('id')
+    )
 
     def get_serializer_class(self):
         serializer_class = {
@@ -39,12 +41,16 @@ class AccountViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             return self.serializer_class
 
-    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    @action(
+        detail=False, methods=['get'], permission_classes=[IsAuthenticated]
+    )
     def me(self, request):
         user = self.get_serializer(self.request.user)
         return Response(user.data)
 
-    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(
+        detail=False, methods=['post'], permission_classes=[IsAuthenticated]
+    )
     def change_password(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

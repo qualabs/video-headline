@@ -5,12 +5,18 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from organization.models import Organization
-from test_utils import create_user, create_superuser, create_key, create_live_videos, \
-    create_videos, create_channels, add_channel_to_video
+from test_utils import (
+    create_user,
+    create_superuser,
+    create_key,
+    create_live_videos,
+    create_videos,
+    create_channels,
+    add_channel_to_video,
+)
 
 
 class VideoLinkTests(APITestCase):
-
     @classmethod
     def setUpClass(cls):
         logging.disable(logging.WARNING)
@@ -20,8 +26,12 @@ class VideoLinkTests(APITestCase):
         cls.org2 = Organization.objects.create(name='Organization 2')
 
         # Channels
-        cls.channels_org1 = create_channels('channel', cls.org1, 2, cf_domain='cf_domain1')
-        cls.channels_org2 = create_channels('channel', cls.org2, 2, cf_domain='cf_domain2')
+        cls.channels_org1 = create_channels(
+            'channel', cls.org1, 2, cf_domain='cf_domain1'
+        )
+        cls.channels_org2 = create_channels(
+            'channel', cls.org2, 2, cf_domain='cf_domain2'
+        )
 
         # Users
         cls.user1 = create_user('user1', '12345678', cls.org1)
@@ -31,11 +41,15 @@ class VideoLinkTests(APITestCase):
 
     def setUp(self):
         # Videos
-        self.video1, self.video3 = create_videos('Video', self.user1, self.org1, 2)
+        self.video1, self.video3 = create_videos(
+            'Video', self.user1, self.org1, 2
+        )
         add_channel_to_video(self.channels_org1[0], self.video1)
         add_channel_to_video(self.channels_org1[1], self.video3)
 
-        self.video2, self.video4 = create_videos('Video', self.user2, self.org2, 2)
+        self.video2, self.video4 = create_videos(
+            'Video', self.user2, self.org2, 2
+        )
         add_channel_to_video(self.channels_org2[0], self.video2)
         add_channel_to_video(self.channels_org2[1], self.video4)
 
@@ -65,7 +79,7 @@ class VideoLinkTests(APITestCase):
 
         video_url = {
             'video_url': self.video1.get_urls()[1],
-            'type': 'application/x-mpegURL'
+            'type': 'application/x-mpegURL',
         }
 
         # Validate status code
@@ -91,10 +105,7 @@ class VideoLinkTests(APITestCase):
 
         _, media_url, mime_type = self.video1.get_urls()
 
-        video_url = {
-            'video_url': media_url,
-            'type': mime_type
-        }
+        video_url = {'video_url': media_url, 'type': mime_type}
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -110,10 +121,7 @@ class VideoLinkTests(APITestCase):
 
         _, media_url, mime_type = self.video2.get_urls()
 
-        video_url = {
-            'video_url': media_url,
-            'type': mime_type
-        }
+        video_url = {'video_url': media_url, 'type': mime_type}
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -125,15 +133,16 @@ class VideoLinkTests(APITestCase):
         url1 = reverse('link', kwargs={'video_id': self.video1.video_id})
         url2 = reverse('link', kwargs={'video_id': self.video2.video_id})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.get(url1, content_type='application/json', **header)
-        response2 = self.client.get(url2, content_type='application/json', **header)
+        response1 = self.client.get(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.get(
+            url2, content_type='application/json', **header
+        )
 
         _, media_url, mime_type = self.video1.get_urls()
 
-        video_url = {
-            'video_url': media_url,
-            'type': mime_type
-        }
+        video_url = {'video_url': media_url, 'type': mime_type}
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response1.status_code)
@@ -160,7 +169,7 @@ class VideoLinkTests(APITestCase):
 
         video_url = {
             'video_url': f'https://{self.live1.cf_domain}/output.m3u8',
-            'type': 'application/x-mpegURL'
+            'type': 'application/x-mpegURL',
         }
 
         # Validate status code
@@ -186,7 +195,7 @@ class VideoLinkTests(APITestCase):
 
         video_url = {
             'video_url': f'https://{self.live1.cf_domain}/output.m3u8',
-            'type': 'application/x-mpegURL'
+            'type': 'application/x-mpegURL',
         }
 
         # Validate status code
@@ -203,7 +212,7 @@ class VideoLinkTests(APITestCase):
 
         video_url = {
             'video_url': f'https://{self.live2.cf_domain}/output.m3u8',
-            'type': 'application/x-mpegURL'
+            'type': 'application/x-mpegURL',
         }
 
         # Validate status code
@@ -216,12 +225,16 @@ class VideoLinkTests(APITestCase):
         url1 = reverse('link', kwargs={'video_id': self.live1.video_id})
         url2 = reverse('link', kwargs={'video_id': self.live2.video_id})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.get(url1, content_type='application/json', **header)
-        response2 = self.client.get(url2, content_type='application/json', **header)
+        response1 = self.client.get(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.get(
+            url2, content_type='application/json', **header
+        )
 
         video_url = {
             'video_url': f'https://{self.live1.cf_domain}/output.m3u8',
-            'type': 'application/x-mpegURL'
+            'type': 'application/x-mpegURL',
         }
 
         # Validate status code
@@ -230,4 +243,5 @@ class VideoLinkTests(APITestCase):
 
         # Validate video link
         self.assertEqual(video_url, response1.data)
+
     # </editor-fold>

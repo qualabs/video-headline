@@ -11,14 +11,14 @@ from utils import costexplorer
 
 class BillsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BillSerializer
-    search_fields = (
-        'plan__name',
-    )
+    search_fields = ('plan__name',)
 
     def get_queryset(self):
         user = self.request.user
 
-        return Bill.objects.filter(organization_id=user.organization_id).order_by('-date')
+        return Bill.objects.filter(
+            organization_id=user.organization_id
+        ).order_by('-date')
 
     def get_serializer_class(self):
         serializer_class = {
@@ -34,7 +34,9 @@ class BillsViewSet(viewsets.ReadOnlyModelViewSet):
         now = timezone.now()
 
         # If the current invoice is more than 12 hours out of date.
-        if bill.is_current_bill() and (now > bill.last_modified + timedelta(hours=12)):
+        if bill.is_current_bill() and (
+            now > bill.last_modified + timedelta(hours=12)
+        ):
             costexplorer.update_bill(bill)
 
         serializer = self.get_serializer(bill)

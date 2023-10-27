@@ -12,15 +12,17 @@ from video.models import Tag
 
 class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
-    search_fields = (
-        'name',
-    )
+    search_fields = ('name',)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        queryset = Tag.objects.filter(organization_id=self.request.user.organization_id)
+        queryset = Tag.objects.filter(
+            organization_id=self.request.user.organization_id
+        )
         if self.action and self.action in ['list']:
-            queryset = queryset.annotate(Count('media')).order_by('-media__count')
+            queryset = queryset.annotate(Count('media')).order_by(
+                '-media__count'
+            )
 
         return queryset
 
@@ -36,7 +38,8 @@ class TagViewSet(viewsets.ModelViewSet):
             return self.serializer_class
 
     # def list(self, request, *args, **kwargs):
-    #     queryset = self.get_queryset().annotate(Count('videos')).order_by('-videos__count')
+    #     queryset = self.get_queryset().annotate(Count('videos'))
+    # .order_by('-videos__count')
 
     #     serialized = self.get_serializer_class()(queryset, many=True)
     #     return Response(serialized.data)
@@ -55,7 +58,9 @@ class TagViewSet(viewsets.ModelViewSet):
             )
 
         except IntegrityError:
-            raise ValidationError({'non_field_errors': ['Error creating tag.']})
+            raise ValidationError(
+                {'non_field_errors': ['Error creating tag.']}
+            )
 
         serialized = TagSerializer(tag)
 

@@ -6,12 +6,16 @@ from rest_framework.test import APITestCase
 
 from api.serializers import ChannelSerializer
 from organization.models import Channel
-from test_utils import create_organizations, create_user, create_superuser, create_channels, \
-    create_key
+from test_utils import (
+    create_organizations,
+    create_user,
+    create_superuser,
+    create_channels,
+    create_key,
+)
 
 
 class ChannelTests(APITestCase):
-
     @classmethod
     def setUpClass(cls):
         logging.disable(logging.WARNING)
@@ -24,7 +28,9 @@ class ChannelTests(APITestCase):
         cls.key = create_key('key', cls.user1)
 
     def setUp(self):
-        self.channel1, self.channel2, self.channel3 = create_channels('Channel', self.org1, 3)
+        self.channel1, self.channel2, self.channel3 = create_channels(
+            'Channel', self.org1, 3
+        )
         self.channel4, self.channel5 = create_channels('Channel', self.org2, 2)
 
     def tearDown(self):
@@ -211,8 +217,9 @@ class ChannelTests(APITestCase):
     def test_create_channels_with_annon_user(self):
         data = {
             "name": "New Channel",
-            "allowed_domains": "one, two, three, four"
+            "allowed_domains": "one, two, three, four",
         }
+
         url = reverse('channels-list')
         response = self.client.post(url, data=data, format='json')
 
@@ -222,7 +229,7 @@ class ChannelTests(APITestCase):
     def test_create_channels_with_superuser(self):
         data = {
             "name": "New Channel",
-            "allowed_domains": ["one", "two", "three", "four"]
+            "allowed_domains": ["one", "two", "three", "four"],
         }
 
         self.client.login(username='admin', password='12345678')
@@ -236,7 +243,7 @@ class ChannelTests(APITestCase):
     def test_create_channels_with_user_1(self):
         data = {
             "name": "New Channel",
-            "allowed_domains": ["one", "two", "three", "four"]
+            "allowed_domains": ["one", "two", "three", "four"],
         }
 
         self.client.login(username='user1', password='12345678')
@@ -250,7 +257,7 @@ class ChannelTests(APITestCase):
     def test_create_channels_with_user_2(self):
         data = {
             "name": "New Channel",
-            "allowed_domains": ["one", "two", "three", "four"]
+            "allowed_domains": ["one", "two", "three", "four"],
         }
 
         self.client.login(username='user2', password='12345678')
@@ -264,7 +271,7 @@ class ChannelTests(APITestCase):
     def test_create_channels_with_key(self):
         data = {
             "name": "New Channel",
-            "allowed_domains": ["one", "two", "three", "four"]
+            "allowed_domains": ["one", "two", "three", "four"],
         }
 
         url = reverse('channels-list')
@@ -280,7 +287,7 @@ class ChannelTests(APITestCase):
     def test_put_channel_annon_user(self):
         data = {
             "name": "New Channel",
-            "allowed_domains": ["one", "two", "three", "four"]
+            "allowed_domains": ["one", "two", "three", "four"],
         }
         url = reverse('channels-detail', kwargs={'pk': self.channel1.pk})
         response = self.client.put(url, data=data, format='json')
@@ -294,7 +301,7 @@ class ChannelTests(APITestCase):
             "allowed_domains": ["one", "two", "three", "four"],
             "ads_vast_url": "",
             "detect_adblock": False,
-            "autoplay": False
+            "autoplay": False,
         }
 
         self.client.login(username='admin', password='12345678')
@@ -306,21 +313,31 @@ class ChannelTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate allowed domains
-        self.assertIn(data['allowed_domains'][0], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][1], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][2], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][3], response.json()['allowed_domains'])
+        self.assertIn(
+            data['allowed_domains'][0], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][1], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][2], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][3], response.json()['allowed_domains']
+        )
 
         # Validate other fields
         self.assertEqual(data['name'], response.json()['name'])
         self.assertEqual(data['ads_vast_url'], response.json()['ads_vast_url'])
-        self.assertEqual(data['detect_adblock'], response.json()['detect_adblock'])
+        self.assertEqual(
+            data['detect_adblock'], response.json()['detect_adblock']
+        )
 
     def test_put_channel_superuser_with_org_1_but_channels_org_2(self):
         data = {
             "name": "New Channel",
             "allowed_domains": ["one", "two", "three", "four"],
-            "ads_vast_url": ""
+            "ads_vast_url": "",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -336,7 +353,7 @@ class ChannelTests(APITestCase):
             "name": "New Channel",
             "allowed_domains": ["one", "two", "three", "four"],
             "ads_vast_url": "",
-            "detect_adblock": False
+            "detect_adblock": False,
         }
 
         self.client.login(username='user1', password='12345678')
@@ -348,15 +365,25 @@ class ChannelTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate allowed domains
-        self.assertIn(data['allowed_domains'][0], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][1], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][2], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][3], response.json()['allowed_domains'])
+        self.assertIn(
+            data['allowed_domains'][0], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][1], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][2], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][3], response.json()['allowed_domains']
+        )
 
         # Validate other fields
         self.assertEqual(data['name'], response.json()['name'])
         self.assertEqual(data['ads_vast_url'], response.json()['ads_vast_url'])
-        self.assertEqual(data['detect_adblock'], response.json()['detect_adblock'])
+        self.assertEqual(
+            data['detect_adblock'], response.json()['detect_adblock']
+        )
 
     def test_put_channel_user_2_with_org_2(self):
         data = {
@@ -364,7 +391,7 @@ class ChannelTests(APITestCase):
             "allowed_domains": ["one", "two", "three", "four"],
             "ads_vast_url": "",
             "detect_adblock": False,
-            "autoplay": True
+            "autoplay": True,
         }
 
         self.client.login(username='user2', password='12345678')
@@ -376,22 +403,32 @@ class ChannelTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate allowed domains
-        self.assertIn(data['allowed_domains'][0], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][1], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][2], response.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][3], response.json()['allowed_domains'])
+        self.assertIn(
+            data['allowed_domains'][0], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][1], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][2], response.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][3], response.json()['allowed_domains']
+        )
 
         # Validate other fields
         self.assertEqual(data['name'], response.json()['name'])
         self.assertEqual(data['ads_vast_url'], response.json()['ads_vast_url'])
-        self.assertEqual(data['detect_adblock'], response.json()['detect_adblock'])
+        self.assertEqual(
+            data['detect_adblock'], response.json()['detect_adblock']
+        )
 
     def test_put_channel_with_key(self):
         data = {
             "name": "New Channel",
             "allowed_domains": ["one", "two", "three", "four"],
             "ads_vast_url": "",
-            "detect_adblock": False
+            "detect_adblock": False,
         }
 
         url1 = reverse('channels-detail', kwargs={'pk': self.channel3.pk})
@@ -406,15 +443,27 @@ class ChannelTests(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response2.status_code)
 
         # Validate allowed domains
-        self.assertIn(data['allowed_domains'][0], response1.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][1], response1.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][2], response1.json()['allowed_domains'])
-        self.assertIn(data['allowed_domains'][3], response1.json()['allowed_domains'])
+        self.assertIn(
+            data['allowed_domains'][0], response1.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][1], response1.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][2], response1.json()['allowed_domains']
+        )
+        self.assertIn(
+            data['allowed_domains'][3], response1.json()['allowed_domains']
+        )
 
         # Validate other fields
         self.assertEqual(data['name'], response1.json()['name'])
-        self.assertEqual(data['ads_vast_url'], response1.json()['ads_vast_url'])
-        self.assertEqual(data['detect_adblock'], response1.json()['detect_adblock'])
+        self.assertEqual(
+            data['ads_vast_url'], response1.json()['ads_vast_url']
+        )
+        self.assertEqual(
+            data['detect_adblock'], response1.json()['detect_adblock']
+        )
 
     # </editor-fold>
 
@@ -430,20 +479,22 @@ class ChannelTests(APITestCase):
         create_data = {
             "name": "New Channel",
             "allowed_domains": ["one", "two", "three", "four"],
-            "ads_vast_url": ""
+            "ads_vast_url": "",
         }
 
         self.client.login(username='admin', password='12345678')
 
         url = reverse('channels-list')
-        creation_response = self.client.post(url, data=create_data, format='json')
+        creation_response = self.client.post(
+            url, data=create_data, format='json'
+        )
         pk = creation_response.data["id"]
 
         patch_data = {
             "name": "Foo",
             "allowed_domains": ["111", "222"],
             "ads_vast_url": "https://www.dummy.com",
-            "detect_adblock": True
+            "detect_adblock": True,
         }
 
         url_patch = reverse('channels-detail', kwargs={'pk': pk})
@@ -456,32 +507,44 @@ class ChannelTests(APITestCase):
         self.assertEqual(patch_data['name'], response.data["name"])
 
         # Validate allowed domains
-        self.assertIn(patch_data['allowed_domains'][0], response.json()['allowed_domains'])
-        self.assertIn(patch_data['allowed_domains'][1], response.json()['allowed_domains'])
+        self.assertIn(
+            patch_data['allowed_domains'][0],
+            response.json()['allowed_domains'],
+        )
+        self.assertIn(
+            patch_data['allowed_domains'][1],
+            response.json()['allowed_domains'],
+        )
         self.assertNotIn("333", response.json()['allowed_domains'])
 
         # Validate other fields
-        self.assertEqual(patch_data['ads_vast_url'], response.json()['ads_vast_url'])
-        self.assertEqual(patch_data['detect_adblock'], response.json()['detect_adblock'])
+        self.assertEqual(
+            patch_data['ads_vast_url'], response.json()['ads_vast_url']
+        )
+        self.assertEqual(
+            patch_data['detect_adblock'], response.json()['detect_adblock']
+        )
 
     def test_patch_channel_with_user(self):
         create_data = {
             "name": "New Channel",
             "allowed_domains": ["one", "two", "three", "four"],
-            "ads_vast_url": ""
+            "ads_vast_url": "",
         }
 
         self.client.login(username='user2', password='12345678')
 
         url = reverse('channels-list')
-        creation_response = self.client.post(url, data=create_data, format='json')
+        creation_response = self.client.post(
+            url, data=create_data, format='json'
+        )
         pk = creation_response.data["id"]
 
         patch_data = {
             "name": "Lorem",
             "allowed_domains": ["one", "two"],
             "ads_vast_url": "https://www.lorem.com",
-            "detect_adblock": True
+            "detect_adblock": True,
         }
 
         url_patch = reverse('channels-detail', kwargs={'pk': pk})
@@ -494,36 +557,50 @@ class ChannelTests(APITestCase):
         self.assertEqual(patch_data['name'], response.data["name"])
 
         # Validate allowed domains
-        self.assertIn(patch_data['allowed_domains'][0], response.json()['allowed_domains'])
-        self.assertIn(patch_data['allowed_domains'][1], response.json()['allowed_domains'])
+        self.assertIn(
+            patch_data['allowed_domains'][0],
+            response.json()['allowed_domains'],
+        )
+        self.assertIn(
+            patch_data['allowed_domains'][1],
+            response.json()['allowed_domains'],
+        )
         self.assertNotIn("three", response.json()['allowed_domains'])
         self.assertNotIn("four", response.json()['allowed_domains'])
 
         # Validate other fields
-        self.assertEqual("https://www.lorem.com", response.json()['ads_vast_url'])
-        self.assertEqual(patch_data['detect_adblock'], response.json()['detect_adblock'])
+        self.assertEqual(
+            "https://www.lorem.com", response.json()['ads_vast_url']
+        )
+        self.assertEqual(
+            patch_data['detect_adblock'], response.json()['detect_adblock']
+        )
 
     def test_patch_channel_with_key(self):
         create_data = {
             "name": "New Channel",
             "allowed_domains": ["one", "two", "three", "four"],
-            "ads_vast_url": ""
+            "ads_vast_url": "",
         }
 
         url = reverse('channels-list')
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        creation_response = self.client.post(url, data=create_data, format='json', **header)
+        creation_response = self.client.post(
+            url, data=create_data, format='json', **header
+        )
         pk = creation_response.data["id"]
 
         patch_data = {
             "name": "Lorem",
             "allowed_domains": ["one", "two"],
             "ads_vast_url": "https://www.lorem.com",
-            "detect_adblock": True
+            "detect_adblock": True,
         }
 
         url_patch = reverse('channels-detail', kwargs={'pk': pk})
-        response = self.client.patch(url_patch, data=patch_data, format='json', **header)
+        response = self.client.patch(
+            url_patch, data=patch_data, format='json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -532,12 +609,23 @@ class ChannelTests(APITestCase):
         self.assertEqual(patch_data['name'], response.data["name"])
 
         # Validate allowed domains
-        self.assertIn(patch_data['allowed_domains'][0], response.json()['allowed_domains'])
-        self.assertIn(patch_data['allowed_domains'][1], response.json()['allowed_domains'])
+        self.assertIn(
+            patch_data['allowed_domains'][0],
+            response.json()['allowed_domains'],
+        )
+        self.assertIn(
+            patch_data['allowed_domains'][1],
+            response.json()['allowed_domains'],
+        )
         self.assertNotIn("three", response.json()['allowed_domains'])
         self.assertNotIn("four", response.json()['allowed_domains'])
 
         # Validate other fields
-        self.assertEqual("https://www.lorem.com", response.json()['ads_vast_url'])
-        self.assertEqual(patch_data['detect_adblock'], response.json()['detect_adblock'])
+        self.assertEqual(
+            "https://www.lorem.com", response.json()['ads_vast_url']
+        )
+        self.assertEqual(
+            patch_data['detect_adblock'], response.json()['detect_adblock']
+        )
+
     # </editor-fold>

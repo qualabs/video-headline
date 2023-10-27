@@ -13,7 +13,7 @@ class ChannelSerializer(serializers.ModelSerializer):
             'allowed_domains',
             'ads_vast_url',
             'detect_adblock',
-            'autoplay'
+            'autoplay',
         )
 
 
@@ -25,16 +25,11 @@ class CreateChannelSerializer(serializers.ModelSerializer):
             'allowed_domains',
             'ads_vast_url',
             'detect_adblock',
-            'autoplay'
+            'autoplay',
         )
 
 
 class MinChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Channel
-        fields = (
-            'id',
-            'channel_id',
-            'name',
-            'cf_domain'
-        )
+        fields = ('id', 'channel_id', 'name', 'cf_domain')
