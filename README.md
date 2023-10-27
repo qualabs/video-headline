@@ -84,9 +84,9 @@ Follow these steps to set up and run the application locally:
 
 ![¡](docs/aws-services-configuration.png)
 
-4. **Test Plan Creation:** Create a `Test Plan`, using the MediaLive and MediaConvert configurations.
-5. **AWS Test Account:** Create a test `AWS Account`, and ensure it's equipped with the appropriate AWS credentials (These should be the credentials obtained in step 4(User permissions) of AWS Configuration).
-6. **Test Organization:** Create a test `Organization`. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
+4. **Plan Creation:** Create a test `Plan`, using the MediaLive and MediaConvert configurations.
+5. **AWS Account:** Create a test `AWS Account`, and ensure it's equipped with the appropriate AWS credentials (These should be the API user's credentials created in AWS Configuration section which are available in AWS Secrets Manager).
+6. **Organization:** Create a test `Organization`. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
 
 ![¡](docs/orgs-and-channels.png)
 
