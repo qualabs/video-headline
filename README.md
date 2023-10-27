@@ -84,9 +84,9 @@ Follow these steps to set up and run the application locally:
 
 ![¡](docs/aws-services-configuration.png)
 
-4. **Test Plan Creation:** Create a `Test Plan`, using the MediaLive and MediaConvert configurations.
-5. **AWS Test Account:** Create a test `AWS Account`, and ensure it's equipped with the appropriate AWS credentials (These should be the credentials obtained in step 4(User permissions) of AWS Configuration).
-6. **Test Organization:** Create a test `Organization`. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
+4. **Plan Creation:** Create a test `Plan`, using the MediaLive and MediaConvert configurations.
+5. **AWS Account:** Create a test `AWS Account`, and ensure it's equipped with the appropriate AWS credentials (These should be the API user's credentials created in AWS Configuration section which are available in AWS Secrets Manager).
+6. **Organization:** Create a test `Organization`. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
 
 ![¡](docs/orgs-and-channels.png)
 
@@ -118,3 +118,34 @@ For AWS deployment, refer to the [README](infrastructure/README.md) within the I
 ```
 
 If you do not have a CSS URL, you can serve a folder using the npx serve command: 1. Navigate to the folder containing the CSS file you want to use. 2. Run the command 'npx serve .'. 3. Open the server from the browser (probably http://localhost:5000), find the file, and copy the URL.
+
+### Setting Up ESLint for Linting React in Visual Studio Code
+Follow the steps below to set up ESLint for linting React code in Visual Studio Code:
+1. Prerequisites:
+  - Navigate to the `web` folder of the project.
+2. Installation:
+  - Run the command `npm install` to install necessary packages.
+3. Configuring Visual Studio Code:
+  - Ensure you have the following extensions installed:
+
+<img src="docs/eslint_extension.png" alt="drawing" width="400"/>
+<img src="docs/prettier_eslint_extension.png" alt="drawing" width="400"/>
+
+  - Accessing settings:
+    - To open the command palette in Visual Studio Code, press Ctrl + Shift + P and select:
+
+<img src="docs/vsc_settings.png" alt="drawing" width="400"/>
+
+  - Append the following configurations:
+    ```json
+    "editor.codeActionsOnSave": { "source.fixAll.eslint": true },
+    "editor.formatOnSave": true,
+    "[javascriptreact]": {
+    	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+	  },
+	  "[json]": {
+    	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    }
+    ```
+
+With these configurations, your React code will be automatically linted and formatted.
