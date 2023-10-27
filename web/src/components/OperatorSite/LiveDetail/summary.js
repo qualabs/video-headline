@@ -35,10 +35,39 @@ class LiveSummary extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isDeleteSubmitting: false
+      isDeleteSubmitting: false,
+      iframeKey: 'old-key',
     }
+   
   }
+ 
+  componentDidUpdate(prevProps) {
+    if (this.props.video.state != prevProps.video.state || this.props.video.input_state != prevProps.video.input_state) {
+      if (this.props.video.state == ON && this.props.video.input_state.length== 0) {
+        const iframe = document.querySelector('iframe');
+        const iframeSrc = iframe.src;
+        const cloudFrontUrl = iframeSrc.split('/')[2];  
+        const checkStatusInterval = setInterval(() => {
+        fetch(cloudFrontUrl, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                  clearInterval(checkStatusInterval);
+                  this.setState({ iframeKey: 'new-key' + Math.random()});
+                }
+              });
+          }, 5000); 
+        }
+        }
+        if (this.props.securityEnabled) {
+          this.props.fetchIframe(this.props.video.video_id)
+        }
+    }
 
+   
   componentWillUnmount () {
     clearInterval(this.timerId)
   }
@@ -400,6 +429,7 @@ class LiveSummary extends Component {
                   scrolling='no'
                   seamless='seamless'
                   allow='autoplay; fullscreen'
+                  key={this.state.iframeKey}
                 />
               </div>
               <div className='iframe-code'>
