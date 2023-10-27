@@ -27,7 +27,7 @@ class LiveVideoCutSerializer(serializers.ModelSerializer):
             'final_time',
             'description',
             'created_by',
-            'state'
+            'state',
         )
 
 
@@ -42,7 +42,7 @@ class CreateLiveVideoCutSerializer(serializers.ModelSerializer):
             'initial_time',
             'final_time',
             'description',
-            'created_by'
+            'created_by',
         )
         extra_kwargs = {'created_by': {'read_only': True}}
 

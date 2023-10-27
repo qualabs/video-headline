@@ -9,15 +9,22 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from api.serializers.live_video import LiveVideoSerializer
-from test_utils import create_organizations, create_channels, \
-    create_live_videos, create_tags, create_live_video, create_user, create_superuser, \
-    add_channel_to_live_video, create_key
+from test_utils import (
+    create_organizations,
+    create_channels,
+    create_live_videos,
+    create_tags,
+    create_live_video,
+    create_user,
+    create_superuser,
+    add_channel_to_live_video,
+    create_key,
+)
 from utils import medialive, sns
 from video.models import LiveVideo
 
 
 class LiveVideoTests(APITestCase):
-
     @classmethod
     def setUpClass(cls):
         logging.disable(logging.WARNING)
@@ -29,15 +36,21 @@ class LiveVideoTests(APITestCase):
         cls.su = create_superuser('admin', '12345678', cls.org1)
         cls.key = create_key('key', cls.user1)
 
-        cls.chan1, cls.chan2, cls.chan3 = create_channels('Channel', cls.org1, 3)
+        cls.chan1, cls.chan2, cls.chan3 = create_channels(
+            'Channel', cls.org1, 3
+        )
         cls.chan4, cls.chan5 = create_channels('Channel', cls.org2, 2)
 
         cls.tag1, cls.tag2 = create_tags('Funny tag', cls.org1, 2)
         cls.tag3, cls.tag4 = create_tags('Funny tag', cls.org2, 2)
 
     def setUp(self):
-        self.live1, self.live2, self.live3 = create_live_videos('Video', self.user1, self.org1, 3)
-        self.live4, self.live5 = create_live_videos('Video', self.user2, self.org2, 2)
+        self.live1, self.live2, self.live3 = create_live_videos(
+            'Video', self.user1, self.org1, 3
+        )
+        self.live4, self.live5 = create_live_videos(
+            'Video', self.user2, self.org2, 2
+        )
 
     def tearDown(self):
         LiveVideo.objects.all().delete()
@@ -207,8 +220,12 @@ class LiveVideoTests(APITestCase):
         url1 = reverse('live-videos-detail', kwargs={'pk': self.live2.pk})
         url2 = reverse('live-videos-detail', kwargs={'pk': self.live5.pk})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.get(url1, content_type='application/json', **header)
-        response2 = self.client.get(url2, content_type='application/json', **header)
+        response1 = self.client.get(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.get(
+            url2, content_type='application/json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response1.status_code)
@@ -224,12 +241,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan3.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         url = reverse('live-videos-detail', kwargs={'pk': self.live1.pk})
@@ -241,15 +255,8 @@ class LiveVideoTests(APITestCase):
     def test_put_live_video_with_multiple_channels(self):
         data = {
             "name": "foo",
-            "channel": [
-                self.chan1.pk,
-                self.chan2.pk,
-                self.chan3.pk
-            ],
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ]
+            "channel": [self.chan1.pk, self.chan2.pk, self.chan3.pk],
+            "tags": [self.tag1.name, self.tag2.name],
         }
         self.client.login(username='user1', password='12345678')
 
@@ -263,12 +270,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan2.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='admin', password='12345678')
@@ -295,12 +299,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan5.pk,
-            "tags": [
-                self.tag3.name,
-                self.tag4.name
-            ],
+            "tags": [self.tag3.name, self.tag4.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='admin', password='12345678')
@@ -315,12 +316,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='user1', password='12345678')
@@ -347,12 +345,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan4.pk,
-            "tags": [
-                self.tag3.name,
-                self.tag4.name
-            ],
+            "tags": [self.tag3.name, self.tag4.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
         self.client.login(username='user2', password='12345678')
 
@@ -378,12 +373,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         url1 = reverse('live-videos-detail', kwargs={'pk': self.live2.pk})
@@ -405,7 +397,9 @@ class LiveVideoTests(APITestCase):
 
         # Validate other fields
         self.assertEqual(data['name'], response1.json()['name'])
-        self.assertEqual(data['ads_vast_url'], response1.json()['ads_vast_url'])
+        self.assertEqual(
+            data['ads_vast_url'], response1.json()['ads_vast_url']
+        )
         self.assertEqual(data['enable_ads'], response1.json()['enable_ads'])
 
     # </editor-fold>
@@ -419,13 +413,7 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_patch_live_video_with_multiple_channels(self):
-        data = {
-            "name": "New name",
-            "channel": [
-                self.chan1.pk,
-                self.chan2.pk
-            ]
-        }
+        data = {"name": "New name", "channel": [self.chan1.pk, self.chan2.pk]}
         self.client.login(username='user1', password='12345678')
 
         url = reverse('live-videos-detail', kwargs={'pk': self.live1.pk})
@@ -468,12 +456,7 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_patch_live_video_with_user_1(self):
-        data = {
-            "tags": [
-                self.tag1.pk
-            ],
-            "channel": self.chan3.pk
-        }
+        data = {"tags": [self.tag1.pk], "channel": self.chan3.pk}
         self.client.login(username='user1', password='12345678')
 
         url = reverse('live-videos-detail', kwargs={'pk': self.live3.pk})
@@ -490,9 +473,7 @@ class LiveVideoTests(APITestCase):
 
     def test_patch_live_video_with_user_2(self):
         data = {
-            "tags": [
-                self.tag3.pk
-            ],
+            "tags": [self.tag3.pk],
             "channel": self.chan5.pk,
         }
         self.client.login(username='user2', password='12345678')
@@ -511,12 +492,7 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(self.chan5.pk, response.json()['channel'])
 
     def test_patch_live_video_with_key(self):
-        data = {
-            "tags": [
-                self.tag1.pk
-            ],
-            "channel": self.chan3.pk
-        }
+        data = {"tags": [self.tag1.pk], "channel": self.chan3.pk}
 
         url1 = reverse('live-videos-detail', kwargs={'pk': self.live3.pk})
         url2 = reverse('live-videos-detail', kwargs={'pk': self.live4.pk})
@@ -535,11 +511,7 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(self.chan3.pk, response1.json()['channel'])
 
     def test_patch_live_video_without_channels(self):
-        data = {
-            "tags": [
-                self.tag3.pk
-            ]
-        }
+        data = {"tags": [self.tag3.pk]}
         self.client.login(username='user2', password='12345678')
 
         url = reverse('live-videos-detail', kwargs={'pk': self.live4.pk})
@@ -561,12 +533,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan2.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         url = reverse('live-videos-list')
@@ -579,12 +548,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='user1', password='12345678')
@@ -599,12 +565,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan4.pk,
-            "tags": [
-                self.tag3.name,
-                self.tag4.name
-            ],
+            "tags": [self.tag3.name, self.tag4.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='user2', password='12345678')
@@ -619,12 +582,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan2.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='admin', password='12345678')
@@ -639,12 +599,9 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name,
-                self.tag2.name
-            ],
+            "tags": [self.tag1.name, self.tag2.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         url = reverse('live-videos-list')
@@ -706,8 +663,12 @@ class LiveVideoTests(APITestCase):
         url1 = reverse('live-videos-detail', kwargs={'pk': self.live1.pk})
         url2 = reverse('live-videos-detail', kwargs={'pk': self.live5.pk})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.delete(url1, content_type='application/json', **header)
-        response2 = self.client.delete(url2, content_type='application/json', **header)
+        response1 = self.client.delete(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.delete(
+            url2, content_type='application/json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_403_FORBIDDEN, response1.status_code)
@@ -716,9 +677,12 @@ class LiveVideoTests(APITestCase):
     # </editor-fold>
 
     # <editor-fold desc="Transition by API LiveVideo TESTS">
-    def test_change_live_video_status_from_starting_to_stopping_with_user_1_org_1(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                          LiveVideo.State.STARTING)
+    def test_change_live_video_status_from_starting_to_stopping_with_user_1_org_1(
+        self,
+    ):
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -734,9 +698,12 @@ class LiveVideoTests(APITestCase):
         # Validate live_video state
         self.assertEqual(LiveVideo.State.STOPPING, live_starting_updated.state)
 
-    def test_change_live_video_status_from_stopping_to_stopping_with_user_1_org_1(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                          LiveVideo.State.STOPPING)
+    def test_change_live_video_status_from_stopping_to_stopping_with_user_1_org_1(
+        self,
+    ):
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -752,8 +719,12 @@ class LiveVideoTests(APITestCase):
         # Validate live_video state
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
-    def test_change_live_video_status_from_on_to_stopping_with_user_1_org_1(self):
-        live_on = create_live_video('Video', self.user1, self.org1, 1, LiveVideo.State.ON)
+    def test_change_live_video_status_from_on_to_stopping_with_user_1_org_1(
+        self,
+    ):
+        live_on = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.ON
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -769,8 +740,12 @@ class LiveVideoTests(APITestCase):
         # Validate live_video state
         self.assertEqual(LiveVideo.State.STOPPING, live_on_updated.state)
 
-    def test_change_live_video_status_from_off_to_stopping_with_user_1_org_1(self):
-        live_off = create_live_video('Video', self.user1, self.org1, 1, LiveVideo.State.OFF)
+    def test_change_live_video_status_from_off_to_stopping_with_user_1_org_1(
+        self,
+    ):
+        live_off = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.OFF
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -781,9 +756,12 @@ class LiveVideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_live_video_status_from_stopping_to_starting_with_user_1_org_1(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                          LiveVideo.State.STOPPING)
+    def test_change_live_video_status_from_stopping_to_starting_with_user_1_org_1(
+        self,
+    ):
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -799,9 +777,12 @@ class LiveVideoTests(APITestCase):
         # Validate live_video state
         self.assertEqual(LiveVideo.State.STARTING, live_stopping_updated.state)
 
-    def test_change_live_video_status_from_starting_to_starting_with_user_1_org_1(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                          LiveVideo.State.STARTING)
+    def test_change_live_video_status_from_starting_to_starting_with_user_1_org_1(
+        self,
+    ):
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -817,8 +798,12 @@ class LiveVideoTests(APITestCase):
         # Validate live_video state
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
-    def test_change_live_video_status_from_off_to_starting_with_user_1_org_1(self):
-        live_off = create_live_video('Video', self.user1, self.org1, 1, LiveVideo.State.OFF)
+    def test_change_live_video_status_from_off_to_starting_with_user_1_org_1(
+        self,
+    ):
+        live_off = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.OFF
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -834,8 +819,12 @@ class LiveVideoTests(APITestCase):
         # Validate live_video state
         self.assertEqual(LiveVideo.State.STARTING, live_off_updated.state)
 
-    def test_change_live_video_status_from_on_to_starting_with_user_1_org_1(self):
-        live_on = create_live_video('Video', self.user1, self.org1, 1, LiveVideo.State.ON)
+    def test_change_live_video_status_from_on_to_starting_with_user_1_org_1(
+        self,
+    ):
+        live_on = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.ON
+        )
 
         self.client.login(username='user1', password='12345678')
 
@@ -880,7 +869,9 @@ class LiveVideoTests(APITestCase):
             self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_subscribe_to_alerts_with_user_1_org_1(self):
-        live_sub = create_live_video('Video', self.user1, self.org1, 1, ml_channel_arn='probando')
+        live_sub = create_live_video(
+            'Video', self.user1, self.org1, 1, ml_channel_arn='probando'
+        )
 
         data = {
             "video_id": live_sub.video_id,
@@ -899,7 +890,9 @@ class LiveVideoTests(APITestCase):
 
         # Validate subscription
         self.assertEqual(arn, response.json()['subscription_id'])
-        self.assertEqual(live_sub.ml_channel_arn, response.json()['channel_arn'])
+        self.assertEqual(
+            live_sub.ml_channel_arn, response.json()['channel_arn']
+        )
 
     def test_subscribe_to_alert_no_subscription_created(self):
         data = {
@@ -910,24 +903,31 @@ class LiveVideoTests(APITestCase):
         self.client.login(username='user1', password='12345678')
 
         url = reverse('live-videos-subscribe')
-        with mock.patch('utils.sns.subscribe', side_effect=sns.NotificationNotFoundException()):
+        with mock.patch(
+            'utils.sns.subscribe',
+            side_effect=sns.NotificationNotFoundException(),
+        ):
             response = self.client.post(url, data=data, format='json')
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
         # Validate response detail
-        self.assertEqual('Could not subscribe to alert service', response.data['detail'])
+        self.assertEqual(
+            'Could not subscribe to alert service', response.data['detail']
+        )
 
     def test_notify_alerts_confirm_subscription(self):
-        data = {
-            "SubscribeURL": "http://prueba.com"
-        }
+        data = {"SubscribeURL": "http://prueba.com"}
 
         url = reverse('live-videos-notify')
         with mock.patch('requests.get', side_effect=None):
-            headers = {'HTTP_X_AMZ_SNS_MESSAGE_TYPE': 'SubscriptionConfirmation'}
-            response = self.client.post(url, data=data, format='json', **headers)
+            headers = {
+                'HTTP_X_AMZ_SNS_MESSAGE_TYPE': 'SubscriptionConfirmation'
+            }
+            response = self.client.post(
+                url, data=data, format='json', **headers
+            )
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -936,12 +936,10 @@ class LiveVideoTests(APITestCase):
         msg = {
             "alarm_state": "SET",
             "alert_type": "Video Not Detected",
-            "channel_arn": "channelarn"
+            "channel_arn": "channelarn",
         }
 
-        data = {
-            "Message": json.dumps(msg)
-        }
+        data = {"Message": json.dumps(msg)}
 
         url = reverse('live-videos-notify')
         headers = {'HTTP_X_AMZ_SNS_MESSAGE_TYPE': 'Notification'}
@@ -951,17 +949,17 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_notify_alerts_set_error_msg(self):
-        live = create_live_video('Video', self.user1, self.org1, 1, ml_channel_arn='probando')
+        live = create_live_video(
+            'Video', self.user1, self.org1, 1, ml_channel_arn='probando'
+        )
 
         msg = {
             "alarm_state": "SET",
             "alert_type": "Video Not Detected",
-            "channel_arn": live.ml_channel_arn
+            "channel_arn": live.ml_channel_arn,
         }
 
-        data = {
-            "Message": json.dumps(msg)
-        }
+        data = {"Message": json.dumps(msg)}
 
         url = reverse('live-videos-notify')
         headers = {'HTTP_X_AMZ_SNS_MESSAGE_TYPE': 'Notification'}
@@ -977,17 +975,21 @@ class LiveVideoTests(APITestCase):
         self.assertIn(msg['alert_type'], live.input_state)
 
     def test_notify_alerts_clear_error_msg(self):
-        live = create_live_video('Video', self.user1, self.org1, 1, ml_channel_arn='testing',
-                                 input_state=['Video Not Detected'])
+        live = create_live_video(
+            'Video',
+            self.user1,
+            self.org1,
+            1,
+            ml_channel_arn='testing',
+            input_state=['Video Not Detected'],
+        )
         msg = {
             "alarm_state": "CLEARED",
             "alert_type": "Video Not Detected",
-            "channel_arn": live.ml_channel_arn
+            "channel_arn": live.ml_channel_arn,
         }
 
-        data = {
-            "Message": json.dumps(msg)
-        }
+        data = {"Message": json.dumps(msg)}
 
         url = reverse('live-videos-notify')
         headers = {'HTTP_X_AMZ_SNS_MESSAGE_TYPE': 'Notification'}
@@ -1024,15 +1026,18 @@ class LiveVideoTests(APITestCase):
                             }
                         ]
                     }
-                ]
+                ],
             }
 
     def test_check_live_status_starting_with_running_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                          LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('RUNNING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('RUNNING'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1041,21 +1046,29 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.ON, live_starting_updated.state)
 
     def test_check_live_status_starting_with_idle_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                          LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
         with self.assertRaises(TransitionNotAllowed):
-            with mock.patch('utils.medialive.get_media_live',
-                            return_value=self.MockMediaLive('IDLE')):
-                with mock.patch('utils.medialive._delete_channel_storage', side_effect=None):
+            with mock.patch(
+                'utils.medialive.get_media_live',
+                return_value=self.MockMediaLive('IDLE'),
+            ):
+                with mock.patch(
+                    'utils.medialive._delete_channel_storage', side_effect=None
+                ):
                     medialive.check_live_state(live_starting.video_id)
 
     def test_check_live_status_starting_with_creating_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('CREATING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('CREATING'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1064,11 +1077,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_starting_with_create_failed_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('CREATE_FAILED')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('CREATE_FAILED'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1077,11 +1093,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_starting_with_recovering_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('RECOVERING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('RECOVERING'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1090,11 +1109,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_starting_with_deleting_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('DELETING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('DELETING'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1103,11 +1125,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_starting_with_deleted_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('DELETED')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('DELETED'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1116,11 +1141,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_starting_with_starting_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('STARTING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('STARTING'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1129,11 +1157,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_starting_with_stopping_in_aws(self):
-        live_starting = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STARTING)
+        live_starting = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STARTING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('STOPPING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('STOPPING'),
+        ):
             medialive.check_live_state(live_starting.video_id)
 
         live_starting_updated = LiveVideo.objects.get(id=live_starting.pk)
@@ -1142,20 +1173,29 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STARTING, live_starting_updated.state)
 
     def test_check_live_status_stopping_with_running_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
         with self.assertRaises(TransitionNotAllowed):
-            with mock.patch('utils.medialive.get_media_live',
-                            return_value=self.MockMediaLive('RUNNING')):
+            with mock.patch(
+                'utils.medialive.get_media_live',
+                return_value=self.MockMediaLive('RUNNING'),
+            ):
                 medialive.check_live_state(live_stopping.video_id)
 
     def test_check_live_status_stopping_with_idle_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live', return_value=self.MockMediaLive('IDLE')):
-            with mock.patch('utils.medialive._delete_channel_storage', side_effect=None):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('IDLE'),
+        ):
+            with mock.patch(
+                'utils.medialive._delete_channel_storage', side_effect=None
+            ):
                 medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1164,11 +1204,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.OFF, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_creating_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('CREATING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('CREATING'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1177,11 +1220,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_create_failed_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('CREATE_FAILED')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('CREATE_FAILED'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1190,11 +1236,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_recovering_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('RECOVERING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('RECOVERING'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1203,11 +1252,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_deleting_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('DELETING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('DELETING'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1216,11 +1268,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_deleted_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('DELETED')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('DELETED'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1229,11 +1284,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_starting_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('STARTING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('STARTING'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1242,11 +1300,14 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(LiveVideo.State.STOPPING, live_stopping_updated.state)
 
     def test_check_live_status_stopping_with_stopping_in_aws(self):
-        live_stopping = create_live_video('Video', self.user1, self.org1, 1,
-                                           LiveVideo.State.STOPPING)
+        live_stopping = create_live_video(
+            'Video', self.user1, self.org1, 1, LiveVideo.State.STOPPING
+        )
 
-        with mock.patch('utils.medialive.get_media_live',
-                        return_value=self.MockMediaLive('STOPPING')):
+        with mock.patch(
+            'utils.medialive.get_media_live',
+            return_value=self.MockMediaLive('STOPPING'),
+        ):
             medialive.check_live_state(live_stopping.video_id)
 
         live_stopping_updated = LiveVideo.objects.get(id=live_stopping.pk)
@@ -1297,7 +1358,9 @@ class LiveVideoTests(APITestCase):
         live4 = LiveVideoSerializer(self.live4).data
         live5 = LiveVideoSerializer(self.live5).data
 
-        url = reverse('live-videos-list') + "?search=" + str(self.live4.video_id)
+        url = (
+            reverse('live-videos-list') + "?search=" + str(self.live4.video_id)
+        )
         response = self.client.get(url, data=None, format=None)
 
         # Validate status code
@@ -1319,7 +1382,11 @@ class LiveVideoTests(APITestCase):
         live4 = LiveVideoSerializer(self.live4).data
         live5 = LiveVideoSerializer(self.live5).data
 
-        url = reverse('live-videos-list') + "?search=" + quote(self.user1.username)
+        url = (
+            reverse('live-videos-list')
+            + "?search="
+            + quote(self.user1.username)
+        )
         response = self.client.get(url, data=None, format=None)
 
         # Validate status code
@@ -1361,7 +1428,9 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate video with no Restriction
-        self.assertEqual(LiveVideo.GeoType.NONE, response.json()['geolocation_type'])
+        self.assertEqual(
+            LiveVideo.GeoType.NONE, response.json()['geolocation_type']
+        )
         self.assertEqual([], response.json()['geolocation_countries'])
 
     def test_live_video_with_whitelist_geolocation_restriction(self):
@@ -1372,11 +1441,7 @@ class LiveVideoTests(APITestCase):
 
         data = {
             "geolocation_type": "whitelist",
-            "geolocation_countries": [
-                'UY',
-                'AR',
-                'ZA'
-            ]
+            "geolocation_countries": ['UY', 'AR', 'ZA'],
         }
 
         url = reverse('live-videos-detail', kwargs={'pk': live_video.pk})
@@ -1386,8 +1451,13 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate video with whitelist restriction
-        self.assertEqual(data['geolocation_type'], response.json()['geolocation_type'])
-        self.assertEqual(data['geolocation_countries'], response.json()['geolocation_countries'])
+        self.assertEqual(
+            data['geolocation_type'], response.json()['geolocation_type']
+        )
+        self.assertEqual(
+            data['geolocation_countries'],
+            response.json()['geolocation_countries'],
+        )
 
     def test_live_video_with_blacklist_geolocation_restriction(self):
         live_video = create_live_video('Video 1', self.user1, self.org1, 1)
@@ -1398,11 +1468,7 @@ class LiveVideoTests(APITestCase):
         data = {
             "name": "New Restriction",
             "geolocation_type": "blacklist",
-            "geolocation_countries": [
-                'CL',
-                'PY',
-                'TN'
-            ]
+            "geolocation_countries": ['CL', 'PY', 'TN'],
         }
 
         url = reverse('live-videos-detail', kwargs={'pk': live_video.pk})
@@ -1412,8 +1478,13 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate video with blacklist restriction
-        self.assertEqual(data['geolocation_type'], response.json()['geolocation_type'])
-        self.assertEqual(data['geolocation_countries'], response.json()['geolocation_countries'])
+        self.assertEqual(
+            data['geolocation_type'], response.json()['geolocation_type']
+        )
+        self.assertEqual(
+            data['geolocation_countries'],
+            response.json()['geolocation_countries'],
+        )
 
     def test_live_video_geolocation_change_type_to_no_restriction(self):
         """
@@ -1428,11 +1499,7 @@ class LiveVideoTests(APITestCase):
         data = {
             "channel": self.chan2.pk,
             "geolocation_type": "blacklist",
-            "geolocation_countries": [
-                'CL',
-                'PY',
-                'TN'
-            ]
+            "geolocation_countries": ['CL', 'PY', 'TN'],
         }
 
         url_1 = reverse('live-videos-detail', kwargs={'pk': live_video.pk})
@@ -1441,9 +1508,7 @@ class LiveVideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-        new_data = {
-            "geolocation_type": "none"
-        }
+        new_data = {"geolocation_type": "none"}
 
         url = reverse('live-videos-detail', kwargs={'pk': live_video.pk})
         response = self.client.patch(url, data=new_data, format='json')
@@ -1452,6 +1517,12 @@ class LiveVideoTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate geolocation restricition (no restriction)
-        self.assertEqual(new_data['geolocation_type'], response.json()['geolocation_type'])
-        self.assertEqual(data['geolocation_countries'], response.json()['geolocation_countries'])
+        self.assertEqual(
+            new_data['geolocation_type'], response.json()['geolocation_type']
+        )
+        self.assertEqual(
+            data['geolocation_countries'],
+            response.json()['geolocation_countries'],
+        )
+
     # </editor-fold>

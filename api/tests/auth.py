@@ -6,7 +6,12 @@ from rest_framework.test import APITestCase
 
 from api.serializers import AccountSerializer
 from hub_auth.models import Account
-from test_utils import create_organizations, create_user, create_superuser, create_key
+from test_utils import (
+    create_organizations,
+    create_user,
+    create_superuser,
+    create_key,
+)
 
 
 class AccountTests(APITestCase):
@@ -34,7 +39,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '12345678',
             'new_password': '11111111',
-            'new_password_2': '11111111'
+            'new_password_2': '11111111',
         }
 
         url = reverse('accounts-change-password')
@@ -63,6 +68,7 @@ class AccountTests(APITestCase):
 
         # Validate status code
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
     # </editor-fold>
 
     # <editor-fold desc="Registered User TESTS">
@@ -72,7 +78,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '12345678',
             'new_password': '11111111',
-            'new_password_2': '11111111'
+            'new_password_2': '11111111',
         }
 
         url = reverse('accounts-change-password')
@@ -92,7 +98,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '123',
             'new_password': '11111111',
-            'new_password_2': '11111111'
+            'new_password_2': '11111111',
         }
 
         url = reverse('accounts-change-password')
@@ -112,7 +118,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '12345678',
             'new_password': '123',
-            'new_password_2': '465'
+            'new_password_2': '465',
         }
 
         url = reverse('accounts-change-password')
@@ -157,6 +163,7 @@ class AccountTests(APITestCase):
 
         # Validate status code
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
     # </editor-fold>
 
     # <editor-fold desc="Superuser TESTS">
@@ -166,7 +173,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '12345678',
             'new_password': '11111111',
-            'new_password_2': '11111111'
+            'new_password_2': '11111111',
         }
 
         url = reverse('accounts-change-password')
@@ -223,6 +230,7 @@ class AccountTests(APITestCase):
 
         # Validate account in results
         self.assertEqual(account, response.json())
+
     # </editor-fold>
 
     # <editor-fold desc="Key TESTS">
@@ -230,7 +238,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '12345678',
             'new_password': '11111111',
-            'new_password_2': '11111111'
+            'new_password_2': '11111111',
         }
 
         url = reverse('accounts-change-password')
@@ -249,7 +257,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '123',
             'new_password': '11111111',
-            'new_password_2': '11111111'
+            'new_password_2': '11111111',
         }
 
         url = reverse('accounts-change-password')
@@ -270,7 +278,7 @@ class AccountTests(APITestCase):
         data = {
             'old_password': '12345678',
             'new_password': '123',
-            'new_password_2': '465'
+            'new_password_2': '465',
         }
 
         url = reverse('accounts-change-password')
@@ -313,4 +321,5 @@ class AccountTests(APITestCase):
 
         # Validate status code
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
     # </editor-fold>

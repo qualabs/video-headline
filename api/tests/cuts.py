@@ -9,13 +9,18 @@ from datetime import timedelta
 from django_fsm import TransitionNotAllowed
 
 from api.serializers.cuts import LiveVideoCutSerializer
-from test_utils import create_organizations, create_user, create_superuser, create_live_videos, \
-    create_live_cut, create_key
+from test_utils import (
+    create_organizations,
+    create_user,
+    create_superuser,
+    create_live_videos,
+    create_live_cut,
+    create_key,
+)
 from video.models import LiveVideoCut, LiveVideo
 
 
 class LiveVideoCutTests(APITestCase):
-
     @classmethod
     def setUpClass(cls):
         logging.disable(logging.WARNING)
@@ -35,14 +40,26 @@ class LiveVideoCutTests(APITestCase):
         self.live2 = create_live_videos('Video', self.user2, self.org2, 1)[0]
 
         # Cuts
-        self.cut1 = create_live_cut(self.live1, timezone.now() + timedelta(days=1),
-                                    timezone.now() + timedelta(days=1, hours=2))
-        self.cut2 = create_live_cut(self.live1, timezone.now() + timedelta(days=1, hours=4),
-                                    timezone.now() + timedelta(days=1, hours=6))
-        self.cut3 = create_live_cut(self.live2, timezone.now() + timedelta(days=1, hours=1),
-                                    timezone.now() + timedelta(days=1, hours=3))
-        self.cut4 = create_live_cut(self.live2, timezone.now() + timedelta(days=1, hours=5),
-                                    timezone.now() + timedelta(days=1, hours=7))
+        self.cut1 = create_live_cut(
+            self.live1,
+            timezone.now() + timedelta(days=1),
+            timezone.now() + timedelta(days=1, hours=2),
+        )
+        self.cut2 = create_live_cut(
+            self.live1,
+            timezone.now() + timedelta(days=1, hours=4),
+            timezone.now() + timedelta(days=1, hours=6),
+        )
+        self.cut3 = create_live_cut(
+            self.live2,
+            timezone.now() + timedelta(days=1, hours=1),
+            timezone.now() + timedelta(days=1, hours=3),
+        )
+        self.cut4 = create_live_cut(
+            self.live2,
+            timezone.now() + timedelta(days=1, hours=5),
+            timezone.now() + timedelta(days=1, hours=7),
+        )
 
     def tearDown(self):
         cuts = LiveVideoCut.objects.all()
@@ -205,8 +222,12 @@ class LiveVideoCutTests(APITestCase):
         url2 = reverse('cuts-detail', kwargs={'pk': self.cut4.pk})
 
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.get(url1, content_type='application/json', **header)
-        response2 = self.client.get(url2, content_type='application/json', **header)
+        response1 = self.client.get(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.get(
+            url2, content_type='application/json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response1.status_code)
@@ -223,7 +244,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         url = reverse('cuts-list')
@@ -237,7 +258,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -253,7 +274,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user1', password='12345678')
@@ -269,7 +290,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user2', password='12345678')
@@ -285,14 +306,14 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         data2 = {
             "live": self.live2.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         url = reverse('cuts-list')
@@ -309,7 +330,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -325,7 +346,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live2.pk,
             "initial_time": "",
             "final_time": "",
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user2', password='12345678')
@@ -341,7 +362,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=-2),
             "final_time": timezone.now() + timedelta(days=-1),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user1', password='12345678')
@@ -357,7 +378,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=-2),
             "final_time": timezone.now() + timedelta(days=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -373,7 +394,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live2.pk,
             "initial_time": timezone.now() + timedelta(days=4),
             "final_time": timezone.now() + timedelta(days=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user2', password='12345678')
@@ -388,8 +409,9 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, minutes=30),
-            "final_time": timezone.now() + timedelta(days=1, hours=1, minutes=30),
-            "description": "Motivo"
+            "final_time": timezone.now()
+            + timedelta(days=1, hours=1, minutes=30),
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -405,7 +427,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, hours=-1),
             "final_time": timezone.now() + timedelta(days=1, hours=3),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -421,14 +443,15 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, hours=-1),
             "final_time": timezone.now() + timedelta(days=1, hours=1),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         data2 = {
             "live": self.live1.pk,
-            "initial_time": timezone.now() + timedelta(days=1, hours=1, minutes=30),
+            "initial_time": timezone.now()
+            + timedelta(days=1, hours=1, minutes=30),
             "final_time": timezone.now() + timedelta(days=1, hours=3),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -449,7 +472,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         url = reverse('cuts-detail', kwargs={'pk': self.cut1.pk})
@@ -463,7 +486,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -478,19 +501,23 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(data['live'], response.json()['live'])
 
         # Validate initial time
-        self.assertEqual(data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['initial_time'])
+        self.assertEqual(
+            data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['final_time'])
+        self.assertEqual(
+            data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['final_time'],
+        )
 
     def test_put_cut_with_user_1(self):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user1', password='12345678')
@@ -505,19 +532,23 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(data['live'], response.json()['live'])
 
         # Validate initial time
-        self.assertEqual(data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['initial_time'])
+        self.assertEqual(
+            data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['final_time'])
+        self.assertEqual(
+            data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['final_time'],
+        )
 
     def test_put_cut_with_user_2(self):
         data = {
             "live": self.live2.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='user2', password='12345678')
@@ -532,19 +563,23 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(data['live'], response.json()['live'])
 
         # Validate initial time
-        self.assertEqual(data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['initial_time'])
+        self.assertEqual(
+            data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['final_time'])
+        self.assertEqual(
+            data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['final_time'],
+        )
 
     def test_put_cut_with_user_from_different_org(self):
         data = {
             "live": self.live2.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -560,14 +595,14 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         data2 = {
             "live": self.live2.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2, hours=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         url1 = reverse('cuts-detail', kwargs={'pk': self.cut1.pk})
@@ -584,19 +619,25 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(data1['live'], response1.json()['live'])
 
         # Validate initial time
-        self.assertEqual(data1['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response1.json()['initial_time'])
+        self.assertEqual(
+            data1['initial_time'].strftime(
+                "%Y-%m-%d" + "T" + "%H:%M:00" + "Z"
+            ),
+            response1.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(data1['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response1.json()['final_time'])
+        self.assertEqual(
+            data1['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response1.json()['final_time'],
+        )
 
     def test_put_cut_with_same_initial_and_final_time(self):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
             "final_time": timezone.now() + timedelta(days=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -612,7 +653,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": "",
             "final_time": "",
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -628,7 +669,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=-2),
             "final_time": timezone.now() + timedelta(days=-1),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -644,7 +685,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=-2),
             "final_time": timezone.now() + timedelta(days=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -660,7 +701,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=4),
             "final_time": timezone.now() + timedelta(days=2),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -675,8 +716,9 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, minutes=30),
-            "final_time": timezone.now() + timedelta(days=1, hours=1, minutes=30),
-            "description": "Motivo"
+            "final_time": timezone.now()
+            + timedelta(days=1, hours=1, minutes=30),
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -692,7 +734,7 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, hours=-1),
             "final_time": timezone.now() + timedelta(days=1, hours=3),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         self.client.login(username='admin', password='12345678')
@@ -708,13 +750,14 @@ class LiveVideoCutTests(APITestCase):
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, hours=-1),
             "final_time": timezone.now() + timedelta(days=1, hours=1),
-            "description": "Motivo"
+            "description": "Motivo",
         }
 
         data2 = {
             "live": self.live1.pk,
-            "initial_time": timezone.now() + timedelta(days=1, hours=1, minutes=30),
-            "final_time": timezone.now() + timedelta(days=1, hours=3)
+            "initial_time": timezone.now()
+            + timedelta(days=1, hours=1, minutes=30),
+            "final_time": timezone.now() + timedelta(days=1, hours=3),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -738,9 +781,7 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_patch_cut_with_superuser(self):
-        data = {
-            "final_time": timezone.now() + timedelta(days=1, hours=3)
-        }
+        data = {"final_time": timezone.now() + timedelta(days=1, hours=3)}
 
         self.client.login(username='admin', password='12345678')
 
@@ -754,17 +795,21 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(self.live1.pk, response.json()['live'])
 
         # Validate initial time
-        self.assertEqual(self.cut1.initial_time.strftime("%Y-%m-%d" + "T" + "%H:%M:%S" + "Z"),
-                         response.json()['initial_time'])
+        self.assertEqual(
+            self.cut1.initial_time.strftime(
+                "%Y-%m-%d" + "T" + "%H:%M:%S" + "Z"
+            ),
+            response.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
-                         response.json()['final_time'])
+        self.assertEqual(
+            data['final_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['final_time'],
+        )
 
     def test_patch_cut_with_user_1(self):
-        data = {
-            "initial_time": timezone.now() + timedelta(days=1, hours=-1)
-        }
+        data = {"initial_time": timezone.now() + timedelta(days=1, hours=-1)}
 
         self.client.login(username='user1', password='12345678')
 
@@ -778,17 +823,19 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(self.live1.pk, response.json()['live'])
 
         # Validate initial time
-        self.assertEqual(data['initial_time'].strftime(
-            "%Y-%m-%d" + "T" + "%H:%M:00" + "Z"), response.json()['initial_time'])
+        self.assertEqual(
+            data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(self.cut1.final_time.strftime(
-            "%Y-%m-%d" + "T" + "%H:%M:%S" + "Z"), response.json()['final_time'])
+        self.assertEqual(
+            self.cut1.final_time.strftime("%Y-%m-%d" + "T" + "%H:%M:%S" + "Z"),
+            response.json()['final_time'],
+        )
 
     def test_patch_cut_with_user_from_different_org(self):
-        data = {
-            "final_time": timezone.now() + timedelta(days=2, hours=2)
-        }
+        data = {"final_time": timezone.now() + timedelta(days=2, hours=2)}
 
         self.client.login(username='user2', password='12345678')
 
@@ -799,9 +846,7 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_patch_cut_with_key(self):
-        data = {
-            "initial_time": timezone.now() + timedelta(days=1, hours=-1)
-        }
+        data = {"initial_time": timezone.now() + timedelta(days=1, hours=-1)}
 
         url1 = reverse('cuts-detail', kwargs={'pk': self.cut1.pk})
         url2 = reverse('cuts-detail', kwargs={'pk': self.cut3.pk})
@@ -817,18 +862,22 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(self.live1.pk, response1.json()['live'])
 
         # Validate initial time
-        self.assertEqual(data['initial_time'].strftime(
-            "%Y-%m-%d" + "T" + "%H:%M:00" + "Z"), response1.json()['initial_time'])
+        self.assertEqual(
+            data['initial_time'].strftime("%Y-%m-%d" + "T" + "%H:%M:00" + "Z"),
+            response1.json()['initial_time'],
+        )
 
         # Validate final time
-        self.assertEqual(self.cut1.final_time.strftime(
-            "%Y-%m-%d" + "T" + "%H:%M:%S" + "Z"), response1.json()['final_time'])
+        self.assertEqual(
+            self.cut1.final_time.strftime("%Y-%m-%d" + "T" + "%H:%M:%S" + "Z"),
+            response1.json()['final_time'],
+        )
 
     def test_patch_cut_with_same_initial_and_final_time(self):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=2),
-            "final_time": timezone.now() + timedelta(days=2)
+            "final_time": timezone.now() + timedelta(days=2),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -840,11 +889,7 @@ class LiveVideoCutTests(APITestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_patch_cut_without_initial_and_final_time(self):
-        data = {
-            "live": self.live1.pk,
-            "initial_time": "",
-            "final_time": ""
-        }
+        data = {"live": self.live1.pk, "initial_time": "", "final_time": ""}
 
         self.client.login(username='admin', password='12345678')
 
@@ -858,7 +903,7 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=-2),
-            "final_time": timezone.now() + timedelta(days=-1)
+            "final_time": timezone.now() + timedelta(days=-1),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -873,7 +918,7 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=-2),
-            "final_time": timezone.now() + timedelta(days=2)
+            "final_time": timezone.now() + timedelta(days=2),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -888,7 +933,7 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=4),
-            "final_time": timezone.now() + timedelta(days=2)
+            "final_time": timezone.now() + timedelta(days=2),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -903,7 +948,8 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, minutes=30),
-            "final_time": timezone.now() + timedelta(days=1, hours=1, minutes=30)
+            "final_time": timezone.now()
+            + timedelta(days=1, hours=1, minutes=30),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -918,7 +964,7 @@ class LiveVideoCutTests(APITestCase):
         data = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, hours=-1),
-            "final_time": timezone.now() + timedelta(days=1, hours=3)
+            "final_time": timezone.now() + timedelta(days=1, hours=3),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -933,13 +979,14 @@ class LiveVideoCutTests(APITestCase):
         data1 = {
             "live": self.live1.pk,
             "initial_time": timezone.now() + timedelta(days=1, hours=-1),
-            "final_time": timezone.now() + timedelta(days=1, hours=1)
+            "final_time": timezone.now() + timedelta(days=1, hours=1),
         }
 
         data2 = {
             "live": self.live1.pk,
-            "initial_time": timezone.now() + timedelta(days=1, hours=1, minutes=30),
-            "final_time": timezone.now() + timedelta(days=1, hours=3)
+            "initial_time": timezone.now()
+            + timedelta(days=1, hours=1, minutes=30),
+            "final_time": timezone.now() + timedelta(days=1, hours=3),
         }
 
         self.client.login(username='admin', password='12345678')
@@ -992,8 +1039,12 @@ class LiveVideoCutTests(APITestCase):
         url1 = reverse('cuts-detail', kwargs={'pk': self.cut1.pk})
         url2 = reverse('cuts-detail', kwargs={'pk': self.cut3.pk})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.delete(url1, content_type='application/json', **header)
-        response2 = self.client.delete(url2, content_type='application/json', **header)
+        response1 = self.client.delete(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.delete(
+            url2, content_type='application/json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_204_NO_CONTENT, response1.status_code)
@@ -1004,14 +1055,14 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.su,
             organization=self.org1,
-            state=LiveVideo.State.ON
+            state=LiveVideo.State.ON,
         )
 
         cut = LiveVideoCut.objects.create(
             live=live,
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
-            state=LiveVideoCut.State.SCHEDULED
+            state=LiveVideoCut.State.SCHEDULED,
         )
 
         self.client.login(username='admin', password='12345678')
@@ -1026,14 +1077,14 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.su,
             organization=self.org1,
-            state=LiveVideo.State.OFF
+            state=LiveVideo.State.OFF,
         )
 
         cut = LiveVideoCut.objects.create(
             live=live,
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
-            state=LiveVideoCut.State.EXECUTING
+            state=LiveVideoCut.State.EXECUTING,
         )
 
         self.client.login(username='admin', password='12345678')
@@ -1048,14 +1099,14 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.su,
             organization=self.org1,
-            state=LiveVideo.State.ON
+            state=LiveVideo.State.ON,
         )
 
         cut = LiveVideoCut.objects.create(
             live=live,
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
-            state=LiveVideoCut.State.PERFORMED
+            state=LiveVideoCut.State.PERFORMED,
         )
 
         self.client.login(username='admin', password='12345678')
@@ -1073,7 +1124,7 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.user1,
             organization=self.org1,
-            state=LiveVideo.State.ON
+            state=LiveVideo.State.ON,
         )
 
         cut = LiveVideoCut.objects.create(
@@ -1081,7 +1132,7 @@ class LiveVideoCutTests(APITestCase):
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
             description='Motivo',
-            state=LiveVideoCut.State.SCHEDULED
+            state=LiveVideoCut.State.SCHEDULED,
         )
 
         self.client.login(username='user1', password='12345678')
@@ -1101,7 +1152,7 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.user1,
             organization=self.org1,
-            state=LiveVideo.State.OFF
+            state=LiveVideo.State.OFF,
         )
 
         cut = LiveVideoCut.objects.create(
@@ -1109,7 +1160,7 @@ class LiveVideoCutTests(APITestCase):
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
             description='Motivo',
-            state=LiveVideoCut.State.EXECUTING
+            state=LiveVideoCut.State.EXECUTING,
         )
 
         self.client.login(username='user1', password='12345678')
@@ -1129,7 +1180,7 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.user1,
             organization=self.org1,
-            state=LiveVideo.State.OFF
+            state=LiveVideo.State.OFF,
         )
 
         cut = LiveVideoCut.objects.create(
@@ -1137,7 +1188,7 @@ class LiveVideoCutTests(APITestCase):
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
             description='Motivo',
-            state=LiveVideoCut.State.EXECUTING
+            state=LiveVideoCut.State.EXECUTING,
         )
 
         self.client.login(username='user1', password='12345678')
@@ -1150,7 +1201,7 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.user1,
             organization=self.org1,
-            state=LiveVideo.State.ON
+            state=LiveVideo.State.ON,
         )
 
         cut = LiveVideoCut.objects.create(
@@ -1158,7 +1209,7 @@ class LiveVideoCutTests(APITestCase):
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
             description='Motivo',
-            state=LiveVideoCut.State.PERFORMED
+            state=LiveVideoCut.State.PERFORMED,
         )
 
         self.client.login(username='user1', password='12345678')
@@ -1171,7 +1222,7 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.user1,
             organization=self.org1,
-            state=LiveVideo.State.ON
+            state=LiveVideo.State.ON,
         )
 
         cut = LiveVideoCut.objects.create(
@@ -1179,7 +1230,7 @@ class LiveVideoCutTests(APITestCase):
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
             description='Motivo',
-            state=LiveVideoCut.State.SCHEDULED
+            state=LiveVideoCut.State.SCHEDULED,
         )
 
         self.client.login(username='user1', password='12345678')
@@ -1192,7 +1243,7 @@ class LiveVideoCutTests(APITestCase):
             name='Video 1',
             created_by=self.user1,
             organization=self.org1,
-            state=LiveVideo.State.ON
+            state=LiveVideo.State.ON,
         )
 
         cut = LiveVideoCut.objects.create(
@@ -1200,7 +1251,7 @@ class LiveVideoCutTests(APITestCase):
             initial_time=timezone.now() + timedelta(days=3),
             final_time=timezone.now() + timedelta(days=3, hours=2),
             description='Motivo',
-            state=LiveVideoCut.State.PERFORMED
+            state=LiveVideoCut.State.PERFORMED,
         )
 
         self.client.login(username='user1', password='12345678')

@@ -14,7 +14,8 @@ class AccountSerializer(serializers.ModelSerializer):
             'last_name',
             'username',
             'email',
-            'organization',)
+            'organization',
+        )
 
 
 class MinAccountSerializer(serializers.ModelSerializer):
@@ -39,4 +40,6 @@ class ChangeAccountPasswordSerializer(serializers.Serializer):
             return data
         else:
             raise serializers.ValidationError(
-                'The new password must be the same in both fields, please verify.')
+                'The new password must be the same in both fields, please'
+                'verify.'
+            )

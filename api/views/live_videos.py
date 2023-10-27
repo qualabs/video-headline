@@ -7,14 +7,22 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED
+)
 from rest_framework import permissions
 
 from api.exceptions import SubscriptionError
 from api.filters import LiveVideoFilter
-from api.serializers import LiveVideoSerializer, UpdateLiveVideoSerializer, \
-    PartialUpdateLiveVideoSerializer, CreateLiveVideoSerializer, SubscribeSerializer, \
-    NotifySerializer
+from api.serializers import (
+    LiveVideoSerializer,
+    UpdateLiveVideoSerializer,
+    PartialUpdateLiveVideoSerializer,
+    CreateLiveVideoSerializer,
+    SubscribeSerializer,
+    NotifySerializer,
+)
 from utils import medialive, sns
 from video.models import LiveVideo
 
@@ -25,7 +33,7 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
         '=video_id',  # Exact field because of search filter
         'name',
         '=created_by__username',  # Exact field because of search filter
-        'tags__name'
+        'tags__name',
     )
 
     filterset_class = LiveVideoFilter
@@ -33,9 +41,14 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        return LiveVideo.objects.select_related('organization', 'channel',
-                                                'created_by').prefetch_related('tags').filter(
-            organization_id=user.organization_id).order_by('-created_at')
+        return (
+            LiveVideo.objects.select_related(
+                'organization', 'channel', 'created_by'
+            )
+            .prefetch_related('tags')
+            .filter(organization_id=user.organization_id)
+            .order_by('-created_at')
+        )
 
     def get_serializer_class(self):
         serializer_class = {
@@ -43,7 +56,7 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
             'update': UpdateLiveVideoSerializer,
             'partial_update': PartialUpdateLiveVideoSerializer,
             'subscribe': SubscribeSerializer,
-            'notify': NotifySerializer
+            'notify': NotifySerializer,
         }
 
         if self.action and self.action in serializer_class.keys():
@@ -54,7 +67,7 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         permission_classes = {
             'create': [permissions.IsAdminUser],
-            'destroy': [permissions.IsAdminUser]
+            'destroy': [permissions.IsAdminUser],
         }
 
         if self.action and self.action in permission_classes.keys():
@@ -77,12 +90,13 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
             )
 
         except IntegrityError:
-            raise ValidationError({'non_field_errors': ['Error while creating live video.']})
+            raise ValidationError(
+                {'non_field_errors': ['Error while creating live video.']}
+            )
 
         data = LiveVideoSerializer(live).data
 
         return Response(data, status=HTTP_201_CREATED)
-    
 
     # DELETE /live-videos/{id}/to_delete
     @action(detail=True, methods=['delete'])
@@ -90,10 +104,12 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
         try:
             live = self.get_object()
             live.to_deleting()
-        except :
-            raise ValidationError({'non_field_errors': ['Error while deleting live video.']})
+        except Exception:
+            raise ValidationError(
+                {'non_field_errors': ['Error while deleting live video.']}
+            )
         return Response(status=HTTP_200_OK)
-    
+
     # POST /live-videos/{id}/to_on
     @action(detail=True, methods=['post'])
     def to_on(self, request, **kwargs):
@@ -104,9 +120,17 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
                 live.to_starting()
             except TransitionNotAllowed:
                 raise ValidationError(
-                    {'non_field_errors': ['Cannot be changed to the entered state.']})
+                    {
+                        'non_field_errors': [
+                            'Cannot be changed to the entered state.'
+                        ]
+                    }
+                )
             except medialive.ChannelNotFoundException:
-                raise NotFound(detail='There was an internal problem, contact your Administrator.')
+                raise NotFound(
+                    detail=('There was an internal problem,'
+                            'contact yourAdministrator.')
+                )
 
         return Response()
 
@@ -119,9 +143,17 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
                 live.to_stopping()
             except TransitionNotAllowed:
                 raise ValidationError(
-                    {'non_field_errors': ['Cannot be changed to the entered state.']})
+                    {
+                        'non_field_errors': [
+                            'Cannot be changed to the entered state.'
+                        ]
+                    }
+                )
             except medialive.ChannelNotFoundException:
-                raise NotFound(detail='There was an internal problem, contact your Administrator.')
+                raise NotFound(
+                    detail=('There was an internal problem,'
+                            'contact your Administrator.')
+                )
 
         return Response()
 
@@ -132,14 +164,15 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
         input_serializer.is_valid(raise_exception=True)
 
         try:
-            live = self.get_queryset().get(video_id=input_serializer.validated_data['video_id'])
+            live = self.get_queryset().get(
+                video_id=input_serializer.validated_data['video_id']
+            )
 
-            arn = sns.subscribe(live, input_serializer.validated_data['endpoint_http'])
+            arn = sns.subscribe(
+                live, input_serializer.validated_data['endpoint_http']
+            )
 
-            data = {
-                'subscription_id':  arn,
-                'channel_arn': live.ml_channel_arn
-            }
+            data = {'subscription_id': arn, 'channel_arn': live.ml_channel_arn}
 
             return Response(data)
         except LiveVideo.DoesNotExist:
@@ -148,7 +181,11 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
             raise SubscriptionError()
 
     # POST /live-videos/notify
-    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
+    @action(
+        detail=False,
+        methods=['post'],
+        permission_classes=[permissions.AllowAny],
+    )
     def notify(self, request, **kwargs):
         input_serializer = self.get_serializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
@@ -161,5 +198,5 @@ class LiveVideoViewSet(viewsets.ModelViewSet):
             msg = input_serializer.validated_data['Message']
 
             medialive.add_channel_alert(msg)
-            
+
         return Response()

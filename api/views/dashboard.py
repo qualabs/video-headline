@@ -23,12 +23,22 @@ class DashboardView(APIView):
         user = self.request.user
 
         response = {
-            'videos_in_process': self._get_videos().filter(state=Media.State.PROCESSING).count(),
-            'failed_videos': self._get_videos().filter(
-                state__in=[Media.State.QUEUING_FAILED, Media.State.PROCESSING_FAILED]).count(),
-            'uploaded_by_user': self._get_videos().filter(created_by=user).count(),
+            'videos_in_process': self._get_videos()
+            .filter(state=Media.State.PROCESSING)
+            .count(),
+            'failed_videos': self._get_videos()
+            .filter(
+                state__in=[
+                    Media.State.QUEUING_FAILED,
+                    Media.State.PROCESSING_FAILED,
+                ]
+            )
+            .count(),
+            'uploaded_by_user': self._get_videos()
+            .filter(created_by=user)
+            .count(),
             'uploaded_by_org': self._get_videos().count(),
-            'live_videos_by_org': self._get_live_videos().count()
+            'live_videos_by_org': self._get_live_videos().count(),
         }
 
         return Response(response)

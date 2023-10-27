@@ -4,7 +4,6 @@ from video.models import Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Tag
         fields = (
@@ -14,7 +13,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class CreateTagSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Tag
         fields = (

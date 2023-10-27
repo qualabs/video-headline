@@ -11,12 +11,17 @@ from rest_framework.test import APITestCase
 
 from api.serializers import MinBillSerializer, BillSerializer
 from organization.models import Bill
-from test_utils import create_user, create_superuser, create_key, create_organizations, \
-    create_plans, create_bill
+from test_utils import (
+    create_user,
+    create_superuser,
+    create_key,
+    create_organizations,
+    create_plans,
+    create_bill,
+)
 
 
 class BillTests(APITestCase):
-
     @classmethod
     def setUpClass(cls):
         logging.disable(logging.WARNING)
@@ -31,10 +36,17 @@ class BillTests(APITestCase):
         cls.plan1, cls.plan2 = create_plans('Plan', 2)
 
     def setUp(self):
-        self.bill1 = create_bill(self.org1, self.plan1, date.today().replace(day=1))
-        self.bill2 = create_bill(self.org2, self.plan1, date.today().replace(day=1))
-        self.bill3 = create_bill(self.org1, self.plan1,
-                                 date.today().replace(day=1) - relativedelta(months=1))
+        self.bill1 = create_bill(
+            self.org1, self.plan1, date.today().replace(day=1)
+        )
+        self.bill2 = create_bill(
+            self.org2, self.plan1, date.today().replace(day=1)
+        )
+        self.bill3 = create_bill(
+            self.org1,
+            self.plan1,
+            date.today().replace(day=1) - relativedelta(months=1),
+        )
 
     def tearDown(self):
         Bill.objects.all().delete()
@@ -101,6 +113,7 @@ class BillTests(APITestCase):
         # Validate bills in results
         self.assertIn(bill1, response.json()['results'])
         self.assertNotIn(bill2, response.json()['results'])
+
     # </editor-fold>
 
     # <editor-fold desc="Retrieve Bill TESTS">
@@ -183,7 +196,9 @@ class BillTests(APITestCase):
 
         # Validate bill
         response = response.json()
-        self.assertEqual(bill3['video_transcoding'], response['video_transcoding'])
+        self.assertEqual(
+            bill3['video_transcoding'], response['video_transcoding']
+        )
         self.assertEqual(bill3['storage'], response['storage'])
         self.assertEqual(bill3['data_transfer'], response['data_transfer'])
         self.assertEqual(bill3['extras'], response['extras'])
@@ -205,8 +220,11 @@ class BillTests(APITestCase):
 
         # Validate bill
         response = response.json()
-        self.assertEqual(bill1['video_transcoding'], response['video_transcoding'])
+        self.assertEqual(
+            bill1['video_transcoding'], response['video_transcoding']
+        )
         self.assertEqual(bill1['storage'], response['storage'])
         self.assertEqual(bill1['data_transfer'], response['data_transfer'])
         self.assertEqual(bill1['extras'], response['extras'])
+
     # </editor-fold>

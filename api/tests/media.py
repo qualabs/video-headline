@@ -5,13 +5,20 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from api.serializers.media import MediaSerializer
-from test_utils import create_organizations, create_user, create_superuser, create_channels, \
-    create_videos, create_tags, create_video, create_key
+from test_utils import (
+    create_organizations,
+    create_user,
+    create_superuser,
+    create_channels,
+    create_videos,
+    create_tags,
+    create_video,
+    create_key,
+)
 from video.models import Media
 
 
 class VideoTests(APITestCase):
-
     @classmethod
     def setUpClass(cls):
         logging.disable(logging.WARNING)
@@ -23,15 +30,21 @@ class VideoTests(APITestCase):
         cls.su = create_superuser('admin', '12345678', cls.org1)
         cls.key = create_key('key', cls.user1)
 
-        cls.chan1, cls.chan2, cls.chan3 = create_channels('Channel', cls.org1, 3)
+        cls.chan1, cls.chan2, cls.chan3 = create_channels(
+            'Channel', cls.org1, 3
+        )
         cls.chan4, cls.chan5 = create_channels('Channel', cls.org2, 2)
 
         cls.tag1 = create_tags('Funny tag', cls.org1, 1)[0]
         cls.tag2, cls.tag3 = create_tags('Funny tag', cls.org2, 2)
 
     def setUp(self):
-        self.video1, self.video2, self.video3 = create_videos('Video', self.user1, self.org1, 3)
-        self.video4, self.video5 = create_videos('Video', self.user2, self.org2, 2)
+        self.video1, self.video2, self.video3 = create_videos(
+            'Video', self.user1, self.org1, 3
+        )
+        self.video4, self.video5 = create_videos(
+            'Video', self.user2, self.org2, 2
+        )
 
     def tearDown(self):
         Media.objects.all().delete()
@@ -201,8 +214,12 @@ class VideoTests(APITestCase):
         url1 = reverse('videos-detail', kwargs={'pk': self.video2.pk})
         url2 = reverse('videos-detail', kwargs={'pk': self.video5.pk})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.get(url1, content_type='application/json', **header)
-        response2 = self.client.get(url2, content_type='application/json', **header)
+        response1 = self.client.get(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.get(
+            url2, content_type='application/json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response1.status_code)
@@ -218,9 +235,7 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag2.name
-            ]
+            "tags": [self.tag2.name],
         }
 
         url = reverse('videos-detail', kwargs={'pk': self.video1.pk})
@@ -232,14 +247,8 @@ class VideoTests(APITestCase):
     def test_put_video_with_multiple_channels(self):
         data = {
             "name": "foo",
-            "channel": [
-                self.chan1.pk,
-                self.chan2.pk,
-                self.chan3.pk
-            ],
-            "tags": [
-                self.tag2.name
-            ]
+            "channel": [self.chan1.pk, self.chan2.pk, self.chan3.pk],
+            "tags": [self.tag2.name],
         }
         self.client.login(username='user1', password='12345678')
 
@@ -253,12 +262,10 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name
-            ],
+            "tags": [self.tag1.name],
             "ads_vast_url": None,
             "enable_ads": True,
-            "autoplay": 'c'
+            "autoplay": 'c',
         }
 
         self.client.login(username='admin', password='12345678')
@@ -285,10 +292,7 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan4.pk,
-            "tags": [
-                self.tag2.name,
-                self.tag3.name
-            ]
+            "tags": [self.tag2.name, self.tag3.name],
         }
 
         self.client.login(username='admin', password='12345678')
@@ -303,11 +307,9 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name
-            ],
+            "tags": [self.tag1.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         self.client.login(username='user1', password='12345678')
@@ -333,13 +335,10 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan4.pk,
-            "tags": [
-                self.tag2.name,
-                self.tag3.name
-            ],
+            "tags": [self.tag2.name, self.tag3.name],
             "ads_vast_url": None,
             "enable_ads": True,
-            "autoplay": 'n'
+            "autoplay": 'n',
         }
         self.client.login(username='user2', password='12345678')
 
@@ -366,11 +365,9 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "channel": self.chan1.pk,
-            "tags": [
-                self.tag1.name
-            ],
+            "tags": [self.tag1.name],
             "ads_vast_url": None,
-            "enable_ads": True
+            "enable_ads": True,
         }
 
         url = reverse('videos-detail', kwargs={'pk': self.video2.pk})
@@ -404,10 +401,14 @@ class VideoTests(APITestCase):
         self.client.login(username='admin', password='12345678')
 
         creation_url = reverse('videos-list')
-        creation_response = self.client.post(creation_url, data=data, format='json')
+        creation_response = self.client.post(
+            creation_url, data=data, format='json'
+        )
 
         # Validate status code
-        self.assertEqual(status.HTTP_201_CREATED, creation_response.status_code)
+        self.assertEqual(
+            status.HTTP_201_CREATED, creation_response.status_code
+        )
 
         pk = creation_response.data['id']
 
@@ -416,12 +417,10 @@ class VideoTests(APITestCase):
             "content_type": "video/mp4",
             "video_id": "123",
             "channel": self.chan2.pk,
-            "tags": [
-                self.tag1.name
-            ],
+            "tags": [self.tag1.name],
             "ads_vast_url": "http://www.vast.com",
             "enable_ads": True,
-            "autoplay": 'y'
+            "autoplay": 'y',
         }
 
         url = reverse('videos-detail', kwargs={'pk': pk})
@@ -434,12 +433,16 @@ class VideoTests(APITestCase):
         self.assertEqual(put_data['name'], response.data['name'])
         self.assertEqual(put_data['autoplay'], response.data['autoplay'])
         self.assertEqual(put_data['enable_ads'], response.data['enable_ads'])
-        self.assertEqual(put_data['ads_vast_url'], response.data['ads_vast_url'])
+        self.assertEqual(
+            put_data['ads_vast_url'], response.data['ads_vast_url']
+        )
 
         # video_id is not editable so it should not change
         self.assertTrue('video_id' not in response.data)
 
-        url = reverse('videos-detail', kwargs={'pk': creation_response.data['id']})
+        url = reverse(
+            'videos-detail', kwargs={'pk': creation_response.data['id']}
+        )
         response = self.client.get(url, format='json')
 
         # Validate video id
@@ -456,13 +459,7 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_patch_video_with_multiple_channels(self):
-        data = {
-            "name": "New name",
-            "channel": [
-                self.chan1.pk,
-                self.chan3.pk
-            ]
-        }
+        data = {"name": "New name", "channel": [self.chan1.pk, self.chan3.pk]}
         self.client.login(username='user1', password='12345678')
 
         url = reverse('videos-detail', kwargs={'pk': self.video1.pk})
@@ -505,18 +502,19 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def test_patch_video_with_user(self):
-        create_data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        create_data = {"name": "foo", "content_type": "video/mp4"}
 
         self.client.login(username='user2', password='12345678')
 
         url = reverse('videos-list')
-        creation_response = self.client.post(url, data=create_data, format='json')
+        creation_response = self.client.post(
+            url, data=create_data, format='json'
+        )
 
         # Validate status code
-        self.assertEqual(status.HTTP_201_CREATED, creation_response.status_code)
+        self.assertEqual(
+            status.HTTP_201_CREATED, creation_response.status_code
+        )
 
         pk = creation_response.data['id']
 
@@ -538,17 +536,18 @@ class VideoTests(APITestCase):
         self.assertEqual(self.chan4.pk, response.json()['channel'])
 
     def test_patch_video_with_key(self):
-        create_data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        create_data = {"name": "foo", "content_type": "video/mp4"}
 
         url = reverse('videos-list')
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        creation_response = self.client.post(url, data=create_data, format='json', **header)
+        creation_response = self.client.post(
+            url, data=create_data, format='json', **header
+        )
 
         # Validate status code
-        self.assertEqual(status.HTTP_201_CREATED, creation_response.status_code)
+        self.assertEqual(
+            status.HTTP_201_CREATED, creation_response.status_code
+        )
 
         pk = creation_response.data['id']
 
@@ -560,8 +559,12 @@ class VideoTests(APITestCase):
         url_patch = reverse('videos-detail', kwargs={'pk': pk})
         url2 = reverse('videos-detail', kwargs={'pk': self.video4.pk})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.patch(url_patch, data=patch_data, format='json', **header)
-        response2 = self.client.patch(url2, data=patch_data, format='json', **header)
+        response1 = self.client.patch(
+            url_patch, data=patch_data, format='json', **header
+        )
+        response2 = self.client.patch(
+            url2, data=patch_data, format='json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response1.status_code)
@@ -576,18 +579,19 @@ class VideoTests(APITestCase):
     def test_patch_video_without_channels(self):
         self.client.login(username='user2', password='12345678')
 
-        create_data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        create_data = {"name": "foo", "content_type": "video/mp4"}
 
         self.client.login(username='user2', password='12345678')
 
         url = reverse('videos-list')
-        creation_response = self.client.post(url, data=create_data, format='json')
+        creation_response = self.client.post(
+            url, data=create_data, format='json'
+        )
 
         # Validate status code
-        self.assertEqual(status.HTTP_201_CREATED, creation_response.status_code)
+        self.assertEqual(
+            status.HTTP_201_CREATED, creation_response.status_code
+        )
 
         pk = creation_response.data['id']
 
@@ -613,16 +617,20 @@ class VideoTests(APITestCase):
             "name": "foo",
             "content_type": "video/mp4",
             "video_id": "12345",
-            "channel": self.chan1.pk
+            "channel": self.chan1.pk,
         }
 
         self.client.login(username='admin', password='12345678')
 
         creation_url = reverse('videos-list')
-        creation_response = self.client.post(creation_url, data=data, format='json')
+        creation_response = self.client.post(
+            creation_url, data=data, format='json'
+        )
 
         # Validate status code
-        self.assertEqual(status.HTTP_201_CREATED, creation_response.status_code)
+        self.assertEqual(
+            status.HTTP_201_CREATED, creation_response.status_code
+        )
 
         pk = creation_response.data['id']
 
@@ -642,7 +650,9 @@ class VideoTests(APITestCase):
         # video_id is not editable so it should not change
         self.assertTrue('video_id' not in response.data)
 
-        url = reverse('videos-detail', kwargs={'pk': creation_response.data['id']})
+        url = reverse(
+            'videos-detail', kwargs={'pk': creation_response.data['id']}
+        )
         response = self.client.get(url, format='json')
 
         # Validate video id
@@ -651,18 +661,19 @@ class VideoTests(APITestCase):
         def test_patch_video_user_2_with_disabled_org(self):
             self.client.login(username='user2', password='12345678')
 
-            create_data = {
-                "name": "foo",
-                "content_type": "video/mp4"
-            }
+            create_data = {"name": "foo", "content_type": "video/mp4"}
 
             self.client.login(username='user2', password='12345678')
 
             url = reverse('videos-list')
-            creation_response = self.client.post(url, data=create_data, format='json')
+            creation_response = self.client.post(
+                url, data=create_data, format='json'
+            )
 
             # Validate status code
-            self.assertEqual(status.HTTP_201_CREATED, creation_response.status_code)
+            self.assertEqual(
+                status.HTTP_201_CREATED, creation_response.status_code
+            )
 
             pk = creation_response.data['id']
 
@@ -674,7 +685,9 @@ class VideoTests(APITestCase):
             }
 
             url_patch = reverse('videos-detail', kwargs={'pk': pk})
-            response = self.client.patch(url_patch, data=patch_data, format='json')
+            response = self.client.patch(
+                url_patch, data=patch_data, format='json'
+            )
 
             # Validate status code
             self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -689,10 +702,7 @@ class VideoTests(APITestCase):
 
     # <editor-fold desc="Create Video TESTS">
     def test_create_video_annon_user(self):
-        data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        data = {"name": "foo", "content_type": "video/mp4"}
         url = reverse('videos-list')
         response = self.client.post(url, data=data, format='json')
 
@@ -700,10 +710,7 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_create_video_superuser_with_org_1(self):
-        data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        data = {"name": "foo", "content_type": "video/mp4"}
 
         self.client.login(username='admin', password='12345678')
 
@@ -714,10 +721,7 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_create_video_user_1_with_org_1(self):
-        data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        data = {"name": "foo", "content_type": "video/mp4"}
 
         self.client.login(username='user1', password='12345678')
 
@@ -728,10 +732,7 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_create_video_with_key(self):
-        data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        data = {"name": "foo", "content_type": "video/mp4"}
 
         url = reverse('videos-list')
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
@@ -741,10 +742,7 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_create_video_user_2_with_org_2(self):
-        data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        data = {"name": "foo", "content_type": "video/mp4"}
 
         self.client.login(username='user2', password='12345678')
 
@@ -755,10 +753,7 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_create_video_with_different_content_type(self):
-        data = {
-            "name": "foo",
-            "content_type": "other/content-type"
-        }
+        data = {"name": "foo", "content_type": "other/content-type"}
 
         self.client.login(username='user2', password='12345678')
 
@@ -772,7 +767,7 @@ class VideoTests(APITestCase):
         data = {
             "name": "foo",
             "content_type": "video/mp4",
-            "video_id": '12345'
+            "video_id": '12345',
         }
 
         self.client.login(username='admin', password='12345678')
@@ -790,10 +785,7 @@ class VideoTests(APITestCase):
         self.org2.upload_enabled = False
         self.org2.save()
 
-        data = {
-            "name": "foo",
-            "content_type": "video/mp4"
-        }
+        data = {"name": "foo", "content_type": "video/mp4"}
 
         self.client.login(username='user2', password='12345678')
 
@@ -847,8 +839,12 @@ class VideoTests(APITestCase):
         url1 = reverse('videos-detail', kwargs={'pk': self.video1.pk})
         url2 = reverse('videos-detail', kwargs={'pk': self.video4.pk})
         header = {'HTTP_AUTHORIZATION': self.key.api_key}
-        response1 = self.client.delete(url1, content_type='application/json', **header)
-        response2 = self.client.delete(url2, content_type='application/json', **header)
+        response1 = self.client.delete(
+            url1, content_type='application/json', **header
+        )
+        response2 = self.client.delete(
+            url2, content_type='application/json', **header
+        )
 
         # Validate status code
         self.assertEqual(status.HTTP_204_NO_CONTENT, response1.status_code)
@@ -857,8 +853,12 @@ class VideoTests(APITestCase):
     # </editor-fold>
 
     # <editor-fold desc="Transition Video TESTS">
-    def test_change_video_status_from_waiting_file_to_queued_with_user_2_org_2(self):
-        video_waiting = create_video('Video', self.user2, self.org2, 1, Media.State.WAITING_FILE)
+    def test_change_video_status_from_waiting_file_to_queued_with_user_2_org_2(
+        self,
+    ):
+        video_waiting = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.WAITING_FILE
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -874,12 +874,18 @@ class VideoTests(APITestCase):
         # Validate video state
         self.assertEqual(Media.State.QUEUED, video_waiting_updated.state)
 
-    def test_change_video_status_from_waiting_file_to_queuing_failed_with_user_2_org_2(self):
-        video_waiting = create_video('Video', self.user2, self.org2, 1, Media.State.WAITING_FILE)
+    def test_change_video_status_from_waiting_file_to_queuing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_waiting = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.WAITING_FILE
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-queued-failed', kwargs={'pk': video_waiting.pk})
+        url = reverse(
+            'videos-to-queued-failed', kwargs={'pk': video_waiting.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         video_waiting_updated = Media.objects.get(pk=video_waiting.pk)
@@ -888,10 +894,16 @@ class VideoTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         # Validate video state
-        self.assertEqual(Media.State.QUEUING_FAILED, video_waiting_updated.state)
+        self.assertEqual(
+            Media.State.QUEUING_FAILED, video_waiting_updated.state
+        )
 
-    def test_change_video_status_from_waiting_file_to_processing_with_user_2_org_2(self):
-        video_waiting = create_video('Video', self.user2, self.org2, 1, Media.State.WAITING_FILE)
+    def test_change_video_status_from_waiting_file_to_processing_with_user_2_org_2(
+        self,
+    ):
+        video_waiting = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.WAITING_FILE
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -901,19 +913,29 @@ class VideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_waiting_file_to_processing_failed_with_user_2_org_2(self):
-        video_waiting = create_video('Video', self.user2, self.org2, 1, Media.State.WAITING_FILE)
+    def test_change_video_status_from_waiting_file_to_processing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_waiting = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.WAITING_FILE
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-processing-failed', kwargs={'pk': video_waiting.pk})
+        url = reverse(
+            'videos-to-processing-failed', kwargs={'pk': video_waiting.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_waiting_file_to_finished_with_user_2_org_2(self):
-        video_waiting = create_video('Video', self.user2, self.org2, 1, Media.State.WAITING_FILE)
+    def test_change_video_status_from_waiting_file_to_finished_with_user_2_org_2(
+        self,
+    ):
+        video_waiting = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.WAITING_FILE
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -924,19 +946,27 @@ class VideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_queued_to_queuing_failed_with_user_2_org_2(self):
-        video_queued = create_video('Video', self.user2, self.org2, 1, Media.State.QUEUED)
+    def test_change_video_status_from_queued_to_queuing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_queued = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.QUEUED
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-queued-failed', kwargs={'pk': video_queued.pk})
+        url = reverse(
+            'videos-to-queued-failed', kwargs={'pk': video_queued.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     def test_change_video_status_from_queued_to_queued_with_user_2_org_2(self):
-        video_queued = create_video('Video', self.user2, self.org2, 1, Media.State.QUEUED)
+        video_queued = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.QUEUED
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -946,19 +976,29 @@ class VideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_queued_to_processing_failed_with_user_2_org_2(self):
-        video_queued = create_video('Video', self.user2, self.org2, 1, Media.State.QUEUED)
+    def test_change_video_status_from_queued_to_processing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_queued = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.QUEUED
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-processing-failed', kwargs={'pk': video_queued.pk})
+        url = reverse(
+            'videos-to-processing-failed', kwargs={'pk': video_queued.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_queued_to_processing_with_user_2_org_2(self):
-        video_queued = create_video('Video', self.user2, self.org2, 1, Media.State.QUEUED)
+    def test_change_video_status_from_queued_to_processing_with_user_2_org_2(
+        self,
+    ):
+        video_queued = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.QUEUED
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -973,8 +1013,12 @@ class VideoTests(APITestCase):
         # Validate video state
         self.assertEqual(Media.State.PROCESSING, video_queued_updated.state)
 
-    def test_change_video_status_from_queued_to_finished_with_user_2_org_2(self):
-        video_queued = create_video('Video', self.user2, self.org2, 1, Media.State.QUEUED)
+    def test_change_video_status_from_queued_to_finished_with_user_2_org_2(
+        self,
+    ):
+        video_queued = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.QUEUED
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -990,19 +1034,29 @@ class VideoTests(APITestCase):
         # Validate video state
         self.assertEqual(Media.State.FINISHED, video_queued_updated.state)
 
-    def test_change_video_status_from_processing_to_queuing_failed_with_user_2_org_2(self):
-        video_processing = create_video('Video', self.user2, self.org2, 1, Media.State.PROCESSING)
+    def test_change_video_status_from_processing_to_queuing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_processing = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.PROCESSING
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-queued-failed', kwargs={'pk': video_processing.pk})
+        url = reverse(
+            'videos-to-queued-failed', kwargs={'pk': video_processing.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_processing_to_queued_with_user_2_org_2(self):
-        video_processing = create_video('Video', self.user2, self.org2, 1, Media.State.PROCESSING)
+    def test_change_video_status_from_processing_to_queued_with_user_2_org_2(
+        self,
+    ):
+        video_processing = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.PROCESSING
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -1012,12 +1066,18 @@ class VideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_processing_to_processing_failed_with_user_2_org_2(self):
-        video_processing = create_video('Video', self.user2, self.org2, 1, Media.State.PROCESSING)
+    def test_change_video_status_from_processing_to_processing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_processing = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.PROCESSING
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-processing-failed', kwargs={'pk': video_processing.pk})
+        url = reverse(
+            'videos-to-processing-failed', kwargs={'pk': video_processing.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         video_processing_updated = Media.objects.get(pk=video_processing.pk)
@@ -1025,21 +1085,33 @@ class VideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-        self.assertEqual(Media.State.PROCESSING_FAILED, video_processing_updated.state)
+        self.assertEqual(
+            Media.State.PROCESSING_FAILED, video_processing_updated.state
+        )
 
-    def test_change_video_status_from_processing_to_processing_with_user_2_org_2(self):
-        video_processing = create_video('Video', self.user2, self.org2, 1, Media.State.PROCESSING)
+    def test_change_video_status_from_processing_to_processing_with_user_2_org_2(
+        self,
+    ):
+        video_processing = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.PROCESSING
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-processing', kwargs={'pk': video_processing.pk})
+        url = reverse(
+            'videos-to-processing', kwargs={'pk': video_processing.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_processing_to_finished_with_user_2_org_2(self):
-        video_processing = create_video('Video', self.user2, self.org2, 1, Media.State.PROCESSING)
+    def test_change_video_status_from_processing_to_finished_with_user_2_org_2(
+        self,
+    ):
+        video_processing = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.PROCESSING
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -1054,19 +1126,29 @@ class VideoTests(APITestCase):
 
         self.assertEqual(Media.State.FINISHED, video_processing_updated.state)
 
-    def test_change_video_status_from_finished_to_processing_failed_with_user_2_org_2(self):
-        video_finished = create_video('Video', self.user2, self.org2, 1, Media.State.FINISHED)
+    def test_change_video_status_from_finished_to_processing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_finished = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.FINISHED
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-processing-failed', kwargs={'pk': video_finished.pk})
+        url = reverse(
+            'videos-to-processing-failed', kwargs={'pk': video_finished.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_finished_to_processing_with_user_2_org_2(self):
-        video_finished = create_video('Video', self.user2, self.org2, 1, Media.State.FINISHED)
+    def test_change_video_status_from_finished_to_processing_with_user_2_org_2(
+        self,
+    ):
+        video_finished = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.FINISHED
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -1076,19 +1158,29 @@ class VideoTests(APITestCase):
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_finished_to_queuing_failed_with_user_2_org_2(self):
-        video_finished = create_video('Video', self.user2, self.org2, 1, Media.State.FINISHED)
+    def test_change_video_status_from_finished_to_queuing_failed_with_user_2_org_2(
+        self,
+    ):
+        video_finished = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.FINISHED
+        )
 
         self.client.login(username='user2', password='12345678')
 
-        url = reverse('videos-to-queued-failed', kwargs={'pk': video_finished.pk})
+        url = reverse(
+            'videos-to-queued-failed', kwargs={'pk': video_finished.pk}
+        )
         response = self.client.post(url, data=None, format=None)
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
-    def test_change_video_status_from_finished_to_queued_with_user_2_org_2(self):
-        video_finished = create_video('Video', self.user2, self.org2, 1, Media.State.FINISHED)
+    def test_change_video_status_from_finished_to_queued_with_user_2_org_2(
+        self,
+    ):
+        video_finished = create_video(
+            'Video', self.user2, self.org2, 1, Media.State.FINISHED
+        )
 
         self.client.login(username='user2', password='12345678')
 
@@ -1097,4 +1189,5 @@ class VideoTests(APITestCase):
 
         # Validate status code
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
     # </editor-fold>

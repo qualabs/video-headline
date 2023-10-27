@@ -12,7 +12,7 @@ class PlanSerializer(serializers.ModelSerializer):
             'video_transcoding',
             'audio_transcoding',
             'storage',
-            'data_transfer'
+            'data_transfer',
         )
 
 
@@ -32,7 +32,7 @@ class BillSerializer(serializers.ModelSerializer):
             'audio_transcoding',
             'storage',
             'data_transfer',
-            'extras'
+            'extras',
         )
 
 
@@ -41,8 +41,4 @@ class MinBillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bill
-        fields = (
-            'id',
-            'plan',
-            'date'
-        )
+        fields = ('id', 'plan', 'date')
