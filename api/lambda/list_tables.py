@@ -9,40 +9,44 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     dynamo_table = path_parameters.get('table')
     table = dynamodb.Table(dynamo_table) 
+    response = {}
 
-    if id:
+    if id is not None:
         try:
-            response = table.query(
+            table_response = table.query(
                 KeyConditionExpression=Key('ScheduleId').eq(id)
             )
-            items = response.get('Items', [])  
-            print(items)
+            items = table_response.get('Items', [])  
             if items:
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(items)
-                }
+                response["status_code"] = 200
+                body = { "message" : "Item found succesfuly",
+                        "data" : json.dumps(items)}
+                response ["body"] = body
+                
             else:
-                return {
-                    'statusCode': 404,
-                    'body': json.dumps({'message': 'Not found'})
-                }
+                response["status_code"] = 404 
+                body = {"message" : "Item not found",
+                        "data" : []}
+                response["body"] = body
+                
         except Exception as e:
-            print(e)
-            return {
-                'statusCode': 500,
-                'body': json.dumps({'message': 'Internal Server Error'})
-            }
+            response["status_code"] = 500
+            body  = {"message" : 'Internal server error',
+                    "data" : []}
     else:
         try:
-            response = table.scan()
-            items = response.get('Items', [])
-            return {
-                'statusCode': 200,
-                'body': json.dumps(items)
-            }
+            table_response = table.scan()
+            items = table_response.get('Items', [])
+            response["status_code"] = 200
+            body = {"message" : "Items found succesfuly",
+                   "data" : json.dumps(items)}
+            response["body"] = body
+
         except Exception as e:
-            return {
-                'statusCode': 500,
-                'body': json.dumps({'message': 'Internal Server Error'})
-            }
+            status_code = 500
+            body = {"message" : "Internal server error",
+                    "data" : [] }
+            response["body"] = body
+
+
+    return response
