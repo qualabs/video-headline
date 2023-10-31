@@ -13,40 +13,25 @@ def json_serial(obj):
 def lambda_handler(event, context):
     path_parameters = event.get('pathParameters', {})
     channel_id = path_parameters.get('id', None)
-    response = {}
-    
+
     if channel_id:
         try:
-            response = media_tailor.describe_channel(ChannelName=channel_id)
-            channel_data = response.get('Channel', {})
+            channel_data = media_tailor.describe_channel(ChannelName=channel_id)
+            del channel_data["ResponseMetadata"]
             channel_data['CreationTime'] = json_serial(channel_data['CreationTime'])
             channel_data['LastModifiedTime'] = json_serial(channel_data['LastModifiedTime']) 
-            if channel_data :
-                response = {
-                    'status_code': 200,
-                    'body' : { 'messsage' : 'Created succesfuly',
-                                'data' : json.dump(channel_data, default=json_serial) 
-                        
-                    }
-                }
-                
-                
-            else :
-                response = { 'status_code': 404,
-                            'body' : {
-                                'message': 'Channel not found',
-                                'data' : []
-                                }
+            response = {
+                'status_code': 200,
+                'body' :  { 'messsage' : 'Created succesfuly',
+                             'data' : json.loads(json.dumps(channel_data, default=json_serial))
                             }
-                raise Exception(response)
-
-                
+            }
+            return response
         except media_tailor.exceptions.ClientError as e:
-                response = { 'status_code': 404,
-                            'body' : {
-                                'message': 'Channel not found',
-                                'data' : []
-                                }
+                response = { 
+                    'status_code': 404,
+                    'body' : {'message': 'Channel not found',
+                             'data' : [] }
                             }
                 raise Exception(response)
     else:
@@ -58,10 +43,12 @@ def lambda_handler(event, context):
             response = {
                 'status_code' : 200,
                 'body' : {
-                    'message' : 'Channel retrieved succesfuly',
-                    'data' : json.dumps(channels_data, default=json_serial)
+                    'message' : 'Channels retrieved succesfuly',
+                    'data' : json.loads(json.dumps(channels_data, default=json_serial))
                 }
             }
+            
+            return response
 
         except media_tailor.exceptions.ClientError as e:
             response = {
@@ -71,6 +58,6 @@ def lambda_handler(event, context):
                     'data' : []
                 }
             }
+            raise Exception(response)
 
 
-        return response
