@@ -22,7 +22,7 @@ def lambda_handler(event, context):
             channel_data['LastModifiedTime'] = json_serial(channel_data['LastModifiedTime']) 
             response = {
                 'status_code': 200,
-                'body' :  { 'messsage' : 'Created succesfuly',
+                'body' :  { 'messsage' : 'Retrieved succesfuly',
                              'data' : json.loads(json.dumps(channel_data, default=json_serial))
                             }
             }
