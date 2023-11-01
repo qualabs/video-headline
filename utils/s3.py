@@ -198,8 +198,7 @@ def delete_bucket(organization):
     try:
         # perform delete operation & catch errors
         return s3.delete_bucket(Bucket=organization.bucket_name)
-    except (ClientError, BotoCoreError):
-        # skip operation on bucket not exists operation
+    except (s3.exceptions.ClientError, BotoCoreError):
         pass
 
 

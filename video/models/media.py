@@ -10,6 +10,10 @@ from hub_auth.models import Account
 from jsonfield import JSONField
 from organization.models import Channel, Organization
 from utils import cloudfront, mediaconvert, s3
+from utils.errors import (
+    DELETE_VIDEO_ERROR,
+    is_no_such_bucket_error,
+    )
 from . import Tag
 
 
@@ -235,5 +239,12 @@ def video_pre_delete_receiver(sender, instance, **kwargs):
         return
 
     key = instance.video_id
-
-    s3.delete_object(instance.organization.bucket_name, key, instance.organization.aws_account)
+    try:
+        s3.delete_object(instance.organization.bucket_name, key, instance.organization.aws_account)
+    except Exception as ex:
+        print(ex)
+        #Ignore error when bucket does not exist
+        if not is_no_such_bucket_error(ex):
+            raise Exception(DELETE_VIDEO_ERROR)
+        else:
+            pass

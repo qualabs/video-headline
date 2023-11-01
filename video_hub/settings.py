@@ -103,6 +103,7 @@ MIDDLEWARE += [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'api.middleware.SNSMiddleware',
+    'video_hub.error_middleware.ErrorMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
