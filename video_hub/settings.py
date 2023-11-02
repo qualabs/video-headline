@@ -38,14 +38,16 @@ if CONN_MAX_AGE:
 AWS_MEDIA_CONVERT_ROLE = os.getenv('AWS_MEDIA_CONVERT_ROLE')
 AWS_MEDIA_LIVE_ROLE = os.getenv('AWS_MEDIA_LIVE_ROLE')
 
-print(f"""
+print(
+    f"""
 -- Settings : {os.getenv('DJANGO_SETTINGS_MODULE')} --
 Debug:          {DEBUG}
 Database:       {DATABASE_HOST}:{DATABASE_PORT}
 Redis:          {REDIS_URL}
 MediaConvert Role:  {AWS_MEDIA_CONVERT_ROLE}
 MediaLive Role: {AWS_MEDIA_LIVE_ROLE}
-""")
+"""
+)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -67,7 +69,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # 3rd Party Apps
     'debug_toolbar',
     'related_admin',
@@ -79,7 +80,6 @@ INSTALLED_APPS = [
     'knox',
     'drf_generators',
     'django_filters',
-
     # Local
     'configuration',
     'hub_auth',
@@ -223,7 +223,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter'
+        'rest_framework.filters.OrderingFilter',
     ),
 }
 
@@ -234,7 +234,7 @@ SWAGGER_SETTINGS = {
     'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout',
     'JSON_EDITOR': True,
-    'SHOW_REQUEST_HEADERS': True
+    'SHOW_REQUEST_HEADERS': True,
 }
 
 # Celery Configuration
@@ -256,7 +256,7 @@ ALLOWED_DOMAINS = [
     'app.videoheadline.com',
     'qhub.qualabs.com',
     'hub.qualabs.com',
-    'localhost'
+    'localhost',
 ]
 
 # Django Toolbar
@@ -267,5 +267,5 @@ if DEBUG and not TESTING_MODE:
 
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_COLLAPSED': True,
-        'SHOW_TOOLBAR_CALLBACK': lambda r: DEBUG
+        'SHOW_TOOLBAR_CALLBACK': lambda r: DEBUG,
     }
