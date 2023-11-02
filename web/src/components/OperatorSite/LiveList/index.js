@@ -1,96 +1,171 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-
-import Page from '../../Page'
-import LiveTable from '../Table/LiveTable'
-
-import {ON, OFF} from '../utils/stepper'
-
 import {fetchLiveVideos, clearLiveVideo} from '../../../actions/live'
 import {fetchTag} from '../../../actions/tags'
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
 
 import './index.css'
-import {Link} from 'react-router-dom'
+
 
 class LiveList extends Component {
-  actionItems () {
-    return [
-      <Link className='btn btn-primary' to='/live-videos/new/'>
-        <i className='fas fa-plus' /> New
-      </Link>,
-    ]
+
+  getItems (count, offset = 0) {
+    return (
+      Array.from({length: count}, (v, k) => k).map((k) => ({
+        id: `item-${k + offset}-${new Date().getTime()}`,
+        content: `item ${k + offset}`
+      }))
+    )
+  }
+
+  constructor (props) {
+    super()
+    this.state = [this.getItems(10), this.getItems(5, 10)]
   }
 
   componentDidMount () {
-    this.props.clearLiveVideo()
+    console.log ("I'm gettnng started!!")
   }
 
-  renderFilterByState = (search) => {
-    let state = search.get('state')
 
-    if (state === ON) {
-      return (
-        'in state "ON"'
-      )
+  reorder (list, startIndex, endIndex) {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+    console.log('reordenando')
+    return result
+  }
+
+  /**
+ * Moves an item from one list to another list.
+ */
+  move (source, destination, droppableSource, droppableDestination) {
+    const sourceClone = Array.from(source)
+    const destClone = Array.from(destination)
+    const [removed] = sourceClone.splice(droppableSource.index, 1)
+    console.log('moviendo')
+
+    destClone.splice(droppableDestination.index, 0, removed)
+
+    const result = {}
+    result[droppableSource.droppableId] = sourceClone
+    result[droppableDestination.droppableId] = destClone
+
+    return result
+  }
+
+
+  getListStyle (isDraggingOver) {
+    return ({
+      background: isDraggingOver ? 'lightblue' : 'lightgrey',
+      padding: 8,
+      width: 250
+    })
+  }
+
+  onDragEnd (result) {
+    const {source, destination} = result
+
+    // dropped outside the list
+    if (!destination) {
+      return
     }
-    if (state === OFF) {
-      return (
-        'in state "OFF"'
-      )
+    const sInd = +source.droppableId
+    const dInd = +destination.droppableId
+
+    if (sInd === dInd) {
+      const items = this.reorder(this.state[sInd], source.index, destination.index)
+      const newState = [...this.state]
+      newState[sInd] = items
+      this.setState(newState)
+    } else {
+      const result = this.move(this.state[sInd], this.state[dInd], source, destination)
+      const newState = [...this.state]
+      newState[sInd] = result[sInd]
+      newState[dInd] = result[dInd]
+
+      this.setState(newState.filter((group) => group.length))
     }
-  };
+  }
 
-  renderFilterByTag = (search) => {
-    let tag_id = parseInt(search.get('tags__id'))
-
-    if (tag_id) {
-      this.props.fetchTag(tag_id)
-      let {tag} = this.props
-
-      if (tag) {
-        return (
-          `with tag "${tag.name}"`
-        )
-      }
-    }
-  };
-
-  renderFilterCreatedBy = (search) => {
-    let username = search.get('created_by__username')
-
-    if (username) {
-      return (
-        `from user "${username}"`
-      )
-    }
-  };
-
-  rendertitle = () => {
-    let search = new URLSearchParams(this.props.location.search)
-    this.renderFilterByState(search)
-
-    return (
-      <h1>Live Videos {
-        this.renderFilterByTag(search) ||
-        this.renderFilterCreatedBy(search) ||
-        this.renderFilterByState(search) }
-      </h1>
-    )
-  };
 
   render () {
     return (
-      <Page header={this.rendertitle()}>
-        <div className='container-fluid videoList'>
-          <LiveTable
-            list={this.props.contents}
-            fetch={this.props.fetchLiveVideos.bind(this)}
-            actionItems={this.actionItems()}
-            location={this.props.location}
-            history={this.props.history}
-          />
+      <div>
+        <button
+          type='button'
+          onClick={() => {
+            this.setState([...this.state, []])
+          }}
+        >
+        Add new group
+        </button>
+        <button
+          type='button'
+          onClick={() => {
+            this.setState([...this.state, this.getItems(1)])
+          }}
+        >
+        Add new item
+        </button>
+        <div style={{display: 'flex'}}>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            {this.state.map((el, ind) => (
+              <Droppable key={ind} droppableId={`${ind}`}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    style={this.setListStyle(snapshot.isDraggingOver)}
+                    {...provided.droppableProps}
+                  >
+                    {el.map((item, index) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={this.getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style
+                            )}
+                          >
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-around'
+                              }}
+                            >
+                              {item.content}
+                              <button
+                                type='button'
+                                onClick={() => {
+                                  const newState = [...this.state]
+                                  newState[ind].splice(index, 1)
+                                  this.setState(
+                                    newState.filter((group) => group.length)
+                                  )
+                                }}
+                              >
+                              delete
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            ))}
+          </DragDropContext>
         </div>
-      </Page>
+      </div>
     )
   }
 }
