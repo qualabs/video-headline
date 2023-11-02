@@ -55,9 +55,11 @@ def change_video_status_to_queued(modeladmin, request, queryset):
         try:
             video.to_queued()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_video_status_to_queued_failed(modeladmin, request, queryset):
@@ -65,9 +67,11 @@ def change_video_status_to_queued_failed(modeladmin, request, queryset):
         try:
             video.to_queued_failed()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_video_status_to_processing(modeladmin, request, queryset):
@@ -75,9 +79,11 @@ def change_video_status_to_processing(modeladmin, request, queryset):
         try:
             video.to_processing()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_video_status_to_processing_failed(modeladmin, request, queryset):
@@ -85,9 +91,11 @@ def change_video_status_to_processing_failed(modeladmin, request, queryset):
         try:
             video.to_processing_failed()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_video_status_to_finished(modeladmin, request, queryset):
@@ -95,9 +103,11 @@ def change_video_status_to_finished(modeladmin, request, queryset):
         try:
             video.to_finished()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def re_process_video(modeladmin, request, queryset):
@@ -105,9 +115,11 @@ def re_process_video(modeladmin, request, queryset):
         try:
             video.re_process()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 # Videos status function for live videos
@@ -116,9 +128,11 @@ def change_live_video_status_to_on(modeladmin, request, queryset):
         try:
             video.to_on()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the live video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the live video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_live_video_status_to_off(modeladmin, request, queryset):
@@ -126,9 +140,11 @@ def change_live_video_status_to_off(modeladmin, request, queryset):
         try:
             video.to_off()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the live video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the live video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_live_video_status_to_starting(modeladmin, request, queryset):
@@ -136,9 +152,11 @@ def change_live_video_status_to_starting(modeladmin, request, queryset):
         try:
             video.to_starting()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the live video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the live video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 def change_live_video_status_to_stopping(modeladmin, request, queryset):
@@ -146,16 +164,22 @@ def change_live_video_status_to_stopping(modeladmin, request, queryset):
         try:
             video.to_stopping()
         except TransitionNotAllowed:
-            modeladmin.message_user(request,
-                                    f'The status of the live video {video.name} cannot be changed to the one entered.',
-                                    level=messages.ERROR, )
+            modeladmin.message_user(
+                request,
+                f'The status of the live video {video.name} cannot be changed to the one entered.',
+                level=messages.ERROR,
+            )
 
 
 # Videos status description for VOD
 change_video_status_to_queued.short_description = 'Change status to Queued'
-change_video_status_to_queued_failed.short_description = 'Change status to Queued (Failed)'
+change_video_status_to_queued_failed.short_description = (
+    'Change status to Queued (Failed)'
+)
 change_video_status_to_processing.short_description = 'Change status to Processing'
-change_video_status_to_processing_failed.short_description = 'Change status to Processing (Failed)'
+change_video_status_to_processing_failed.short_description = (
+    'Change status to Processing (Failed)'
+)
 change_video_status_to_finished.short_description = 'Change status to Finished'
 re_process_video.short_description = 'Re-process video'
 
@@ -187,7 +211,7 @@ class VideoAdmin(admin.ModelAdmin):
         'organization__name',
         'video_id',
     )
-    
+
     readonly_fields = (
         'video_id',
         'created_by',
@@ -202,7 +226,7 @@ class VideoAdmin(admin.ModelAdmin):
         change_video_status_to_processing,
         change_video_status_to_processing_failed,
         change_video_status_to_finished,
-        re_process_video
+        re_process_video,
     ]
     form = VideoForm
 
@@ -211,14 +235,9 @@ class VideoAdmin(admin.ModelAdmin):
             # Only set added_by during the first save.
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
-    
+
     def get_readonly_fields(self, request, obj=None):
-        readonly_fields = [
-            'video_id',
-            'created_by',
-            'state',
-            'created_at'
-        ]
+        readonly_fields = ['video_id', 'created_by', 'state', 'created_at']
 
         if obj is not None:
             readonly_fields.append('media_type')
@@ -244,7 +263,7 @@ class LiveVideoAdmin(admin.ModelAdmin):
         'organization',
         'created_by',
         'state',
-        'created_at'
+        'created_at',
     )
     list_filter = (
         'organization',
@@ -259,7 +278,7 @@ class LiveVideoAdmin(admin.ModelAdmin):
         change_live_video_status_to_on,
         change_live_video_status_to_off,
         change_live_video_status_to_starting,
-        change_live_video_status_to_stopping
+        change_live_video_status_to_stopping,
     ]
     form = LiveVideoForm
 
