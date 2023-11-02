@@ -25,14 +25,15 @@ def get_media_convert(aws_account):
 
     if aws_account:
         media_convert = boto3.client(
-            'mediaconvert', aws_access_key_id=aws_account.access_key,
+            'mediaconvert',
+            aws_access_key_id=aws_account.access_key,
             aws_secret_access_key=aws_account.secret_access_key,
             endpoint_url=aws_account.media_convert_endpoint_url,
-            region_name=aws_account.region)
+            region_name=aws_account.region,
+        )
     else:
         media_convert = boto3.client(
-            'mediaconvert',
-            endpoint_url=(os.getenv('AWS_MEDIA_CONVERT_ENDPOINT'))
+            'mediaconvert', endpoint_url=(os.getenv('AWS_MEDIA_CONVERT_ENDPOINT'))
         )
 
     return media_convert
@@ -59,8 +60,7 @@ def transcode(media):
 
     # create job
     job = media_convert.create_job(
-        Role=organization.aws_account.media_convert_role,
-        Settings=conf_cont
+        Role=organization.aws_account.media_convert_role, Settings=conf_cont
     )
 
     # get job reference and associated to target video
@@ -107,20 +107,22 @@ def set_video_transcode_output_location(conf_cont, organization, media):
     """
     # set video and thumbnails output location
     for entry in conf_cont['OutputGroups']:
-
         # transcoded video location
         if entry['Name'] == 'Apple HLS':
             entry['OutputGroupSettings']['HlsGroupSettings'][
-                'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/hls/output'
+                'Destination'
+            ] = f's3://{organization.bucket_name}/{media.video_id}/hls/output'
 
         # generated thumbnails location
         elif entry['CustomName'] == 'Thumbs':
             entry['OutputGroupSettings']['FileGroupSettings'][
-                'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/thumbs/thumb'
+                'Destination'
+            ] = f's3://{organization.bucket_name}/{media.video_id}/thumbs/thumb'
 
     # set video path to transcode (currently first entry data)
     conf_cont['Inputs'][0][
-        'FileInput'] = f's3://{organization.bucket_name}/{media.video_id}/input.mp4'
+        'FileInput'
+    ] = f's3://{organization.bucket_name}/{media.video_id}/input.mp4'
 
     return conf_cont
 
@@ -128,15 +130,16 @@ def set_video_transcode_output_location(conf_cont, organization, media):
 def set_audio_transcode_output_location(conf_cont, organization, media):
     # set audio output location
     for entry in conf_cont['OutputGroups']:
-
         # transcoded audio location
         if entry['Name'] == 'File Group':
             entry['OutputGroupSettings']['FileGroupSettings'][
-                'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/audio/output'
+                'Destination'
+            ] = f's3://{organization.bucket_name}/{media.video_id}/audio/output'
 
     # set audio path to transcode (currently first entry data)
     conf_cont['Inputs'][0][
-        'FileInput'] = f's3://{organization.bucket_name}/{media.video_id}/input.mp4'
+        'FileInput'
+    ] = f's3://{organization.bucket_name}/{media.video_id}/input.mp4'
 
     return conf_cont
 
@@ -148,7 +151,9 @@ def check_job_status(video_id):
     """
     from video.models import Media
 
-    media = Media.objects.select_related('organization__aws_account').get(video_id=video_id)
+    media = Media.objects.select_related('organization__aws_account').get(
+        video_id=video_id
+    )
 
     job_id = media.metadata.get('media_convert_job_id')
 
@@ -175,7 +180,8 @@ def check_job_status(video_id):
             media.metadata.pop('job_percent_complete')
 
             media.duration = math.ceil(
-                job['OutputGroupDetails'][0]['OutputDetails'][0]['DurationInMs'] / 1000)
+                job['OutputGroupDetails'][0]['OutputDetails'][0]['DurationInMs'] / 1000
+            )
             media.save()
             return
 
