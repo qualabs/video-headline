@@ -5,9 +5,12 @@ from celery import shared_task
 
 def get_cloudwatch(aws_account):
     if aws_account:
-        cloudwatch = boto3.client('logs', aws_access_key_id=aws_account.access_key,
-                                  aws_secret_access_key=aws_account.secret_access_key,
-                                  region_name=aws_account.region)
+        cloudwatch = boto3.client(
+            'logs',
+            aws_access_key_id=aws_account.access_key,
+            aws_secret_access_key=aws_account.secret_access_key,
+            region_name=aws_account.region,
+        )
     else:
         cloudwatch = boto3.client('logs')
 
@@ -37,7 +40,7 @@ def check_input(video_id):
             logStreamNames=[log_stream_name],
             filterPattern=filter_pattern,
             startTime=start_time,
-            endTime=end_time
+            endTime=end_time,
         )
 
         if len(response['events']) > 0:
