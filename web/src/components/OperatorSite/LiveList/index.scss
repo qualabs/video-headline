@@ -13,5 +13,43 @@
 }
 
 .container {
-    background-color: red;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.assets,
+.loop_order {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  min-width: 45%;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.draggable-item {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #F5F5F5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.draggable-item:hover {
+  background-color: #E0E0E0;
+}
+
+.item-title {
+  font-weight: 500;
+  color: #333;
+}
+
+.item-info {
+  font-size: 0.9em;
+  color: #666;
 }
