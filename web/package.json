@@ -31,6 +31,7 @@
     "react-confirm-alert": "^2.0.5",
     "react-dom": "^16.4.1",
     "react-draft-wysiwyg": "^1.12.13",
+    "react-dragula": "^1.1.17",
     "react-id-swiper": "^1.6.6",
     "react-infinite-scroller": "^1.2.0",
     "react-markdown": "^3.6.0",
