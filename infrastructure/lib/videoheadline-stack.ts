@@ -19,7 +19,6 @@ import { join } from 'path';
 import * as ecrdeploy from 'cdk-ecr-deployment';
 import { taskDefinitionEnvironment, videoHubtaskDefinitionEnvironment, qhubDevCertArn } from './utils/aws';
 import { RedisCluster } from './redis-cluster';
-import * as kms from 'aws-cdk-lib/aws-kms';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 const engineVersion = db.PostgresEngineVersion.of('11.21', '11');
@@ -60,13 +59,10 @@ export class VideoheadlineStack extends Stack {
             vpc: this.vpc,
             sg: securityGroup,
         });
-        const ksmEncryptionKey = new kms.Key(this, 'ECSClusterKey', {
-            enableKeyRotation: true,
-        });
+
         const vhCluster = new ecs.Cluster(this, 'VideoheadlineCluster', {
             clusterName: 'Videoheadline-cluster',
             vpc: this.vpc,
-            executeCommandConfiguration: { kmsKey: ksmEncryptionKey },
         });
 
         //Task definitions
@@ -74,7 +70,7 @@ export class VideoheadlineStack extends Stack {
             this,
             'celeryTask',
             {
-                memoryLimitMiB: 2048,
+                memoryLimitMiB: 1024,
                 cpu: 512,
             }
         );
@@ -87,19 +83,27 @@ export class VideoheadlineStack extends Stack {
             }
         );
 
+        // Adding role to enable connection to containers
+        const ecsTaskRole = new iam.Role(this, "EcsTaskRole", {
+            roleName: "EcsTaskRole",
+            assumedBy: new iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+
+        })
+        ecsTaskRole.addToPolicy(
+            new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: ['ssmmessages:CreateControlChannel', 'ssmmessages:CreateDataChannel', 'ssmmessages:OpenControlChannel', 'ssmmessages:OpenDataChannel'],
+                resources: ['*']
+            })
+        );
+        ecsTaskRole.grantAssumeRole(new iam.ServicePrincipal("ecs-tasks.amazonaws.com"))
+
         // Adding policies to enable connection to containers
         videoHubTaskDefinition.addToTaskRolePolicy(
             new iam.PolicyStatement({
                 effect: iam.Effect.ALLOW,
                 actions: ['ssmmessages:CreateControlChannel', 'ssmmessages:CreateDataChannel', 'ssmmessages:OpenControlChannel', 'ssmmessages:OpenDataChannel'],
                 resources: ['*']
-            }),
-        );
-        videoHubTaskDefinition.addToTaskRolePolicy(
-            new iam.PolicyStatement({
-                effect: iam.Effect.ALLOW,
-                actions: ['kms:Decrypt'],
-                resources: [ksmEncryptionKey.keyArn]
             }),
         );
 
