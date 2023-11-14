@@ -21,11 +21,30 @@ import {clearVideo} from '../../actions/video'
 import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
+import {FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler} from 'video-headline-fast-channels/dist'
 
 export class OperatorRoutes extends Component {
+  constructor (props) {
+    super(props)
+    this.config = this.props.user.organization.config
+  }
   render () {
     return (
       <Switch>
+        {this.config && (
+        <Route exact path='/fast-channels/' render={(props) => <FASTChannelDashboard history={history}
+          routes={{newChannel: '/fast-channels/channel/new',
+            newAd: '/fast-channels/ad/new',
+            scheduler: '/fast-channels/scheduler'}}
+          {...props}
+        />}
+        />
+        )}
+        {this.config && ( <Route exact path='/fast-channels/channel/new/' component={CreateNewChannel}/>)}
+        {this.config && (<Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>)}
+        {this.config && (<Route exact path='/fast-channels/scheduler/:id/' render={() => <Scheduler history={history}/>}/> )}
+  
+
         <Route exact path='/video-on-demand/new/' component={VideoNew} />
         <Route exact path='/video-on-demand/:id/*/' component={VideoDetail} />
         <Route exact path='/video-on-demand/:id/' component={VideoDetail} />
@@ -62,6 +81,9 @@ export class OperatorRoutes extends Component {
         <Route exact path='/change-password/' component={ChangePassword} />
         <Route exact path='/' component={DashboardOperator} />
         <Route path='*' render={() => <div>{history.push('/')}</div>} />
+
+        
+        
       </Switch>
     )
   }
@@ -104,6 +126,7 @@ class OperatorMenu extends Component {
         <li><Link className='btn' to='/video-on-demand/'><i className='fas fa-fw fa-film'/> Videos On Demand</Link></li>
         <li><Link className='btn' to='/live-videos/'><i className='fas fa-fw fa-video'/> Live Videos</Link></li>
         <li><Link className='btn' to='/video-groups/'><i className='fas fa-fw fa-tv'/> Video Groups</Link></li>
+        <li><Link className='btn' to='/fast-channels/'><i className='fas fa-fw fa-tv'/> Fast Channels</Link></li>
         {this.renderChannels()}
         <li><Link className='btn' to='/bills/'><i className='fas fa-fw fa-calculator'/> Usage Report</Link></li>
         {this.renderMonitor()}
