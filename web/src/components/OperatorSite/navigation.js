@@ -21,7 +21,11 @@ import {clearVideo} from '../../actions/video'
 import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
-import {FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler} from 'video-headline-fast-channels/dist'
+let FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler;
+
+if (isSshKeyAvailable()) {
+  ({ FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } =import('video-headline-fast-channels/dist'));
+}
 
 export class OperatorRoutes extends Component {
   constructor (props) {
@@ -31,7 +35,7 @@ export class OperatorRoutes extends Component {
   render () {
     return (
       <Switch>
-        {this.config && (
+        {this.config && FASTChannelDashboard && (
         <Route exact path='/fast-channels/' render={(props) => <FASTChannelDashboard history={history}
           routes={{newChannel: '/fast-channels/channel/new',
             newAd: '/fast-channels/ad/new',
@@ -40,9 +44,11 @@ export class OperatorRoutes extends Component {
         />}
         />
         )}
-        {this.config && ( <Route exact path='/fast-channels/channel/new/' component={CreateNewChannel}/>)}
-        {this.config && (<Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>)}
-        {this.config && (<Route exact path='/fast-channels/scheduler/:id/' render={() => <Scheduler history={history}/>}/> )}
+        {this.config && FASTCCreateNewChannelhannelDashboard && ( <Route exact path='/fast-channels/channel/new/' component={CreateNewChannel}/>)}
+        {this.config && CreateAdConfiguration && (<Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>)}
+        {this.config && Scheduler &&  (<Route exact path='/fast-channels/scheduler/:id/'  render={(props) =>
+          isSshKeyAvailable() ? <Scheduler history={history} {...props} /> : <Redirect to='/' />
+        }/> )}
   
 
         <Route exact path='/video-on-demand/new/' component={VideoNew} />
