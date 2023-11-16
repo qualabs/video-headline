@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Switch, Route, Link} from 'react-router-dom'
 import history from '../../history'
-import { FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } from 'video-headline-fast-channels/dist'
+// import { FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } from 'video-headline-fast-channels/dist'
 import DashboardOperator from './DashboardOperator'
 import VideoList from './VideoList'
 import VideoDetail from './VideoDetail'
@@ -23,8 +23,10 @@ import BillDetail from './BillDetail'
 import Monitor from './Monitor'
 
 const isSshKeyAvailable = require('../../check-ssh-key'); 
-
-
+let FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler
+if (isSshKeyAvailable) {
+  ({ FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } = require('video-headline-fast-channels/dist'));
+}
 
 export class OperatorRoutes extends Component {
   constructor (props) {
