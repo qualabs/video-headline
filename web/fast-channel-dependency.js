@@ -1,22 +1,8 @@
+// check-ssh-key.js
 const fs = require('fs');
-const { spawnSync } = require('child_process');
+const isSshKeyAvailable = require('./src/check-ssh-key'); 
 
 const originalPackageJson = require('./package.json');
-
-function isSshKeyAvailable() {
-  try {
-
-    fs.accessSync(`${process.env.HOME}/.ssh/id_rsa`, fs.constants.R_OK);
-    // Check if the SSH key is valid by attempting to connect to GitHub
-    spawnSync('ssh', ['-T', 'git@github.com'], { stdio: 'inherit' });
-    console.log('Package.json updated successfully.');
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-
 const updatedPackageJson = {
   ...originalPackageJson,
   dependencies: {
@@ -28,8 +14,4 @@ const updatedPackageJson = {
   }
 };
 
-
 fs.writeFileSync('package.json', JSON.stringify(updatedPackageJson, null, 2));
-
-
-
