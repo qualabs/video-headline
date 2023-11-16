@@ -30,11 +30,17 @@ export class OperatorRoutes extends Component {
   constructor (props) {
     super(props)
     this.config = this.props.user.organization.config
+    if (this.config["fast-channel"]){
+      this.fastChannelEnable = this.config["fast-channel"].enable
+    }
+    else{
+      this.fastChannelEnable = false 
+    }
   }
   render () {
     return (
       <Switch>
-        {isSshKeyAvailable && (
+        {isSshKeyAvailable && this.fastChannelEnable && (
           <Route exact path='/fast-channels/' render={(props) => 
           <FASTChannelDashboard history={history}
           routes={{newChannel: '/fast-channels/channel/new',
@@ -44,13 +50,13 @@ export class OperatorRoutes extends Component {
         />}
         />
         )}
-        {isSshKeyAvailable && ( 
+        {isSshKeyAvailable && this.fastChannelEnable && ( 
           <Route exact path='/fast-channels/channel/new/' component={CreateNewChannel}/>
         )}
-        {isSshKeyAvailable && (
+        {isSshKeyAvailable && this.fastChannelEnable &&  (
           <Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>
         )}
-        {isSshKeyAvailable  &&( 
+        {isSshKeyAvailable  && this.fastChannelEnable && ( 
           <Route exact path='/fast-channels/scheduler/:id/' render={() => 
             <Scheduler history={history}
           />}
