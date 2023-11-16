@@ -22,7 +22,7 @@ const updatedPackageJson = {
   dependencies: {
     ...originalPackageJson.dependencies,
     ...(isSshKeyAvailable()
-      ? { 'video-headline-fast-channels': 'git+ssh://git@github.com:qualabs/video-headline-fast-channels.git'
+      ? { 'video-headline-fast-channels': 'git+ssh://git@github.com:qualabs/video-headline-fast-channels.git#hotfix/add-package-json'
     } 
       : {})
   }

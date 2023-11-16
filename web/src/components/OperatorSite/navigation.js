@@ -21,21 +21,22 @@ import {clearVideo} from '../../actions/video'
 import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
-let FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler;
+//let FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler;
 
-if (isSshKeyAvailable()) {
-  ({ FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } =import('video-headline-fast-channels/dist'));
-}
+// if (isSshKeyAvailable()) {
+//   ({ FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } =import('video-headline-fast-channels'));
+// }
 
+import FASTChannelDashboard from 'video-headline-fast-channels'
 export class OperatorRoutes extends Component {
   constructor (props) {
     super(props)
-    this.config = this.props.user.organization.config
+    //this.config = this.props.user.organization.config
   }
   render () {
     return (
       <Switch>
-        {this.config && FASTChannelDashboard && (
+        {/* /* {this.config && FASTChannelDashboard && (
         <Route exact path='/fast-channels/' render={(props) => <FASTChannelDashboard history={history}
           routes={{newChannel: '/fast-channels/channel/new',
             newAd: '/fast-channels/ad/new',
@@ -48,7 +49,15 @@ export class OperatorRoutes extends Component {
         {this.config && CreateAdConfiguration && (<Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>)}
         {this.config && Scheduler &&  (<Route exact path='/fast-channels/scheduler/:id/'  render={(props) =>
           isSshKeyAvailable() ? <Scheduler history={history} {...props} /> : <Redirect to='/' />
-        }/> )}
+        }/> )} */ }
+
+         <Route exact path='/fast-channels/' render={(props) => <FASTChannelDashboard history={history}
+          routes={{newChannel: '/fast-channels/channel/new',
+            newAd: '/fast-channels/ad/new',
+            scheduler: '/fast-channels/scheduler'}}
+          {...props}
+          />} />
+
   
 
         <Route exact path='/video-on-demand/new/' component={VideoNew} />
