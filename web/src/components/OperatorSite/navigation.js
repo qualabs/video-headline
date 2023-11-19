@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Switch, Route, Link} from 'react-router-dom'
 import history from '../../history'
-// import { FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } from 'video-headline-fast-channels/dist'
+
 import DashboardOperator from './DashboardOperator'
 import VideoList from './VideoList'
 import VideoDetail from './VideoDetail'
@@ -22,11 +22,15 @@ import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
 
-const isSshKeyAvailable = require('../../check-ssh-key'); 
 let FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler
-if (isSshKeyAvailable) {
-  ({ FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } = require('video-headline-fast-channels/dist'));
-}
+
+  try{
+    ({ FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler } = require('video-headline-fast-channels/dist'));
+  } catch(error){
+      console.log("Access to fast channel is restricted.");
+  } 
+
+
 
 export class OperatorRoutes extends Component {
   constructor (props) {
@@ -42,7 +46,7 @@ export class OperatorRoutes extends Component {
   render () {
     return (
       <Switch>
-        {isSshKeyAvailable && this.fastChannelEnable && (
+        { FASTChannelDashboard && this.fastChannelEnable && (
           <Route exact path='/fast-channels/' render={(props) => 
           <FASTChannelDashboard history={history}
           routes={{newChannel: '/fast-channels/channel/new',
@@ -52,13 +56,13 @@ export class OperatorRoutes extends Component {
         />}
         />
         )}
-        {isSshKeyAvailable && this.fastChannelEnable && ( 
+        { CreateNewChannel && this.fastChannelEnable && ( 
           <Route exact path='/fast-channels/channel/new/' component={CreateNewChannel}/>
         )}
-        {isSshKeyAvailable && this.fastChannelEnable &&  (
+        {CreateAdConfiguration && this.fastChannelEnable &&  (
           <Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>
         )}
-        {isSshKeyAvailable  && this.fastChannelEnable && ( 
+        { Scheduler && this.fastChannelEnable && ( 
           <Route exact path='/fast-channels/scheduler/:id/' render={() => 
             <Scheduler history={history}
           />}
