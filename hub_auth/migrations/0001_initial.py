@@ -14,15 +14,7 @@ import json
 class Migration(migrations.Migration):
     def create_default_objects(apps, schema_editor):
         AWSAccount = apps.get_model('organization', 'AWSAccount')
-        secret_name = 'ApiUserSecret'
         access_key, secret_access_key = os.getenv('AWS_ACCESS_KEY_ID'), os.getenv('AWS_SECRET_ACCESS_KEY')
-        print(access_key)
-        print(secret_access_key)
-
-        # access_key, secret_access_key = Migration.get_secret(secret_name)
-
-        media_convert_role_name = 'MediaConvertRole'
-        media_live_role_name = 'MediaLiveAccessRole'
 
         media_convert_role_arn = os.getenv('AWS_MEDIA_CONVERT_ROLE')
         media_live_role_arn = os.getenv('AWS_MEDIA_LIVE_ROLE')
@@ -37,12 +29,67 @@ class Migration(migrations.Migration):
             'media_convert_role': media_convert_role_arn,
             'region': os.environ.get('AWS_DEFAULT_REGION'),
             'account_id': os.environ.get('AWS_ACCOUNT_ID'),
+            # 'media_convert_endpoint_url': media_convert_endpoint_url,
             
 
             # TODO: Add other fields with default values as needed
         }
 
         AWSAccount.objects.create(**aws_account_defaults)
+        
+    def create_default_global_settings(apps, schema_editor):
+        configuration = apps.get_model('hub_auth', 'Configuration')
+        # load cloudfront configuration from file 
+        file_path = os.path.join(os.path.dirname(__file__), '../configuration.samples/cloud_front_configuration.json')
+        cloud_front_configuration = {}
+        with open(file_path) as json_file:
+            cloud_front_configuration = json.load(json_file)
+        
+        configuration.objects.create(
+           { "cloud_front_configuration" : cloud_front_configuration}
+        )
+        
+    def create_default_media_convert_settings(apps, schema_editor):
+        media_convert_configuration = apps.get_model('hub_auth', 'MediaConvertConfiguration')
+        # load media convert configuration from file 
+        file_path = os.path.join(os.path.dirname(__file__), '../configuration.samples/media_convert_configuration.json')
+        media_convert_configuration = {}
+        with open(file_path) as json_file:
+            media_convert_configuration = json.load(json_file)
+        
+        media_convert_configuration.objects.create(
+           { "name" : "Default Media Convert Configuration",
+            "description" : "Default Media Convert Configuration",
+            "media_convert_configuration" : media_convert_configuration}
+        )
+        
+    def create_default_media_live_settings(apps, schema_editor):
+        media_live_configuration = apps.get_model('hub_auth', 'MediaLiveConfiguration')
+        # load media live configuration from file 
+        file_path_encoder_settings = os.path.join(os.path.dirname(__file__), '../configuration.samples/media_live_encoder_settings.json')
+        file_path_source_settings = os.path.join(os.path.dirname(__file__), '../configuration.samples/media_live_input_attachments.json')
+        file_path_destination_settings = os.path.join(os.path.dirname(__file__), '../configuration.samples/media_live_destinations.json')
+        media_live_encoder_settings_configuration = {}
+        media_live_source_settings_configuration = {}
+        media_live_destination_settings_configuration = {}
+        with open(file_path_encoder_settings) as json_file:
+            media_live_encoder_settings_configuration = json.load(json_file)
+        with open(file_path_source_settings) as json_file:
+            media_live_source_settings_configuration = json.load(json_file)
+        with open(file_path_destination_settings) as json_file:
+            media_live_destination_settings_configuration = json.load(json_file)
+        
+        media_live_configuration.objects.create(
+           { "name" : "Default Media Live Configuration",
+            "description" : "Default Media Live Configuration",
+            "source_settings" : media_live_source_settings_configuration,
+            "destination_settings" : media_live_destination_settings_configuration,
+            "encoder_settings" : media_live_encoder_settings_configuration}
+        )
+        
+            
+            
+        
     def create_periodic_tasks(apps, schema_editor):
         PeriodicTask = apps.get_model('djcelery', 'PeriodicTask')
         PeriodicTask.objects.create(
@@ -91,28 +138,14 @@ class Migration(migrations.Migration):
 
         return role_arn
         
-    def get_secret(secret_name):
-        secret_client = boto3.client('secretsmanager')
-        print(secret_client)
-        print(secret_client.list_secrets())
-
-        try:
-            response = secret_client.get_secret_value(SecretId=secret_name)
-            secret_data = response['SecretString']
-            secret_json = json.loads(secret_data)
-            access_key = secret_json.get('accessKeyId')
-            secret_access_key = secret_json.get('secretAccessKey')
-        except secret_client.exceptions.ResourceNotFoundException:
-            print(f"Secret with name '{secret_name}' not found in Secrets Manager.")
-            access_key, secret_access_key = None, None
-
-        return access_key, secret_access_key
-
+    
     def get_media_convert_endpoint_url():
         mediaconvert_client = boto3.client('mediaconvert', region_name=os.environ.get('AWS_DEFAULT_REGION'), aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
         
         try:
             response = mediaconvert_client.describe_endpoints()
+            print("response")
+            print(response)
             endpoint_url = response['Endpoints'][0]['Url']
         except (IndexError, KeyError):
             print("Unable to retrieve MediaConvert endpoint URL.")
