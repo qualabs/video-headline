@@ -57,11 +57,12 @@ class Migration(migrations.Migration):
         with open(file_path) as json_file:
             media_convert_configuration = json.load(json_file)
         
-        media_convert_configuration.objects.create(
+        return media_convert_configuration.objects.create(
            { "name" : "Default Media Convert Configuration",
             "description" : "Default Media Convert Configuration",
             "media_convert_configuration" : media_convert_configuration}
-        )
+        ).id
+        
         
     def create_default_media_live_settings(apps, schema_editor):
         media_live_configuration = apps.get_model('hub_auth', 'MediaLiveConfiguration')
@@ -79,15 +80,33 @@ class Migration(migrations.Migration):
         with open(file_path_destination_settings) as json_file:
             media_live_destination_settings_configuration = json.load(json_file)
         
-        media_live_configuration.objects.create(
+        return media_live_configuration.objects.create(
            { "name" : "Default Media Live Configuration",
             "description" : "Default Media Live Configuration",
             "source_settings" : media_live_source_settings_configuration,
             "destination_settings" : media_live_destination_settings_configuration,
             "encoder_settings" : media_live_encoder_settings_configuration}
-        )
+        ).id
         
-            
+    def create_plan(apps, schema_editor):
+        plan = apps.get_model('hub_auth', 'Plan')
+        return plan.objects.create(
+                {
+            "name":'Default Plan',
+            " description  ":'Default Plan',
+            "media_live_configuration ": Migration.create_default_media_live_settings(),
+            " media_convert_configuration ":Migration.create_default_media_convert_settings()
+            }
+                ).id
+    def create_organization(apps, schema_editor):
+        organization = apps.get_model('organization', 'Organization')
+        organization.objects.create(
+                {
+            "name":'Default Organization',
+            " description  ":'Default Organization',
+            "plan ": Migration.create_plan()
+            }
+                )
             
         
     def create_periodic_tasks(apps, schema_editor):
