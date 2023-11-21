@@ -15,16 +15,19 @@ class Migration(migrations.Migration):
     def create_default_objects(apps, schema_editor):
         AWSAccount = apps.get_model('organization', 'AWSAccount')
         secret_name = 'ApiUserSecret'
+        access_key, secret_access_key = os.getenv('AWS_ACCESS_KEY_ID'), os.getenv('AWS_SECRET_ACCESS_KEY')
+        print(access_key)
+        print(secret_access_key)
 
-        access_key, secret_access_key = Migration.get_secret(secret_name)
+        # access_key, secret_access_key = Migration.get_secret(secret_name)
 
         media_convert_role_name = 'MediaConvertRole'
         media_live_role_name = 'MediaLiveAccessRole'
 
-        media_convert_role_arn = Migration.get_iam_role_arn(media_convert_role_name)
-        media_live_role_arn = Migration.get_iam_role_arn(media_live_role_name)
+        media_convert_role_arn = os.getenv('AWS_MEDIA_CONVERT_ROLE')
+        media_live_role_arn = os.getenv('AWS_MEDIA_LIVE_ROLE')
 
-        media_convert_endpoint_url = Migration.get_media_convert_endpoint_url()
+        # media_convert_endpoint_url = Migration.get_media_convert_endpoint_url()
 
         aws_account_defaults = {
             'name': 'Default AWS Account',
@@ -33,7 +36,6 @@ class Migration(migrations.Migration):
             'media_live_role': media_live_role_arn,
             'media_convert_role': media_convert_role_arn,
             'region': os.environ.get('AWS_DEFAULT_REGION'),
-            'media_convert_endpoint_url': media_convert_endpoint_url,
             'account_id': os.environ.get('AWS_ACCOUNT_ID'),
             
 
@@ -78,7 +80,8 @@ class Migration(migrations.Migration):
         
             
     def get_iam_role_arn(role_name):
-        iam_client = boto3.client('iam')
+        iam_client = boto3.client('iam', region_name=os.environ.get('AWS_DEFAULT_REGION'), aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
+        #add access key and secret access key
 
         try:
             response = iam_client.get_role(RoleName=role_name)
@@ -90,6 +93,8 @@ class Migration(migrations.Migration):
         
     def get_secret(secret_name):
         secret_client = boto3.client('secretsmanager')
+        print(secret_client)
+        print(secret_client.list_secrets())
 
         try:
             response = secret_client.get_secret_value(SecretId=secret_name)
@@ -104,7 +109,7 @@ class Migration(migrations.Migration):
         return access_key, secret_access_key
 
     def get_media_convert_endpoint_url():
-        mediaconvert_client = boto3.client('mediaconvert')
+        mediaconvert_client = boto3.client('mediaconvert', region_name=os.environ.get('AWS_DEFAULT_REGION'), aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
         
         try:
             response = mediaconvert_client.describe_endpoints()
