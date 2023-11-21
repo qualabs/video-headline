@@ -137,7 +137,7 @@ export class VideoheadlineStack extends Stack {
             },
             comment: 'Videoheadline',
         });
-
+        console.log("Cloudfront URL: ", videoheadlineCF.domainName)
 
         // Containers
         videoHubTaskDefinition.addContainer('videoheadline', {
