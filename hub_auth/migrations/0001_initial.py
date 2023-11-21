@@ -12,13 +12,36 @@ import boto3
 import json
 
 class Migration(migrations.Migration):
+    def create_default_objects(apps, schema_editor):
+        AWSAccount = apps.get_model('organization', 'AWSAccount')
+        secret_name = 'ApiUserSecret'
+
+        access_key, secret_access_key = Migration.get_secret(secret_name)
+
+        media_convert_role_name = 'MediaConvertRole'
+        media_live_role_name = 'MediaLiveAccessRole'
+
+        media_convert_role_arn = Migration.get_iam_role_arn(media_convert_role_name)
+        media_live_role_arn = Migration.get_iam_role_arn(media_live_role_name)
+
+        media_convert_endpoint_url = Migration.get_media_convert_endpoint_url()
+
+        aws_account_defaults = {
+            'name': 'Default AWS Account',
+            'access_key': access_key,
+            'secret_access_key': secret_access_key,
+            'media_live_role': media_live_role_arn,
+            'media_convert_role': media_convert_role_arn,
+            'region': os.environ.get('AWS_DEFAULT_REGION'),
+            'media_convert_endpoint_url': media_convert_endpoint_url,
+            'account_id': os.environ.get('AWS_ACCOUNT_ID'),
+            
+
+            # TODO: Add other fields with default values as needed
+        }
+
+        AWSAccount.objects.create(**aws_account_defaults)
     def create_periodic_tasks(apps, schema_editor):
-#          - `delete_channels` every hour.
-#    - `delete_inputs` every hour.
-#    - `check_live_cuts` every minute.
-#    - `delete_distributions` daily.
-#    - `bill_renewal` on the first day of every month.
-    #how to create periodic tasks
         PeriodicTask = apps.get_model('djcelery', 'PeriodicTask')
         PeriodicTask.objects.create(
             name='Delete Channels',
@@ -50,8 +73,10 @@ class Migration(migrations.Migration):
             interval=2592000,
             enabled=True,
         )
+
+
         
-        
+            
     def get_iam_role_arn(role_name):
         iam_client = boto3.client('iam')
 
@@ -62,7 +87,7 @@ class Migration(migrations.Migration):
             print(f"IAM role '{role_name}' not found.")
 
         return role_arn
-    
+        
     def get_secret(secret_name):
         secret_client = boto3.client('secretsmanager')
 
@@ -90,35 +115,7 @@ class Migration(migrations.Migration):
 
         return endpoint_url
 #Default configuration
-    def create_default_objects(apps, schema_editor):
-        AWSAccount = apps.get_model('organization', 'AWSAccount')
-        secret_name = 'ApiUserSecret'
 
-        access_key, secret_access_key = get_secret(secret_name)
-
-        media_convert_role_name = 'MediaConvertRole'
-        media_live_role_name = 'MediaLiveAccessRole'
-
-        media_convert_role_arn = get_iam_role_arn(media_convert_role_name)
-        media_live_role_arn = get_iam_role_arn(media_live_role_name)
-
-        media_convert_endpoint_url = get_media_convert_endpoint_url()
-
-        aws_account_defaults = {
-            'name': 'Default AWS Account',
-            'access_key': access_key,
-            'secret_access_key': secret_access_key,
-            'media_live_role': media_live_role_arn,
-            'media_convert_role': media_convert_role_arn,
-            'region': os.environ.get('AWS_DEFAULT_REGION'),
-            'media_convert_endpoint_url': media_convert_endpoint_url,
-            'account_id': os.environ.get('AWS_ACCOUNT_ID'),
-            
-
-            # TODO: Add other fields with default values as needed
-        }
-
-        AWSAccount.objects.create(**aws_account_defaults)
     initial = True
 
     dependencies = [
