@@ -36,6 +36,7 @@ class Migration(migrations.Migration):
         }
 
         AWSAccount.objects.create(**aws_account_defaults)
+
         
     def create_default_global_settings(apps, schema_editor):
         configuration = apps.get_model('hub_auth', 'Configuration')
@@ -91,24 +92,25 @@ class Migration(migrations.Migration):
     def create_plan(apps, schema_editor):
         plan = apps.get_model('hub_auth', 'Plan')
         return plan.objects.create(
-                {
-            "name":'Default Plan',
-            " description  ":'Default Plan',
-            "media_live_configuration ": Migration.create_default_media_live_settings(),
-            " media_convert_configuration ":Migration.create_default_media_convert_settings()
+            {
+                "name":'Default Plan',
+                "description ":'Default Plan',
+                "media_live_configuration ": Migration.create_default_media_live_settings(),
+                "media_convert_configuration ":Migration.create_default_media_convert_settings()
             }
-                ).id
+         ).id
+        
     def create_organization(apps, schema_editor):
         organization = apps.get_model('organization', 'Organization')
         organization.objects.create(
                 {
-            "name":'Default Organization',
-            " description  ":'Default Organization',
-            "plan ": Migration.create_plan()
-            }
+                    "name":'Default Organization',
+                    "description":'Default Organization',
+                    "plan": Migration.create_plan()
+                }
                 )
             
-        
+
     def create_periodic_tasks(apps, schema_editor):
         PeriodicTask = apps.get_model('djcelery', 'PeriodicTask')
         PeriodicTask.objects.create(
@@ -141,21 +143,6 @@ class Migration(migrations.Migration):
             interval=2592000,
             enabled=True,
         )
-
-
-        
-            
-    def get_iam_role_arn(role_name):
-        iam_client = boto3.client('iam', region_name=os.environ.get('AWS_DEFAULT_REGION'), aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
-        #add access key and secret access key
-
-        try:
-            response = iam_client.get_role(RoleName=role_name)
-            role_arn = response['Role']['Arn']
-        except iam_client.exceptions.NoSuchEntityException:
-            print(f"IAM role '{role_name}' not found.")
-
-        return role_arn
         
     
     def get_media_convert_endpoint_url():
@@ -171,7 +158,6 @@ class Migration(migrations.Migration):
             endpoint_url = None
 
         return endpoint_url
-#Default configuration
 
     initial = True
 
@@ -243,7 +229,9 @@ class Migration(migrations.Migration):
             name='user_permissions',
             field=models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions'),
         ),
-        migrations.RunPython(create_default_objects),
+        # migrations.RunPython(create_default_objects),
+        migrations.RunPython(create_default_global_settings),
+        migrations.RunPython(create_plan),
        
     ]
     
