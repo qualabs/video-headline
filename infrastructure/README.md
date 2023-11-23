@@ -10,7 +10,7 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 2. Build the project: `yarn run build` .
 
-3. Bootstrap the CDK app (replace `[...]` with your AWS profile): `yarn cdk bootstrap --profile [...]`.
+3. Bootstrap the CDK app: `yarn cdk bootstrap`. If you are using a specific AWS profile, include the `--profile` flag: `yarn cdk bootstrap --profile [...]` (replace `[...]` with your AWS profile). If no profile flag is specified, the default profile will be used.
 
 4. Deploy the app: `yarn cdk deploy '*' --profile [...]`
 
