@@ -6,9 +6,10 @@ python manage.py migrate --noinput # Apply database migrations
 echo "Executing create_super_user.sh script"
 
 # Set superuser credentials
-username="admin"
-email="admin@admin.com"
-password="12345678"
+username="${SUPERUSER_USERNAME}"
+email="${SUPERUSER_EMAIL}"
+password="${SUPERUSER_PASSWORD}"
+
 
 echo "Creating superuser"
 

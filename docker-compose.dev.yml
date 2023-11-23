@@ -33,6 +33,9 @@ services:
       - APM_SERVER_URL=${APM_SERVER_URL}
       - APM_DEBUG=True
       - BASE_URL=${BASE_URL}
+      - SUPERUSER_USERNAME=${SUPERUSER_USERNAME}
+      - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
+      - SUPERUSER_PASSWORD=${SUPERUSER_PASSWORD}
 
   web:
     container_name: web
@@ -91,7 +94,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}     
 
   celery-beat:
     build: .
