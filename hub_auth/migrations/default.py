@@ -6,14 +6,9 @@ import django.contrib.auth.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-import hub_auth.models
 import boto3
 import os 
 import json 
-import re
-import utils.s3
-import utils.cloudfront
-from functools import partial
 
 
 class Migration(migrations.Migration):
@@ -26,33 +21,17 @@ class Migration(migrations.Migration):
     account_id = media_convert_role_arn.split(':')[4]
     aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
     configuration_folder = os.path.join(os.path.dirname(__file__), 'configuration.samples/')
+    default_user = os.getenv('DEFAULT_USER')
 
-    def _load_values():
-        Migration.aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
-        Migration.aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        Migration.media_convert_role_arn = os.getenv('AWS_MEDIA_CONVERT_ROLE')
-        Migration.media_live_role_arn = os.getenv('AWS_MEDIA_LIVE_ROLE')
-        Migration.account_id = Migration.media_convert_role_arn.split(':')[4]
-        Migration.configuration_folder = os.path.join(os.path.dirname(__file__), 'configuration.samples/')
-        
-
-
-        
     
-    def assign_user_to_organization(apps, schema_editor):
+    def assign_user_to_organization(apps, schema_editor,organization_name):
         User = apps.get_model('hub_auth', 'account')
-        Organization = apps.get_model('organization', 'Organization')
-        django_session = apps.get_model('django', 'Session')
-        # get current user logged in 
-        session = django_session.objects.get(
-            expire_date__gte=django.utils.timezone.now()
-        )
+        Organization = apps.get_model('organization', 'organization')
         user = User.objects.get(
-            pk=session.get_decoded().get('_auth_user_id')
+            first_name ='noe'
         )
-        #is there a way of knowing which is the user logged in ?
         organization = Organization.objects.get(
-            name='Default Organization'
+            name=organization_name
         )
         user.organization = organization
         user.save()
@@ -76,8 +55,7 @@ class Migration(migrations.Migration):
         }
         return aws_account.objects.create(**aws_account_defaults).id
 
-    def test(self):
-        return self.create_global_settings()
+
         
     def create_global_settings(apps, schema_editor):
         configuration_model = apps.get_model('configuration', 'configuration')
@@ -142,27 +120,24 @@ class Migration(migrations.Migration):
         return plan.objects.create( **plan_default).id
         
     def create_organization(apps, schema_editor):
-        organization = apps.get_model('organization', 'organization')
-        bucket_name = utils.s3.generate_bucket_name('Default Organization')
         aws_account = apps.get_model('organization', 'AWSAccount')
         aws_account_id = Migration.create_AWS_Account(apps, schema_editor)
         aws_account_dict = aws_account()
         aws_account_dict.name = 'Default AWS Account'
-        aws_account_dict.access_key = os.getenv('AWS_ACCESS_KEY_ID')
-        aws_account_dict.secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+        aws_account_dict.access_key =Migration.aws_access_key_id
+        aws_account_dict.secret_access_key = Migration.aws_secret_access_key
         
-        organizacion_dict = organization()
-        organizacion_dict.bucket_name = bucket_name
-        organizacion_dict.aws_account_id =aws_account_id
-        organizacion_dict.name = 'Default Organization'
-        utils.s3.create_bucket(organizacion_dict)
-        organization_default ={"name":'Default Organization',
-                               "contact_email":'Default Organization@default.com',
-                               "bucket_name":bucket_name,
-                               "aws_account_id":aws_account_id,
-                               "plan_id": Migration.create_plan(apps, schema_editor)}
-        obj=organization.objects.create(**organization_default)
-        obj.save()
+        from organization.models import Organization
+        import math
+        import time
+        new_organization = Organization()
+        new_organization.name = f'Default Organization{math.floor(time.time())}'
+        new_organization.plan_id = Migration.create_plan(apps, schema_editor)
+        new_organization.aws_account_id = aws_account_id
+        new_organization.save()
+        Migration.assign_user_to_organization(apps, schema_editor,new_organization.name)
+
+    
             
     def add_interval_schedule(apps, schema_editor, seconds):
         IntervalSchedule = apps.get_model('django_celery_beat', 'IntervalSchedule')
@@ -224,11 +199,10 @@ class Migration(migrations.Migration):
     ]
     
 
+        
     operations = [
-        # migrations.RunPython(delete_all_objects_of_the_tables),
-        # migrations.RunPython(create_global_settings),
-        # migrations.RunPython(create_AWS_Account),
-        # migrations.RunPython(create_organization),
-        # migrations.RunPython(assign_user_to_organization),
+        migrations.RunPython(create_global_settings),
+        migrations.RunPython(create_organization),
+        migrations.RunPython(assign_user_to_organization),
         migrations.RunPython(create_periodic_tasks),
     ]
