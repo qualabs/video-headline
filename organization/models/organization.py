@@ -100,8 +100,6 @@ def org_post_save_receiver(sender, instance, created, **kwargs):
     '''
     Create a new AWS S3 bucket after that a new organization is saved.
     '''
-    print('Instance')
-    print(instance)
 
     if 'test' in sys.argv:
         return
