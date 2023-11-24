@@ -164,38 +164,45 @@ class Migration(migrations.Migration):
         obj=organization.objects.create(**organization_default)
         obj.save()
             
+    def add_interval_schedule(apps, schema_editor, seconds):
+        IntervalSchedule = apps.get_model('django_celery_beat', 'IntervalSchedule')
+        return IntervalSchedule.objects.create(
+            every=seconds,
+            period='seconds',
+        )
+        
 
     def create_periodic_tasks(apps, schema_editor):
-        PeriodicTask = apps.get_model('djcelery', 'PeriodicTask')
+        PeriodicTask = apps.get_model('django_celery_beat', 'PeriodicTask')
         PeriodicTask.objects.create(
             name='Delete Channels',
             task='hub.tasks.delete_channels',
-            interval=3600,
-            enabled=True,
+            interval=Migration.add_interval_schedule(apps, schema_editor, 3600),
+            enabled=False,
         )
         PeriodicTask.objects.create(
             name='Delete Inputs',
             task='hub.tasks.delete_inputs',
-            interval=3600,
-            enabled=True,
+            interval=Migration.add_interval_schedule(apps, schema_editor, 3600),
+            enabled=False,
         )
         PeriodicTask.objects.create(
             name='Check Live Cuts',
             task='hub.tasks.check_live_cuts',
-            interval=60,
-            enabled=True,
+            interval=Migration.add_interval_schedule(apps, schema_editor, 60),
+            enabled=False,
         )
         PeriodicTask.objects.create(
             name='Delete Distributions',
             task='hub.tasks.delete_distributions',
-            interval=86400,
-            enabled=True,
+            interval=Migration.add_interval_schedule(apps, schema_editor, 86400),
+            enabled=False,
         )
         PeriodicTask.objects.create(
             name='Bill Renewal',
             task='hub.tasks.bill_renewal',
-            interval=2592000,
-            enabled=True,
+            interval=Migration.add_interval_schedule(apps, schema_editor, 86400),
+            enabled=False,
         )
     
         
@@ -209,20 +216,19 @@ class Migration(migrations.Migration):
             return mediaconvert_client.describe_endpoints()['Endpoints'][0]['Url']
         except Exception as e:
             return None
-    def operations_wrapper(self, operation):
-        # Wrapper to pass self to operations
-        return partial(operation, self)
 
     dependencies = [
         ('organization', '0001_initial'),
         ('auth', '0009_alter_user_last_name_max_length'),
         ('hub_auth', '0001_initial'),
     ]
+    
 
     operations = [
-        migrations.RunPython((create_global_settings)),
-        migrations.RunPython(create_AWS_Account),
-        migrations.RunPython(create_organization),
+        # migrations.RunPython(delete_all_objects_of_the_tables),
+        # migrations.RunPython(create_global_settings),
+        # migrations.RunPython(create_AWS_Account),
+        # migrations.RunPython(create_organization),
         # migrations.RunPython(assign_user_to_organization),
-        # migrations.RunPython(create_periodic_tasks),
+        migrations.RunPython(create_periodic_tasks),
     ]
