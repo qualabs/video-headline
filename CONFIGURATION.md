@@ -19,13 +19,6 @@
    - **Encoder Configuration:** `configuration/configuration.samples/media_live_encoder_settings_economic.sample`.
 
    ![¡](docs/aws-services-configuration.png)
-<!-- 
-#### Using secure tokens with Cloudfront
-
-*Cloudfront is used to deliver the Vod/live sources to the viewers, using the default configuration everything is set to Public, but we can change a few of this settings in order to have a more security and control.
- This properties are inside the configuration/configuration.samples/cloud_front_configuration.sample file
-
-1. **ViewerProtocolPolicy:** Choose "Redirect HTTP to HTTPS" for enhanced security. -->
 
 #### Creating a Plan
 
@@ -65,13 +58,25 @@
 
 ![¡](docs/organization.png)
 
-#### Associatin an Organization to a user
+#### Associating an Organization to a user
 
 *On the "Authentication and Authorization" menu choose "Users" and click on the username to edit.
 
 1. **Organization:** Assign the newly created Organization to the superuser to enable authentication via the User web.
 
 ![¡](docs/auth.png)
+
+#### Periodic Tasks Configuration
+
+*All kind of tasks can be set to run periodically. This can be done on the "Periodic Tasks" menu.
+
+1. **Clocked:** Here an specific date and hour can be set to run a task.
+2. **Crontabs** Cron configuration, the cron can be configured to run at specific months of the year, specific days of the week, and even specify down to the minute when a particular task should be executed.
+3. **Intervals:** Set intervals to wait before running the same task again, it can be set in days, hours, minutes, seconds, and microseconds.
+4.**Periodic Tasks** Here a Name must be set for the task, and choose a tasl from "Task(registered)" dropdown. Inside the Schedule menu we can choose from the previously created options when we want the task to be executed.
+5. **Solar Events** The task can be executed on a specific zone, this can be set by adding "Latitue" and "Longitude" and selecting one of the solar events from the dropdown menu.
+
+![¡](docs/periodic-tasks.png)
 
 ### Custom CSS Configuration for the Player in an Organization
 
