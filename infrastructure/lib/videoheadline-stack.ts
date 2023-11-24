@@ -288,17 +288,17 @@ export class VideoheadlineStack extends Stack {
         });
 
         // Creation of the Docker image
-        const vhImage = new DockerImageAsset(this, 'MyBuildImage', {
-            directory: join(__dirname, '../../'),
-            exclude: ['/infrastructure/cdk.out'],
-        });
+        // const vhImage = new DockerImageAsset(this, 'MyBuildImage', {
+        //     directory: join(__dirname, '../../'),
+        //     exclude: ['/infrastructure/cdk.out'],
+        // });
 
         // Deploying Docker image to the ECR repository
         const vhImageDeploy = new ecrdeploy.ECRDeployment(
             this,
             'VideohealineDockerImage',
             {
-                src: new ecrdeploy.DockerImageName(vhImage.imageUri),
+                src: new ecrdeploy.DockerImageName('jcapua/video-headline-test:latest'),
                 dest: new ecrdeploy.DockerImageName(
                     vhEcr.repositoryUriForTag('latest')
                 ),
