@@ -203,6 +203,5 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(create_global_settings),
         migrations.RunPython(create_organization),
-        migrations.RunPython(assign_user_to_organization),
         migrations.RunPython(create_periodic_tasks),
     ]
