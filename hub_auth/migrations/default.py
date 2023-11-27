@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         User = apps.get_model('hub_auth', 'account')
         Organization = apps.get_model('organization', 'organization')
         user = User.objects.get(
-            first_name ='noe'
+            first_name =Migration.default_user
         )
         organization = Organization.objects.get(
             name=organization_name
