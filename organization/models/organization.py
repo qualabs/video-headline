@@ -7,6 +7,14 @@ from jsonfield import JSONField
 from organization.models import AWSAccount
 from organization.models.plan import Plan
 from utils import s3
+from utils.errors import (
+    ADD_ORG_ERROR,
+    DELETE_ORG_ERROR,
+    INVALID_ORG_NAME,
+    is_bucket_already_exist_error,
+    is_no_such_bucket_error,
+    print_error,
+)
 
 
 class Organization(models.Model):
@@ -99,20 +107,27 @@ def org_post_save_receiver(sender, instance, created, **kwargs):
     if 'test' in sys.argv:
         return
 
-    if created:
-        # Create a default channel
-        from organization.models import Channel
-        bucket_name = instance.bucket_name
-        s3.create_bucket(instance)
+    try:
+        if created:
+            # Create a default channel
+            from organization.models import Channel
+            bucket_name = instance.bucket_name
+            s3.create_bucket(instance)
 
-        Channel.objects.create(organization=instance, name="Default")
+            Channel.objects.create(organization=instance, name="Default")
 
-    # Updating plan
-    else:
-        bill = instance.bills.all().order_by('-date').first()
-        if bill:
-            bill.plan = instance.plan
-            bill.save()
+        # Updating plan
+        else:
+            bill = instance.bills.all().order_by('-date').first()
+            if bill:
+                bill.plan = instance.plan
+                bill.save()
+    except Exception as ex:
+        if is_bucket_already_exist_error(ex):
+            raise Exception(INVALID_ORG_NAME)
+        else:
+            print_error(ex)
+            raise Exception(ADD_ORG_ERROR)
 
 
 @receiver(pre_delete, sender=Organization, dispatch_uid='org_deleted')
@@ -122,4 +137,11 @@ def org_pre_delete_receiver(sender, instance, **kwargs):
     """
     if 'test' in sys.argv:
         return
-    s3.delete_bucket(instance)
+    try:
+        s3.delete_bucket(instance)
+    except Exception as ex:
+        if is_no_such_bucket_error(ex):
+            pass
+        else:
+            raise Exception(DELETE_ORG_ERROR)
+
