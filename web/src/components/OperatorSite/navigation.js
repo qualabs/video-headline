@@ -46,17 +46,6 @@ export class OperatorRoutes extends Component {
 
         <Route exact path='/drop/:video-group_id/' component={VideoUploadPage} />
         <Route exact path='/drop/' component={VideoUploadPage} />
-
-        {/* <Route exact path='/fast-channels/' render={(props) => <FASTChannelDashboard history={history}
-          routes={{newChannel: '/fast-channels/channel/new',
-            newAd: '/fast-channels/ad/new',
-            scheduler: '/fast-channels/scheduler'}}
-          {...props}
-        />}
-        />
-        <Route exact path='/fast-channels/channel/new/' component={CreateNewChannel}/>
-        <Route exact path='/fast-channels/ad/new/' component={CreateAdConfiguration}/>
-        <Route exact path='/fast-channels/scheduler/:id/' render={() => <Scheduler history={history}/>}/> */}
         <Route
           exact
           path='/drop-audio/:video-group_id/'
