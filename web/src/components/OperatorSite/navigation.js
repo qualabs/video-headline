@@ -21,7 +21,6 @@ import {clearVideo} from '../../actions/video'
 import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
-// import {FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler} from 'video-headline-fast-channels/dist'
 export class OperatorRoutes extends Component {
   render () {
     return (
