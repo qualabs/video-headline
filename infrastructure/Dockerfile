@@ -31,8 +31,4 @@ ENV AWS_SESSION_TOKEN=""
 # CMD ["yarn", "cdk", "bootstrap", "--profile", "$AWS_PROFILE"] && \
 #     ["yarn", "cdk", "deploy", "'*'", "--profile", "$AWS_PROFILE"]
 
-CMD /bin/bash -c 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID && export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY && export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN && \
-    read -p "Enter username: " username && \
-    read -p "Enter email: " email && \
-    read -p "Enter password: " password && \
-    python3 create_super_user.py $username $email $password'
+CMD /bin/bash -c 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID && export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY && export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN && python3 create_super_user.py'

@@ -1,15 +1,10 @@
 import boto3
 import os
-import sys
 
 def main():
-    if len(sys.argv) != 4:
-        print("Usage: python create_super_user.py <username> <email> <password>")
-        sys.exit(1)
-
-    username = sys.argv[1]
-    email = sys.argv[2]
-    password = sys.argv[3]
+    username = input("Enter username: ")
+    email = input("Enter email: ")
+    password = input("Enter password: ")
 
     client = boto3.client("ecs", region_name="us-east-1")
 
