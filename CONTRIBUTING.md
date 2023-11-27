@@ -55,6 +55,11 @@ When modifying the player, ensure that it continues working in IE 11 on Windows 
 
 ### How to run the tests
 
+To run the tests, follow the steps below:
+
+1. Once the docker is running, run the command: `docker exec -it video-hub bash` to access the video-hub container.
+2. Run the command: `python manage.py test` to run the tests.
+
 ### How to use the linters
 
 If you want to contribute to the project, it is important to use the linters to ensure that the code is consistent and follows the best practices. The linters used in the project are ESLint for JavaScript and Flake8 for Python. In addition, we use Prettier to format the JavaScript code and Black to format the Python code.
