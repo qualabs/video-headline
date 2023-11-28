@@ -18,6 +18,7 @@ To set up the project locally, follow the instructions provided below.
 - Yarn and Node.js(v10): Required to deploy AWS configurations and build the playerReact component.
 - Python: Necessary for running Django and other Python-based tools.
 - AWS CLI: Useful for configuring and managing AWS services from the command line.
+- AWS CDK: The primary tool for interacting with your AWS CDK app.
 
 #### AWS Configuration
 
