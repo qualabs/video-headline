@@ -21,23 +21,7 @@ class Migration(migrations.Migration):
     account_id = media_convert_role_arn.split(':')[4]
     aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
     configuration_folder = os.path.join(os.path.dirname(__file__), 'configuration.samples/')
-    default_user = os.getenv('DEFAULT_USER')
-
-    
-    def assign_user_to_organization(apps, schema_editor,organization_name):
-        User = apps.get_model('hub_auth', 'account')
-        Organization = apps.get_model('organization', 'organization')
-        user = User.objects.get(
-            first_name ='noe'
-        )
-        organization = Organization.objects.get(
-            name=organization_name
-        )
-        user.organization = organization
-        user.save()
-    
-
-            
+      
     def create_AWS_Account(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')
         media_convert_endpoint_url = Migration.get_media_convert_endpoint_url()
