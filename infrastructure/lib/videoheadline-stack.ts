@@ -13,6 +13,7 @@ import {
     RemovalPolicy,
     aws_cloudfront,
     aws_cloudfront_origins,
+    CfnOutput,
 } from 'aws-cdk-lib';
 import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
 import { join } from 'path';
@@ -137,7 +138,9 @@ export class VideoheadlineStack extends Stack {
             },
             comment: 'Videoheadline',
         });
+        
         console.log("Cloudfront URL: ", videoheadlineCF.domainName)
+        new CfnOutput(this, "CfnOutCloudfrontUrl", { value: videoheadlineCF.domainName, description: "CloudFront URL", });
 
         // Containers
         videoHubTaskDefinition.addContainer('videoheadline', {
