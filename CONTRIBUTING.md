@@ -55,7 +55,7 @@ Create a .env file at the root of the project with all the variables defined in 
 ##### .env variables
 
 1. `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`: Database credentials for the PostgreSQL database.
-   **Note:** The `DATABASE_USER` and `DATABASE_PASSWORD` variables are not being used in the docker-commands/db_init/init.sh. If you want to use them you need to modify the init.sh file.
+   **Note:** If you need to change the database credentials, you need to modify the values in the .env file and also the line 13 in the docker-commands/db_init/init.sh file (`CREATE USER qualabs WITH PASSWORD 'yVm=7>GQ';`) with your new values, since the file does not use the .env variables.
 2. `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`: these variables can be found in AWS Console > AWS Secret Manager > Secrets > ApiUserSecret
 3. `AWS_MEDIA_CONVERT_ROLE`, `AWS_MEDIA_LIVE_ROLE`: these variables can be found in AWS Console > IAM > Roles > MediaConvertRole, MediaLiveAccessRole > ARN
 4. `AWS_MEDIA_CONVERT_ENDPOINT`: these variables can be found in AWS Console > AWS Elemental MediaConvert > Account
