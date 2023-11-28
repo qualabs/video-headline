@@ -71,7 +71,7 @@ Follow these steps to set up and run the application locally:
 2. Run `docker-compose up`.
 3. Run `docker exec -it video-hub bash` to access the video-hub container.
 4. Create a superuser for admin access running `python manage.py createsuperuser`.
-5. Go to `http://localhost:8010/admin` and log in with the superuser credentials.
+5. Go to `http://localhost:8010/admin` and log in with the username and password provided in the previous step.
 
 **Optional**: If you want to create another superuser:
 
