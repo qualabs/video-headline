@@ -134,6 +134,7 @@ class Migration(migrations.Migration):
         new_organization.name = f'Default Organization{math.floor(time.time())}'
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
+        new_organization.id = 1
         new_organization.save()
         Migration.assign_user_to_organization(apps, schema_editor,new_organization.name)
 
