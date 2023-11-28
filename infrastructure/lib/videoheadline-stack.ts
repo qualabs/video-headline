@@ -291,7 +291,7 @@ export class VideoheadlineStack extends Stack {
         });
 
         // Creation of the Docker image
-        const vhImage = isProduction ? 'qualabs/video-headline:latest' : new DockerImageAsset(this, 'VideHeadlineImage', {
+        const vhImage = isProduction ? 'qualabs/video-headline:latest' : new DockerImageAsset(this, 'VideoHeadlineImage', {
             directory: join(__dirname, '../../'),
             exclude: ['/infrastructure/cdk.out'],
         }).imageUri;
