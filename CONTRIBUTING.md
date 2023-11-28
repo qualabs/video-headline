@@ -48,11 +48,17 @@ This deployment will set up:
 
 To set up the project locally, follow the instructions provided below. For AWS deployment, refer to the README within the Infrastructure folder.
 
-**Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
-
 #### Create .env file
 
 Create a .env file at the root of the project with all the variables defined in the .env-example file and their respective values.
+
+##### .env variables
+
+1. `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`: AWS Console > AWS Secret Manager > Secrets > ApiUserSecret
+2. `AWS_MEDIA_CONVERT_ROLE`, `AWS_MEDIA_LIVE_ROLE`: AWS Console > IAM > Roles > MediaConvertRole, MediaLiveAccessRole
+3. `AWS_MEDIA_CONVERT_ENDPOINT`: AWS Console > AWS Elemental MediaConvert > Account
+
+**Optional: APM_SERVICE_NAME, APM_SECRET_TOKEN, APM_SERVER_URL**: optional Elastic APM credentials for monitoring the application.
 
 #### Running the application
 
