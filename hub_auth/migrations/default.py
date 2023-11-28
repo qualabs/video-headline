@@ -118,6 +118,7 @@ class Migration(migrations.Migration):
         import time
         new_organization = Organization()
         new_organization.name = f'Default Organization{math.floor(time.time())}'
+        os.environ['ORGANIZATION_NAME'] = new_organization.name
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
         new_organization.save()
