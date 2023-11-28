@@ -121,6 +121,7 @@ class Migration(migrations.Migration):
         os.environ['ORGANIZATION_NAME'] = new_organization.name
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
+        new_organization.id = 1
         new_organization.save()
 
             
@@ -184,7 +185,7 @@ class Migration(migrations.Migration):
         ('hub_auth', '0001_initial'),
     ]
     
-            
+  
     operations = [
         migrations.RunPython(create_global_settings),
         migrations.RunPython(create_organization),
