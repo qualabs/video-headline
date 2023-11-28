@@ -30,6 +30,8 @@ export interface VideoheadlineStackProps extends StackProps {
     awsConfigSecret: sm.ISecret;
 }
 
+const isProduction = process.env.VIDEOHEADLINE_IMAGE === 'production';
+
 export class VideoheadlineStack extends Stack {
     vpc: ec2.IVpc;
     readonly database: db.IDatabaseInstance;
@@ -111,6 +113,7 @@ export class VideoheadlineStack extends Stack {
         const vhEcr = new ecr.Repository(this, 'vhRepository', {
             repositoryName: 'vh-repository',
             removalPolicy: RemovalPolicy.DESTROY,
+            autoDeleteImages: true
         });
 
         const vhLoadBalancer = new elb.ApplicationLoadBalancer(
@@ -288,17 +291,17 @@ export class VideoheadlineStack extends Stack {
         });
 
         // Creation of the Docker image
-        const vhImage = new DockerImageAsset(this, 'MyBuildImage', {
+        const vhImage = isProduction ? 'qualabs/video-headline:latest' : new DockerImageAsset(this, 'VideoHeadlineImage', {
             directory: join(__dirname, '../../'),
             exclude: ['/infrastructure/cdk.out'],
-        });
+        }).imageUri;
 
         // Deploying Docker image to the ECR repository
         const vhImageDeploy = new ecrdeploy.ECRDeployment(
             this,
             'VideohealineDockerImage',
             {
-                src: new ecrdeploy.DockerImageName(vhImage.imageUri),
+                src: new ecrdeploy.DockerImageName(vhImage),
                 dest: new ecrdeploy.DockerImageName(
                     vhEcr.repositoryUriForTag('latest')
                 ),
