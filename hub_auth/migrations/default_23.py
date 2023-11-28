@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         User = apps.get_model('hub_auth', 'account')
         Organization = apps.get_model('organization', 'organization')
         user = User.objects.get(
-            first_name =Migration.default_user
+            first_name ='noe'
         )
         organization = Organization.objects.get(
             name=organization_name
@@ -58,17 +58,19 @@ class Migration(migrations.Migration):
 
         
     def create_global_settings(apps, schema_editor):
-        configuration_model = apps.get_model('configuration', 'configuration')
+        from configuration.models import Configuration as configuration_model
+        config = configuration_model()
+        
+        
         file_path = os.path.join(Migration.configuration_folder,'cloud_front_configuration.json')
+        print(file_path)
         if not os.path.exists(file_path):
             return
-        
         with open(file_path) as json_file:
-            cloud_front_configuration = {
-                "cloud_front_configuration":json.load(json_file)
-            }
+            config.cloud_front_configuration = json.load(json_file)
         
-        configuration_model.objects.create(**cloud_front_configuration)
+        
+        config.save()
             
         
     def create_default_media_convert_settings(apps, schema_editor):
@@ -135,7 +137,7 @@ class Migration(migrations.Migration):
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
         new_organization.save()
-        Migration.assign_user_to_organization(apps, schema_editor,new_organization.name)
+        # Migration.assign_user_to_organization(apps, schema_editor,new_organization.name)
 
     
             
@@ -150,7 +152,7 @@ class Migration(migrations.Migration):
     def create_periodic_tasks(apps, schema_editor):
         PeriodicTask = apps.get_model('django_celery_beat', 'PeriodicTask')
         PeriodicTask.objects.create(
-            name='Delete Channels',
+            name='Delete Channels ',
             task='hub.tasks.delete_channels',
             interval=Migration.add_interval_schedule(apps, schema_editor, 3600),
             enabled=False,
@@ -179,6 +181,7 @@ class Migration(migrations.Migration):
             interval=Migration.add_interval_schedule(apps, schema_editor, 86400),
             enabled=False,
         )
+        
     
         
     def get_media_convert_endpoint_url():
@@ -198,9 +201,39 @@ class Migration(migrations.Migration):
         ('hub_auth', '0001_initial'),
     ]
     
+    def delete_all_tables(apps, schema_editor):
+        table = apps.get_model('django_celery_beat', 'PeriodicTask')
+        table.objects.all().delete()
+        table = apps.get_model('django_celery_beat', 'CrontabSchedule')
+        table.objects.all().delete()
+        table = apps.get_model('django_celery_beat', 'SolarSchedule')
+        table.objects.all().delete()
+#      
+        table = apps.get_model('django_celery_beat', 'PeriodicTasks')
+        table.objects.all().delete()
+        table = apps.get_model('django_celery_beat', 'IntervalSchedule')
+        table.objects.all().delete()
+        table = apps.get_model('configuration', 'MediaConvertConfiguration')
+        table.objects.all().delete()
+        table = apps.get_model('configuration', 'MediaLiveConfiguration')
+        table.objects.all().delete()
+        table = apps.get_model('configuration', 'configuration')
+        table.objects.all().delete()
+        table = apps.get_model('organization', 'Plan')
+        table.objects.all().delete()
+        table = apps.get_model('organization', 'AWSAccount')
+        table.objects.all().delete()
+        table = apps.get_model('organization', 'Organization')
+        table.objects.all().delete()
+        table = apps.get_model('hub_auth', 'account')
+        table.objects.all().delete()
+ 
+     
+    
 
         
     operations = [
+        # migrations.RunPython(delete_all_tables),
         migrations.RunPython(create_global_settings),
         migrations.RunPython(create_organization),
         migrations.RunPython(create_periodic_tasks),
