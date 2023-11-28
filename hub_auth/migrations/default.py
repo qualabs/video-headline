@@ -63,9 +63,9 @@ class Migration(migrations.Migration):
         
         
         file_path = os.path.join(Migration.configuration_folder,'cloud_front_configuration.json')
-        print(file_path)
         if not os.path.exists(file_path):
             return
+        
         with open(file_path) as json_file:
             config.cloud_front_configuration = json.load(json_file)
         
@@ -137,9 +137,7 @@ class Migration(migrations.Migration):
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
         new_organization.save()
-        # Migration.assign_user_to_organization(apps, schema_editor,new_organization.name)
 
-    
             
     def add_interval_schedule(apps, schema_editor, seconds):
         IntervalSchedule = apps.get_model('django_celery_beat', 'IntervalSchedule')
@@ -201,39 +199,8 @@ class Migration(migrations.Migration):
         ('hub_auth', '0001_initial'),
     ]
     
-    def delete_all_tables(apps, schema_editor):
-        table = apps.get_model('django_celery_beat', 'PeriodicTask')
-        table.objects.all().delete()
-        table = apps.get_model('django_celery_beat', 'CrontabSchedule')
-        table.objects.all().delete()
-        table = apps.get_model('django_celery_beat', 'SolarSchedule')
-        table.objects.all().delete()
-#      
-        table = apps.get_model('django_celery_beat', 'PeriodicTasks')
-        table.objects.all().delete()
-        table = apps.get_model('django_celery_beat', 'IntervalSchedule')
-        table.objects.all().delete()
-        table = apps.get_model('configuration', 'MediaConvertConfiguration')
-        table.objects.all().delete()
-        table = apps.get_model('configuration', 'MediaLiveConfiguration')
-        table.objects.all().delete()
-        table = apps.get_model('configuration', 'configuration')
-        table.objects.all().delete()
-        table = apps.get_model('organization', 'Plan')
-        table.objects.all().delete()
-        table = apps.get_model('organization', 'AWSAccount')
-        table.objects.all().delete()
-        table = apps.get_model('organization', 'Organization')
-        table.objects.all().delete()
-        table = apps.get_model('hub_auth', 'account')
-        table.objects.all().delete()
- 
-     
-    
-
-        
+            
     operations = [
-        # migrations.RunPython(delete_all_tables),
         migrations.RunPython(create_global_settings),
         migrations.RunPython(create_organization),
         migrations.RunPython(create_periodic_tasks),
