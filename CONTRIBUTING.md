@@ -69,7 +69,9 @@ Follow these steps to set up and run the application locally:
 
 1. Create a symbolic link to the appropriate Docker Compose file (`docker-compose.dev.yml` or `docker-compose.prod.yml`) for your environment using the following command `ln -s docker-compose.dev.yml docker-compose.yml`.
 2. Run `docker-compose up`.
-3. Go to `http://localhost:8010/admin` and log in with the superuser credentials created in the AWS Configuration deploy step.
+3. Run `docker exec -it video-hub bash` to access the video-hub container.
+4. Create a superuser for admin access running `python manage.py createsuperuser`.
+5. Go to `http://localhost:8010/admin` and log in with the superuser credentials.
 
 **Optional**: If you want to create another superuser:
 
