@@ -4,7 +4,6 @@
 
 - [Running the application in local environment](#running-the-application-in-local-environment)
 - [How to build the player](#how-to-build-the-player)
-- [How to build the docker](#how-to-build-the-docker)
 - [How to run the tests](#how-to-run-the-tests)
 - [How to use the linters](#how-to-use-the-linters)
 
@@ -20,15 +19,46 @@ To set up the project locally, follow the instructions provided below.
 - Python: Necessary for running Django and other Python-based tools.
 - AWS CLI: Useful for configuring and managing AWS services from the command line.
 
+#### AWS Configuration
+
+Video Headline requires some IAM roles and permissiones. To automate the configuration, there's CDK code to create a Stack with all the requirements.
+
+To deploy this stack, follow this steps:
+
+1. Navigate to the infrastructure directory.
+2. Run the command: `yarn cdk deploy AwsConfigurationStack`.
+
+This deployment will set up:
+
+- Api User with permissions for:
+  - S3
+  - Sns
+  - MediaConvert
+  - MediaLive
+  - Cloudfront
+  - Cloudwatch
+- Media Convert Role with permissions for:
+  - Api Gateway
+  - S3
+- Media Live Role with permissions for:
+  - MediaLive
+  - Cloudwatch
+
+#### Set up the application in local environment
+
+To set up the project locally, follow the instructions provided below. For AWS deployment, refer to the README within the Infrastructure folder.
+
+**Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
+
 #### Create .env file
 
 Create a .env file at the root of the project with all the variables defined in the .env-example file and their respective values.
 
-#### Set up and running the application
+#### Running the application
 
 Follow these steps to set up and run the application locally:
 
-1. Create a symbolic link to the appropriate Docker Compose file (`docker-compose.dev.yml` or `docker-compose.prod.yml`) for your environment using `ln -s docker-compose.dev.yml docker-compose.yml`.
+1. Create a symbolic link to the appropriate Docker Compose file (`docker-compose.dev.yml` or `docker-compose.prod.yml`) for your environment using the following command `ln -s docker-compose.dev.yml docker-compose.yml`.
 2. Run `docker-compose up`.
 3. Run `docker exec -it video-hub bash` to access the video-hub container.
 4. Create a superuser for admin access running `python manage.py createsuperuser`.
@@ -47,12 +77,6 @@ If you need to make changes to the player, you need to follow the steps below to
 4. In the player/templates/player/index.html template, change the names of the CSS and JS files to which the template points.
 5. Test in Videoheadline to ensure that the player is working correctly.
 
-#### Important Notes:
-
-When modifying the player, ensure that it continues working in IE 11 on Windows 10 and 8.1. It doesn´t work on Windows 7 with IE 11.
-
-### How to build the docker
-
 ### How to run the tests
 
 To run the tests, follow the steps below:
@@ -62,7 +86,7 @@ To run the tests, follow the steps below:
 
 ### How to use the linters
 
-If you want to contribute to the project, it is important to use the linters to ensure that the code is consistent and follows the best practices. The linters used in the project are ESLint for JavaScript and Flake8 for Python. In addition, we use Prettier to format the JavaScript code and Black to format the Python code.
+If you want to contribute to the project, it is important to use the linters to ensure that the code is consistent and follows the best practices. The linter used in the project is ESLint for JavaScript. In addition, we use Prettier to format the JavaScript code.
 
 #### Setting Up ESLint for Linting React in Visual Studio Code
 
@@ -101,5 +125,3 @@ Follow the steps below to set up ESLint for linting React code in Visual Studio 
   ```
 
 With these configurations, your React code will be automatically linted and formatted.
-
-#### Setting Up Flake8 and Black for Linting and Formatting Python in Visual Studio Code
