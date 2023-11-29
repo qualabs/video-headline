@@ -60,7 +60,7 @@ Once the app is deployed you can access the web through the previously mentioned
 - You need to install AWS Session manager plugin (https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html).
 - You need to configure your AWS_PROFILE env variable.
 
-#### Running the create_super_user.py script
+#### Running  create_super_user.py script
 To create a superuser run `python create_super_user.py`
 
 A superuser with the data configured in create_super_user.sh will be created.
