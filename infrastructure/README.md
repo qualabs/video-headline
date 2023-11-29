@@ -3,7 +3,7 @@
 - [Deployment](#Deployment)
     - [Use pre-build image](#Use-pre-build-image)
     - [Use local image](#use-local-image)
-- Destroy
+- [Destroy](#Destroy)
     - [Destroy deployment using pre-built image](#destroy-deployment-using-pre-built-image)
     - [Destroy deployment using local image](#destroy-deployment-using-local-image)
 - [Useful commands](#useful-commands)
