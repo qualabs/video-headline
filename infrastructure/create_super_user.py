@@ -1,8 +1,11 @@
 import boto3
 import os
 
-
 def main():
+    username = input("Enter username: ")
+    email = input("Enter email: ")
+    password = input("Enter password: ")
+
     client = boto3.client("ecs", region_name="us-east-1")
 
     cluster = "Videoheadline-cluster"
@@ -30,10 +33,10 @@ def main():
 
     # Execute create_super_user.sh inside the container
     os.system(
-        f'aws ecs execute-command --cluster {cluster} \
+        f'unbuffer aws ecs execute-command --cluster {cluster} \
         --task {task_arn} \
         --container video-hub --interactive \
-        --command "./create_super_user.sh"  --region us-east-1'
+        --command "./create_super_user.sh {username} {email} {password}"  --region us-east-1'
     )
 
 
