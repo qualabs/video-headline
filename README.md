@@ -41,7 +41,7 @@ Once the app is deployed you can access the web through the previously mentioned
 
 ## Table of extra contents
 
-- Deploy videoheadline to AWS and
+- Deploy VideoHeadline to AWS and
   - See [README.md](infrastructure/README.md) within the Infrastructure folder.
 - Want to develop locally and contribute?
   - See [CONTRIBUTING.md](CONTRIBUTING.md).
