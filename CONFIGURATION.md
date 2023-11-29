@@ -66,24 +66,9 @@
 
 ![¡](docs/auth.png)
 
-#### Enable Cloudfront Token Authentication (Signed Urls)
-
-*Cloudfront can add a layer of security using it's "SignedUrls" feature, a key pair is needed in order to encrypt and decrypt a token, said token is added as a query param at the end of the cloudfront url used to get the media. If the token is missing or incorrect the viewer cannot access it.
-
-**Steps to enable "SignedURls":
-First a RSA Key pair is needed, in this example will use OpenSSL but there are other ways to create the keys. 
-
-1. We can create the key pair with these command:
-
-openssl genrsa -out private_key.pem 2048
-
-
-1. On the AWS Console, go to the Cloudfront service and on the left menu, go onto the "key management" and inside is the "key groups", click on it.
-2. Click on the "Create key group" button, on the next menu a Name is needed for the key pair
-
 #### Periodic Tasks Configuration
 
-*All kind of tasks can be set to run periodically. This can be done on the "Periodic Tasks" menu.
+*All kind of tasks can be set to run periodically. This can be done on the "Periodic Tasks" menu. (See image below)
 
 1. **Clocked:** Here an specific date and hour can be set to run a task.
 2. **Crontabs** Cron configuration, the cron can be configured to run at specific months of the year, specific days of the week, and even specify down to the minute when a particular task should be executed.
@@ -92,6 +77,7 @@ openssl genrsa -out private_key.pem 2048
 5. **Solar Events** The task can be executed in a specific zone, this can be set by adding "Latitude" and "Longitude" and selecting one of the solar events from the dropdown menu.
 
 ![¡](docs/periodic-tasks.png)
+![¡](docs/tasks.png)
 
 ### Custom CSS Configuration for the Player in an Organization
 
