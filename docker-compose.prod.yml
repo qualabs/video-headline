@@ -1,11 +1,11 @@
-version: '2'
+version: "2"
 
 services:
   video-hub:
     build: .
     container_name: video-hub
     restart: always
-    command: '/start_app.sh'
+    command: "/start_app.sh"
     stdin_open: true
     tty: true
     ports:
@@ -28,7 +28,7 @@ services:
     build: .
     container_name: celery
     restart: always
-    command: 'celery -A video_hub worker -l info -Q default'
+    command: "celery -A video_hub worker -l info -Q default"
     stdin_open: true
     tty: true
     depends_on:
@@ -48,7 +48,7 @@ services:
     build: .
     container_name: celery-transcode
     restart: always
-    command: 'celery -A video_hub worker -l info -Q transcode'
+    command: "celery -A video_hub worker -l info -Q transcode"
     stdin_open: true
     tty: true
     depends_on:
@@ -68,7 +68,7 @@ services:
     build: .
     container_name: celery-beat
     restart: always
-    command: 'celery -A video_hub beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
+    command: "celery -A video_hub beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     stdin_open: true
     tty: true
     depends_on:
@@ -91,6 +91,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
       - ./docker-commands/db_init:/docker-entrypoint-initdb.d/
+    environment:
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
 
   redis:
     image: redis
