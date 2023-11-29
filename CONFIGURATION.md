@@ -2,18 +2,18 @@
 
 #### Creating a superuser
 
-*Is assumed that by this time all images are running on docker. (check: - [Running the application in local environment](#running-the-application-in-local-environment))
+*This should be executed after executing all docker commands. (check: - [Running the application in local environment](#running-the-application-in-local-environment))
 
 1. Create a superuser for admin access running `python manage.py createsuperuser`.
-2. Go to `http://localhost:8010/admin` and log in with the superuser credentials.
+2. Go to `http://localhost:8010/admin` and sign in with the superuser credentials.
 
 #### AWS Services Configuration in the Admin Web
 
-*In order to apply this configurations, login to the admin web is needed.
+*In order to apply the following configurations, signing in to admin web is needed.
 
-1. **CloudFront Configuration:** Inside the Global configuration, apply the settings located in configuration/configuration.samples/cloud_front_configuration.sample on the CloudFront Configuration input.
-2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` named `default`, using the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
-3. **MediaLive Configuration:** Create `MediaLive Configuration`, also named `default`, and apply the following configurations:
+1. **CloudFront Configuration:** Inside `Global configuration`, apply the settings located in `configuration/configuration.samples/cloud_front_configuration`. on the `CloudFront Configuration` input.
+2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` and add a name to it, using the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
+3. **MediaLive Configuration:** Create a `MediaLive Configuration`, add a name to it, and apply the following configurations:
    - **Input Configuration:** `configuration/configuration.samples/media_live_input_attachments.sample`.
    - **Destination Configuration:** `configuration/configuration.samples/media_live_destinations.sample`.
    - **Encoder Configuration:** `configuration/configuration.samples/media_live_encoder_settings_economic.sample`.
@@ -22,20 +22,20 @@
 
 #### Creating a Plan
 
-*On the "Organizations and channels" menu choose "Plans" and click on the "add plan" button.
+*On the `Organizations and Channels` menu choose `Plans` and click on `add plan`button.
 
 ![¡](docs/orgs-and-channels.png)
 
 1. **Business name:** Add a name for the plan.
-2. **Video transcoding configuration:** From the dropdown choose the configuration needed.
-2. **Audio transcoding configuration:** From the dropdown choose the configuration needed.
+2. **Video transcoding configuration:** From the selector choose the configuration with the name previously created.
+2. **Audio transcoding configuration:** From the selector choose the configuration with the name previously created.
 3. **MediaLive Configuration:** From the dropdown choose the configuration needed.
 
 ![¡](docs/plan.png)
 
 #### Adding a AWS account
 
-*On the "Organizations and channels" menu choose "AWS account" and click on the "add AWS account" button.
+*On the `Organizations and Channels` menu choose `AWS account` and click on the `add AWS account` button.
 
 1. **Name:** Add a name for the account.
 2. **Access Key:** The Access Key for the API user (The user was created in the AWS Configuration section, and the credentials are available in AWS Secrets Manager).
@@ -50,7 +50,7 @@
 
 #### Creating an Organization
 
-*On the "Organizations and channels" menu choose "Organization" and click on the "add organization" button.
+*On the "Organizations and channels" menu choose "Organization" and click on the "add Organization" button.
 
 1. **Name:** Add a name for your organization. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
 2. **Plan:** From the dropdown choose the plan previously created.
@@ -66,6 +66,21 @@
 
 ![¡](docs/auth.png)
 
+#### Enable Cloudfront Token Authentication (Signed Urls)
+
+*Cloudfront can add a layer of security using it's "SignedUrls" feature, a key pair is needed in order to encrypt and decrypt a token, said token is added as a query param at the end of the cloudfront url used to get the media. If the token is missing or incorrect the viewer cannot access it.
+
+**Steps to enable "SignedURls":
+First a RSA Key pair is needed, in this example will use OpenSSL but there are other ways to create the keys. 
+
+1. We can create the key pair with these command:
+
+openssl genrsa -out private_key.pem 2048
+
+
+1. On the AWS Console, go to the Cloudfront service and on the left menu, go onto the "key management" and inside is the "key groups", click on it.
+2. Click on the "Create key group" button, on the next menu a Name is needed for the key pair
+
 #### Periodic Tasks Configuration
 
 *All kind of tasks can be set to run periodically. This can be done on the "Periodic Tasks" menu.
@@ -73,8 +88,8 @@
 1. **Clocked:** Here an specific date and hour can be set to run a task.
 2. **Crontabs** Cron configuration, the cron can be configured to run at specific months of the year, specific days of the week, and even specify down to the minute when a particular task should be executed.
 3. **Intervals:** Set intervals to wait before running the same task again, it can be set in days, hours, minutes, seconds, and microseconds.
-4.**Periodic Tasks** Here a Name must be set for the task, and choose a tasl from "Task(registered)" dropdown. Inside the Schedule menu we can choose from the previously created options when we want the task to be executed.
-5. **Solar Events** The task can be executed on a specific zone, this can be set by adding "Latitue" and "Longitude" and selecting one of the solar events from the dropdown menu.
+4.**Periodic Tasks** Here a Name must be set for the task, and choose a task from the "Task(registered)" menu. On schedule menu, we can choose previous created options so as to schedule the task.
+5. **Solar Events** The task can be executed in a specific zone, this can be set by adding "Latitude" and "Longitude" and selecting one of the solar events from the dropdown menu.
 
 ![¡](docs/periodic-tasks.png)
 
