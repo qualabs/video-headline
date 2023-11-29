@@ -31,13 +31,13 @@ Alternatively, you can build the image locally to deploy a customized version of
 
 3. Once the implementation process has started through the console, you may be asked to confirm with a y/n, please confirm it.
 
-4. The url of the application will be displayed in the console
+4. The url of the application will be displayed in the console.
 
 5. At the end of this deploy process, a superuser will be created to use in the application, you will be asked via console for the data you want to use.
 
 ### Accessing the App
 
-Once the app is deployed you can access the web through the previously mentioned url. If you want to access the Admin web you need to add /admin to the Distribution domain name.
+Once the app is deployed you can access the web through the previously mentioned url. If you want to access the Admin web you need to add /admin to the app base URL.
 
 ## Table of extra contents
 
