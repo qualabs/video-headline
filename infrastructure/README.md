@@ -1,6 +1,6 @@
 # Video Headline CDK Deployment
 # Table of Contents
-- Deployment
+- [Deployment](#Deployment)
     - [Use pre-build image](#Use-pre-build-image)
     - [Use local image](#use-local-image)
 - Destroy
