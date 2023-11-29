@@ -9,17 +9,20 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 
 ## Table of Contents
 
-- [Getting started](#getting-started)
-  - [Global configuration (local and AWS environment)](#global-configuration-local-and-aws-environment)
-    - [Prerequisites](#prerequisites)
-    - [Create .env file](#create-.env-file)
-    - [AWS Configuration](#aws-configuration)
-  - [Running the application in local environment](#running-the-application-in-local-environment)
-    - [Set up and running the application](#set-up-and-running-the-application)
-    - [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
-  - [Running the application in AWS environment](#running-the-application-in-aws-environment)
-  - [Production Environment Tasks (optional)](#production-environment-tasks)
-  - [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
+- Deploy videoheadline to AWS
+- Want to make changes and deploy it?
+- Want to contribute?
+
+- [Global configuration (local and AWS environment)](#global-configuration-local-and-aws-environment)
+  - [Prerequisites](#prerequisites)
+  - [Create .env file](#create-.env-file)
+  - [AWS Configuration](#aws-configuration)
+- [Running the application in local environment](#running-the-application-in-local-environment)
+  - [Set up and running the application](#set-up-and-running-the-application)
+  - [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
+- [Running the application in AWS environment](#running-the-application-in-aws-environment)
+- [Production Environment Tasks (optional)](#production-environment-tasks)
+- [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
 
 ## Getting started
 ### Global configuration (local and AWS environment)
