@@ -10,7 +10,7 @@ system (CMS). It is a deployable solution that leverages the power of AWS servic
 ## Deploy VideoHeadline
 
 Deploy a stable version of VideoHeadline using a pre-built docker-hub image for a quick and easy deployment process.
-Alternatively, you can build the image locally to deploy a customized version of VideoHeadline, changing the code it's configuration files (see [Table of extra contents](#table-of-extra-contents) for more information).
+Alternatively, you can build the image locally to deploy a customized version of VideoHeadline, changing the code and it's configuration files (see [Table of extra contents](#table-of-extra-contents) for more information).
 
 ### Prerequisites
 
