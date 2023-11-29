@@ -23,6 +23,9 @@ To deploy videoheadline to AWS there are two alternatives. The first involves us
     - AWS_SECRET_ACCESS_KEY: AWS secret access key.
     - AWS_SESSION_TOKEN: AWS session token (if required).
 
+   These variables can be found in AWS Command line or programmatic access.
+
+
 3. Once the implementation process has started through the console, you may be asked to confirm with a y/n, please confirm it.
 
 3. The url of the application will be displayed in the console
@@ -73,6 +76,9 @@ Once the app is deployed you can access the web through the previously mentioned
     - AWS_ACCESS_KEY_ID: AWS access key identifier.
     - AWS_SECRET_ACCESS_KEY: AWS secret access key.
     - AWS_SESSION_TOKEN: AWS session token (if required).
+
+   These variables can be found in AWS Command line or programmatic access.
+
 
 ## Destroy deployment using local image
 
