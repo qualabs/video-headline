@@ -89,4 +89,7 @@
   "playerCustomCss":"https://your-css-url/cssFile.css"
 ```
 
-If you do not have a CSS URL, you can serve a folder using the npx serve command: 1. Navigate to the folder containing the CSS file you want to use. 2. Run the command 'npx serve .'. 3. Open the server from the browser (probably http://localhost:5000), find the file, and copy the URL.
+If you do not have a CSS URL, you can serve a folder using the npx serve command: 
+1. Navigate to the folder containing the CSS file you want to use. 
+2. Run the command 'npx serve .'. 
+3. Open the server from the browser (probably http://localhost:5000), find the file, and copy the URL.
