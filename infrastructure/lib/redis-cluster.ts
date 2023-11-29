@@ -21,7 +21,7 @@ export class RedisCluster extends Construct {
 
         // Define construct contents here
         const redis = new CfnCacheCluster(this, 'redis-cluster', {
-            cacheNodeType: 'cache.t2.small',
+            cacheNodeType: 'cache.t2.micro',
             engine: 'redis',
             numCacheNodes: 1,
 

@@ -21,7 +21,6 @@ import {clearVideo} from '../../actions/video'
 import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
-
 export class OperatorRoutes extends Component {
   render () {
     return (
@@ -46,7 +45,6 @@ export class OperatorRoutes extends Component {
 
         <Route exact path='/drop/:video-group_id/' component={VideoUploadPage} />
         <Route exact path='/drop/' component={VideoUploadPage} />
-
         <Route
           exact
           path='/drop-audio/:video-group_id/'
