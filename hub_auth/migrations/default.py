@@ -21,23 +21,7 @@ class Migration(migrations.Migration):
     account_id = media_convert_role_arn.split(':')[4]
     aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
     configuration_folder = os.path.join(os.path.dirname(__file__), 'configuration.samples/')
-    default_user = os.getenv('DEFAULT_USER')
-
-    
-    def assign_user_to_organization(apps, schema_editor,organization_name):
-        User = apps.get_model('hub_auth', 'account')
-        Organization = apps.get_model('organization', 'organization')
-        user = User.objects.get(
-            first_name =Migration.default_user
-        )
-        organization = Organization.objects.get(
-            name=organization_name
-        )
-        user.organization = organization
-        user.save()
-    
-
-            
+      
     def create_AWS_Account(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')
         media_convert_endpoint_url = Migration.get_media_convert_endpoint_url()
@@ -58,17 +42,19 @@ class Migration(migrations.Migration):
 
         
     def create_global_settings(apps, schema_editor):
-        configuration_model = apps.get_model('configuration', 'configuration')
+        from configuration.models import Configuration as configuration_model
+        config = configuration_model()
+        
+        
         file_path = os.path.join(Migration.configuration_folder,'cloud_front_configuration.json')
         if not os.path.exists(file_path):
             return
         
         with open(file_path) as json_file:
-            cloud_front_configuration = {
-                "cloud_front_configuration":json.load(json_file)
-            }
+            config.cloud_front_configuration = json.load(json_file)
         
-        configuration_model.objects.create(**cloud_front_configuration)
+        
+        config.save()
             
         
     def create_default_media_convert_settings(apps, schema_editor):
@@ -132,13 +118,11 @@ class Migration(migrations.Migration):
         import time
         new_organization = Organization()
         new_organization.name = f'Default Organization{math.floor(time.time())}'
+        os.environ['ORGANIZATION_NAME'] = new_organization.name
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
         new_organization.id = 1
         new_organization.save()
-        Migration.assign_user_to_organization(apps, schema_editor,new_organization.name)
-
-    
             
     def add_interval_schedule(apps, schema_editor, seconds):
         IntervalSchedule = apps.get_model('django_celery_beat', 'IntervalSchedule')
@@ -151,7 +135,7 @@ class Migration(migrations.Migration):
     def create_periodic_tasks(apps, schema_editor):
         PeriodicTask = apps.get_model('django_celery_beat', 'PeriodicTask')
         PeriodicTask.objects.create(
-            name='Delete Channels',
+            name='Delete Channels ',
             task='hub.tasks.delete_channels',
             interval=Migration.add_interval_schedule(apps, schema_editor, 3600),
             enabled=False,
@@ -180,6 +164,7 @@ class Migration(migrations.Migration):
             interval=Migration.add_interval_schedule(apps, schema_editor, 86400),
             enabled=False,
         )
+        
     
         
     def get_media_convert_endpoint_url():
@@ -199,8 +184,7 @@ class Migration(migrations.Migration):
         ('hub_auth', '0001_initial'),
     ]
     
-
-        
+  
     operations = [
         migrations.RunPython(create_global_settings),
         migrations.RunPython(create_organization),

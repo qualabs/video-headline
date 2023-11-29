@@ -27,8 +27,19 @@ RUN curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubunt
 ENV AWS_ACCESS_KEY_ID=""
 ENV AWS_SECRET_ACCESS_KEY=""
 ENV AWS_SESSION_TOKEN=""
+ENV VIDEOHEADLINE_IMAGE="production"
 
-# CMD ["yarn", "cdk", "bootstrap", "--profile", "$AWS_PROFILE"] && \
-#     ["yarn", "cdk", "deploy", "'*'", "--profile", "$AWS_PROFILE"]
-
-CMD /bin/bash -c 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID && export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY && export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN && python3 create_super_user.py'
+CMD /bin/bash -c ' \
+    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID && \
+    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY && \
+    export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN && \
+    if [ "$PROCESS" = "deploy" ]; then \ 
+        yarn cdk bootstrap && \
+        yarn cdk deploy "*" && \
+        python3 create_super_user.py; \
+    elif [ "$PROCESS" = "destroy" ]; then \
+        yarn cdk destroy "*"; \
+    else \
+        echo "Error: Unknown value for PROCESS. Please set it to 'deploy' or 'destroy'."; \
+    fi \
+    '
