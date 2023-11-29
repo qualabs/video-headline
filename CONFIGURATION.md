@@ -1,6 +1,6 @@
 # Configuration
 
-#### Creating a superuser
+#### Creating another superuser
 
 *This should be executed after executing all docker commands. (check: - [Running the application in local environment](#running-the-application-in-local-environment))
 
@@ -9,11 +9,12 @@
 
 #### AWS Services Configuration in the Admin Web
 
-*In order to apply the following configurations, signing in to admin web is needed.
+*In order to apply the following configurations, signing in to admin web is needed. 
+*The "default" intial configurations are created using the configurations inside the `samples` folder, These files can be used as starting point templates to modify in order to create more advanced configurations for their respective services.
 
-1. **CloudFront Configuration:** Inside `Global configuration`, apply the settings located in `configuration/configuration.samples/cloud_front_configuration`. on the `CloudFront Configuration` input.
-2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` and add a name to it, using the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
-3. **MediaLive Configuration:** Create a `MediaLive Configuration`, add a name to it, and apply the following configurations:
+1. **CloudFront Configuration:** Inside `Global configuration`, modify and then apply the settings located in `configuration/configuration.samples/cloud_front_configuration`. on the `CloudFront Configuration` input.
+2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` and add a name to it, modify and then use the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
+3. **MediaLive Configuration:** Create a `MediaLive Configuration`, add a name to it, modify and then and apply the following configurations:
    - **Input Configuration:** `configuration/configuration.samples/media_live_input_attachments.sample`.
    - **Destination Configuration:** `configuration/configuration.samples/media_live_destinations.sample`.
    - **Encoder Configuration:** `configuration/configuration.samples/media_live_encoder_settings_economic.sample`.
@@ -22,7 +23,7 @@
 
 #### Creating a Plan
 
-*On the `Organizations and Channels` menu choose `Plans` and click on `add plan`button.
+*On the `Organizations and Channels` menu choose `Plans` and click on add plan button.
 
 ![¡](docs/orgs-and-channels.png)
 
