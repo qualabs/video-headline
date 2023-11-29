@@ -123,7 +123,6 @@ class Migration(migrations.Migration):
         new_organization.aws_account_id = aws_account_id
         new_organization.id = 1
         new_organization.save()
-
             
     def add_interval_schedule(apps, schema_editor, seconds):
         IntervalSchedule = apps.get_model('django_celery_beat', 'IntervalSchedule')
