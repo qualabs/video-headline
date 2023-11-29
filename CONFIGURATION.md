@@ -4,8 +4,9 @@
 
 *This should be executed after executing all docker commands. (check: - [Running the application in local environment](#running-the-application-in-local-environment))
 
-1. Create a superuser for admin access running `python manage.py createsuperuser`.
-2. Go to `http://localhost:8010/admin` and sign in with the superuser credentials.
+1. If not done already, run `docker exec -it video-hub bash` to access the video-hub container.
+2. Create a superuser for admin access running `python manage.py createsuperuser`.
+3. Go to `http://localhost:8010/admin` and sign in with the superuser credentials.
 
 #### AWS Services Configuration in the Admin Web
 
