@@ -10,7 +10,8 @@
 - [Configuring HTTPS](#configuring-https)
 
 # Deployment
-To deploy videoheadline to AWS there are two alternatives. The first involves using a stable videoheadline version (main), so there is already a built image that exists in docker-hub and the deploy process will use this image. The second alternative involves building the videoheadline image before performing the deploy process, this can be used to make changes locally and to perform a deploy without depending on the version of main
+To deploy VideoHeadline in AWS there are two alternatives. The first involves using a stable VideoHeadline version (main), so there is already a built image that exists in docker-hub and the deploy process will use this image. 
+The second alternative involves building VideoHeadline image before performing  deploy process, this can be used to make changes locally and to perform a deploy without depending on the version of main
 ## Use pre-build image
 ### Prerequisites
 - AWS account (it's not necessary to have any profile configured locally).
