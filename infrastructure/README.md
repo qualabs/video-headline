@@ -16,7 +16,7 @@ The second alternative involves building VideoHeadline image before performing  
 ### Prerequisites
 - AWS account (it's not necessary to have any profile configured locally).
 - Docker running on your machine.
-### Steps to deploy Videoheadline Infrastructure
+### Steps to deploy VideoHeadline Infrastructure
 1. Build deployment image: `docker build -t video-headline-deploy .`
 
 2. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=deploy -it video-headline-deploy`
