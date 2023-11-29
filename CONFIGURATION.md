@@ -28,9 +28,9 @@
 ![¡](docs/orgs-and-channels.png)
 
 1. **Business name:** Add a name for the plan.
-2. **Video transcoding configuration:** From the selector choose the configuration with the name previously created.
-2. **Audio transcoding configuration:** From the selector choose the configuration with the name previously created.
-3. **MediaLive Configuration:** From the dropdown choose the configuration needed.
+2. **Video transcoding configuration:** From the menu choose the configuration with the name previously created.
+2. **Audio transcoding configuration:** From the menu choose the configuration with the name previously created.
+3. **MediaLive Configuration:** From the menu choose the configuration needed.
 
 ![¡](docs/plan.png)
 
@@ -54,8 +54,8 @@
 *On the "Organizations and channels" menu choose "Organization" and click on the "add Organization" button.
 
 1. **Name:** Add a name for your organization. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
-2. **Plan:** From the dropdown choose the plan previously created.
-3. **AWS Account:** From the dropdown choose the AWS Account previously created.
+2. **Plan:** From the menu choose the plan previously created.
+3. **AWS Account:** From the menu choose the AWS Account previously created.
 
 ![¡](docs/organization.png)
 
@@ -75,7 +75,7 @@
 2. **Crontabs** Cron configuration, the cron can be configured to run at specific months of the year, specific days of the week, and even specify down to the minute when a particular task should be executed.
 3. **Intervals:** Set intervals to wait before running the same task again, it can be set in days, hours, minutes, seconds, and microseconds.
 4.**Periodic Tasks** Here a Name must be set for the task, and choose a task from the "Task(registered)" menu. On schedule menu, we can choose previous created options so as to schedule the task.
-5. **Solar Events** The task can be executed in a specific zone, this can be set by adding "Latitude" and "Longitude" and selecting one of the solar events from the dropdown menu.
+5. **Solar Events** The task can be executed in a specific zone, this can be set by adding "Latitude" and "Longitude" and selecting one of the solar events from the menu.
 
 ![¡](docs/periodic-tasks.png)
 ![¡](docs/tasks.png)
