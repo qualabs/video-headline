@@ -1,9 +1,3 @@
----
-runme:
-  id: 01HGE0ZDMVJFAC0WHX7TBH7T9C
-  version: v2.0
----
-
 # Video Headline - Contributing
 
 ## Table of Contents
@@ -38,20 +32,22 @@ To deploy this stack, follow this steps:
 This deployment will set up:
 
 - Api User with permissions for:
-   - S3
-   - Sns
-   - MediaConvert
-   - MediaLive
-   - Cloudfront
-   - Cloudwatch
+
+  - S3
+  - Sns
+  - MediaConvert
+  - MediaLive
+  - Cloudfront
+  - Cloudwatch
 
 - Media Convert Role with permissions for:
-   - Api Gateway
-   - S3
+
+  - Api Gateway
+  - S3
 
 - Media Live Role with permissions for:
-   - MediaLive
-   - Cloudwatch
+  - MediaLive
+  - Cloudwatch
 
 #### Set up the application in local environment
 
@@ -69,7 +65,7 @@ Create a .env file at the root of the project with all the variables defined in 
 4. `AWS_MEDIA_CONVERT_ENDPOINT`: these variables can be found in AWS Console > AWS Elemental MediaConvert > Account
 5. `BASE_URL`: App base endpoint
 
-__Optional: APM_SERVICE_NAME, APM_SECRET_TOKEN, APM_SERVER_URL__: optional Elastic APM credentials for monitoring the application.
+**Optional: APM_SERVICE_NAME, APM_SECRET_TOKEN, APM_SERVER_URL**: optional Elastic APM credentials for monitoring the application.
 
 #### Running the application
 
@@ -130,7 +126,7 @@ Follow the steps below to set up ESLint for linting React code in Visual Studio 
 <img src="docs/prettier_eslint_extension.png" alt="drawing" width="400"/>
 
 - Accessing settings:
-   - To open the command palette in Visual Studio Code, press Ctrl + Shift + P and select:
+  - To open the command palette in Visual Studio Code, press Ctrl + Shift + P and select:
 
 <img src="docs/vsc_settings.png" alt="drawing" width="400"/>
 
