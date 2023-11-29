@@ -1,4 +1,4 @@
-# Video Headline CDK Deployment
+# VideoHeadline CDK Deployment
 # Table of Contents
 - [Deployment](#Deployment)
     - [Use pre-build image](#Use-pre-build-image)
