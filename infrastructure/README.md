@@ -61,7 +61,7 @@ Once the app is deployed you can access the web through the previously mentioned
 - You need to configure your AWS_PROFILE env variable.
 
 #### Running  create_super_user.py script
-To create a superuser run `python create_super_user.py`
+To create a superuser, run `python create_super_user.py`
 
 A superuser with the data configured in create_super_user.sh will be created.
 
@@ -92,5 +92,3 @@ Once the app is deployed you can access the web through the previously mentioned
 -   `yarn cdk deploy` deploy this stack to your default AWS account/region
 -   `yarn cdk diff` compare deployed stack with current state
 -   `yarn cdk synth` emits the synthesized CloudFormation template
-# Configuring HTTPS
-If you want to configure https with a certificate you can put your certificate arn in `/lib/utils/aws.ts`. (https://github.com/qualabs/video-headline/blob/cca91831ef0130ea1fefa53084b949308d55c57e/infrastructure/lib/utils/aws.ts#L25).
