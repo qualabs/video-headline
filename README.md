@@ -17,7 +17,7 @@ Alternatively, you can build the image locally to deploy a customized version of
 - AWS account (it's not necessary to have any profile configured locally).
 - Docker running on your machine.
 
-### Steps to deploy Videoheadline Infrastructure
+### Steps to deploy VideoHeadline Infrastructure
 
 1. Build deployment image: `docker build -t video-headline-deploy .`
 
