@@ -19,9 +19,7 @@ Alternatively, you can build the image locally to deploy a customized version of
 
 ### Steps to deploy VideoHeadline Infrastructure
 
-1. Build deployment image: `docker build -t video-headline-deploy .`
-
-2. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=deploy -it video-headline-deploy`
+1. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=deploy -it qualabs/video-headline-deploy`
 
    - AWS_ACCESS_KEY_ID: AWS access key identifier.
    - AWS_SECRET_ACCESS_KEY: AWS secret access key.
@@ -29,11 +27,11 @@ Alternatively, you can build the image locally to deploy a customized version of
 
    These variables can be found in AWS Command line or programmatic access.
 
-3. Once the implementation process has started through the console, you may be asked to confirm with a y/n, please confirm it.
+2. Once the implementation process has started through the console, you may be asked to confirm with a y/n, please confirm it.
 
-4. The url of the application will be displayed in the console.
+3. The url of the application will be displayed in the console.
 
-5. At the end of this deploy process, a superuser will be created to use in the application, you will be asked via console for the data you want to use.
+4. At the end of this deploy process, a superuser will be created to use in the application, you will be asked via console for the data you want to use.
 
 ### Accessing the App
 

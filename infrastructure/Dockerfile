@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:20
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update  \
-    && pip3 install boto3 \
+    && apt-get install -y python3-boto3 \
     && apt-get install -y expect 
 
 RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
