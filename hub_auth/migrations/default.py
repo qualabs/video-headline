@@ -186,7 +186,8 @@ class Migration(migrations.Migration):
         ('organization', '0001_initial'),
         ('auth', '0009_alter_user_last_name_max_length'),
         ('hub_auth', '0001_initial'),
-        ('organization','0002_auto_20231129_1730')
+        ('organization','0002_auto_20231129_1730'),
+
     ]
     
   

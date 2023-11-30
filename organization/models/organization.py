@@ -12,7 +12,7 @@ from utils import s3
 def get_default_plan_model():
     return Plan.objects.get_or_create(
         name='Default Plan',
-    )[0]
+    )[0].id
 
 
 class Organization(models.Model):
