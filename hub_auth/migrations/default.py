@@ -96,14 +96,18 @@ class Migration(migrations.Migration):
         
     def create_plan(apps, schema_editor):
         plan = apps.get_model('organization', 'Plan')
-        media_convert_settings_id = Migration.create_default_media_convert_settings(apps, schema_editor)
-        plan_default = {"name":'Default Plan',
-                            "medialive_configuration_id": Migration.create_default_media_live_settings(apps, schema_editor),
-                            "video_transcode_configuration_id":media_convert_settings_id,
-                            "audio_transcode_configuration_id" : media_convert_settings_id
-                        }
-                    
-        return plan.objects.create( **plan_default).id
+        plan_default = plan.objects.filter(name='Default Plan')
+        if plan_default.exists():
+            return plan_default[0].id
+        else :
+            media_convert_settings_id = Migration.create_default_media_convert_settings(apps, schema_editor)
+            plan_default = {"name":'Default Plan',
+                                "medialive_configuration_id": Migration.create_default_media_live_settings(apps, schema_editor),
+                                "video_transcode_configuration_id":media_convert_settings_id,
+                                "audio_transcode_configuration_id" : media_convert_settings_id
+                            }
+                        
+            return plan.objects.create( **plan_default).id
         
     def create_organization(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')
@@ -182,6 +186,7 @@ class Migration(migrations.Migration):
         ('organization', '0001_initial'),
         ('auth', '0009_alter_user_last_name_max_length'),
         ('hub_auth', '0001_initial'),
+        ('organization','0002_auto_20231129_1730')
     ]
     
   
