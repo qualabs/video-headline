@@ -105,8 +105,16 @@ class Migration(migrations.Migration):
                                 "video_transcode_configuration_id":media_convert_settings_id,
                                 "audio_transcode_configuration_id" : media_convert_settings_id
                             }
+            from organization.models import Plan
+            new_plan = Plan()
+            new_plan.name = 'Default Plan'
+            new_plan.id = 1
+            new_plan.medialive_configuration_id = Migration.create_default_media_live_settings(apps, schema_editor)
+            new_plan.video_transcode_configuration_id = media_convert_settings_id
+            new_plan.audio_transcode_configuration_id = media_convert_settings_id
+            new_plan.save()
                         
-            return plan.objects.create( **plan_default).id
+            return new_plan.id
         
     def create_organization(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')

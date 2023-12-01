@@ -34,7 +34,7 @@ class Organization(models.Model):
     plan = models.ForeignKey(Plan,
                              models.PROTECT,
                              null=True,
-                             default=None,
+                             default=1,
                              related_name='organizations',
                              verbose_name='Plan')
     config = JSONField(blank=True,
