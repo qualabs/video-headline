@@ -132,7 +132,7 @@ Follow the steps below to set up ESLint for linting React code in Visual Studio 
 
 - Append the following configurations:
 
-```json {"id":"01HGE0ZDMTZ1QSB2P8MF8PGX1Y"}
+```json
 "editor.codeActionsOnSave": { "source.fixAll.eslint": true },
 "editor.formatOnSave": true,
 "[javascriptreact]": {
