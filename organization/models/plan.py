@@ -1,29 +1,29 @@
 from django.db import models
 
-from configuration.models import (
-    MediaConvertConfiguration,
-    MediaLiveConfiguration,
-)
+from configuration.models import MediaConvertConfiguration, MediaLiveConfiguration
+
 
 class Plan(models.Model):
-    name = models.CharField(
-        max_length=100, unique=True, verbose_name='Business name'
-    )
-    description = models.TextField(
-        default='', blank=True, null=True, verbose_name='Description'
-    )
-    video_transcoding = models.FloatField(
-        default=0, verbose_name='Video Transcoding Minutes'
-    )
-    audio_transcoding = models.FloatField(
-        default=0, verbose_name='Audio Transcoding Minutes'
-    )
-    storage = models.FloatField(default=0, verbose_name='Storage (GB)')
-    data_transfer = models.FloatField(default=0, verbose_name='Traffic (GB)')
+    name = models.CharField(max_length=100,
+                            unique=True,
+                            verbose_name='Business name')
+    description = models.TextField(default='',
+                                   blank=True,
+                                   null=True,
+                                   verbose_name='Description')
+    video_transcoding = models.FloatField(default=0,
+                                          verbose_name='Video Transcoding Minutes')
+    audio_transcoding = models.FloatField(default=0,
+                                          verbose_name='Audio Transcoding Minutes')
+    storage = models.FloatField(default=0,
+                                verbose_name='Storage (GB)')
+    data_transfer = models.FloatField(default=0,
+                                      verbose_name='Traffic (GB)')
     video_transcode_configuration = models.ForeignKey(
         MediaConvertConfiguration,
         models.PROTECT,
         null=True,
+        default=None,
         verbose_name='Video transcoding configuration',
         related_name='video_transcode_config',
     )
@@ -32,6 +32,7 @@ class Plan(models.Model):
         MediaConvertConfiguration,
         models.PROTECT,
         null=True,
+        default=None,
         verbose_name='Audio transcoding configuration',
         related_name='audio_transcode_config',
     )
@@ -40,6 +41,7 @@ class Plan(models.Model):
         MediaLiveConfiguration,
         models.PROTECT,
         null=True,
+        default=None,
         verbose_name='MediaLive Configuration',
     )
 

@@ -17,15 +17,10 @@ class Configuration(SingletonModel):
 
 class MediaConvertConfiguration(models.Model):
     name = models.CharField(
-        max_length=100, verbose_name='Name', unique=True, default='Default'
-    )
+        max_length=100, verbose_name='Name', unique=True, default='')
     description = models.TextField(
-        max_length=100, verbose_name='Description', null=True
-    )
-    settings = JSONField(
-        blank=True,
-        verbose_name='MediaConvert Configuration',
-    )
+        max_length=100, verbose_name='Description', null=True)
+    settings = JSONField(blank=True, default={}, verbose_name='MediaConvert Configuration')
 
     def __str__(self):
         return self.name
@@ -36,29 +31,26 @@ class MediaConvertConfiguration(models.Model):
 
 
 class MediaLiveConfiguration(models.Model):
-    name = models.CharField(
-        max_length=100, verbose_name='Name', unique=True, default=''
-    )
+    name = models.CharField(max_length=100,
+                            verbose_name='Name',
+                            unique=True,
+                            default='')
 
-    description = models.TextField(
-        max_length=100, verbose_name='description', null=True
-    )
+    description = models.TextField(max_length=100,
+                                   verbose_name='description',
+                                   null=True)
 
-    source_settings = JSONField(
-        blank=True,
-        verbose_name='Source Settings',
-    )
+    source_settings = JSONField(blank=True,
+                                default={},
+                                verbose_name='Source Settings')
 
-    destination_settings = JSONField(
-        blank=True,
-        verbose_name='Destination Settings',
-    )
+    destination_settings = JSONField(blank=True,
+                                     default={},
+                                     verbose_name='Destination Settings')
 
-    encoder_settings = JSONField(
-        blank=True,
-        verbose_name='Encoder Settings',
-    )
-
+    encoder_settings = JSONField(blank=True,
+                                 default={},
+                                 verbose_name='Encoder Settings')
     def __str__(self):
         return self.name
 
