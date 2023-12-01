@@ -5,47 +5,6 @@ import json
 import os
 
 
-def get_default_media_convert_configuration_settings():
-    file_path = os.path.join(
-        os.path.dirname(__file__),
-        './configuration.samples/media_convert_configuration.sample',
-    )
-
-    with open(file_path) as f:
-        conf_cont = json.load(f)
-        return conf_cont
-
-
-def get_default_media_live_source_settings():
-    file_path = os.path.join(
-        os.path.dirname(__file__),
-        './configuration.samples/media_live_input_attachments.sample',
-    )
-    with open(file_path) as f:
-        conf_cont = json.load(f)
-        return conf_cont
-
-
-def get_default_media_live_destinations_settings():
-    file_path = os.path.join(
-        os.path.dirname(__file__),
-        './configuration.samples/media_live_destinations.sample',
-    )
-    with open(file_path) as f:
-        conf_cont = json.load(f)
-        return conf_cont
-
-
-def get_default_media_live_encoder_settings():
-    file_path = os.path.join(
-        os.path.dirname(__file__),
-        './configuration.samples/media_live_encoder_settings.sample',
-    )
-    with open(file_path) as f:
-        conf_cont = json.load(f)
-        return conf_cont
-
-
 class Configuration(SingletonModel):
     slack_notifications_url = models.URLField(blank=True, null=True)
     cloud_front_configuration = JSONField(
@@ -65,7 +24,6 @@ class MediaConvertConfiguration(models.Model):
     )
     settings = JSONField(
         blank=True,
-        default=get_default_media_convert_configuration_settings,
         verbose_name='MediaConvert Configuration',
     )
 
@@ -88,19 +46,16 @@ class MediaLiveConfiguration(models.Model):
 
     source_settings = JSONField(
         blank=True,
-        default=get_default_media_live_source_settings,
         verbose_name='Source Settings',
     )
 
     destination_settings = JSONField(
         blank=True,
-        default=get_default_media_live_destinations_settings,
         verbose_name='Destination Settings',
     )
 
     encoder_settings = JSONField(
         blank=True,
-        default=get_default_media_live_encoder_settings,
         verbose_name='Encoder Settings',
     )
 

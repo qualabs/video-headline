@@ -8,13 +8,6 @@ from organization.models import AWSAccount
 from organization.models.plan import Plan
 from utils import s3
 
-
-def get_default_plan_model():
-    return Plan.objects.get_or_create(
-        name='Default Plan',
-    )[0].id
-
-
 class Organization(models.Model):
     '''Organization is the top most level entity'''
 
@@ -36,9 +29,8 @@ class Organization(models.Model):
         models.PROTECT,
         null=True,
         related_name='organizations',
-        verbose_name='Plan',
-        default=get_default_plan_model,
-    )
+        verbose_name='Plan'
+       )    ,
     config = JSONField(blank=True, default=dict, verbose_name='Configuration')
     aws_account = models.ForeignKey(
         AWSAccount,
