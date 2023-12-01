@@ -99,13 +99,8 @@ class Migration(migrations.Migration):
         if plan_default.exists():
             return plan_default[0].id
         else :
-            media_convert_settings_id = Migration.create_default_media_convert_settings(apps, schema_editor)
-            plan_default = {"name":'Default Plan',
-                                "medialive_configuration_id": Migration.create_default_media_live_settings(apps, schema_editor),
-                                "video_transcode_configuration_id":media_convert_settings_id,
-                                "audio_transcode_configuration_id" : media_convert_settings_id
-                            }
             from organization.models import Plan
+            media_convert_settings_id = Migration.create_default_media_convert_settings(apps, schema_editor)
             new_plan = Plan()
             new_plan.name = 'Default Plan'
             new_plan.id = 1
