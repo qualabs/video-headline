@@ -148,6 +148,7 @@ export class VideoheadlineStack extends Stack {
         
         console.log("Cloudfront URL: ", videoheadlineCF.domainName)
         new CfnOutput(this, "CfnOutCloudfrontUrl", { value: videoheadlineCF.domainName, description: "CloudFront URL", });
+        process.env.VIDEO_HEADLINE_CDN_URL = videoheadlineCF.domainName
 
         // Containers
         videoHubTaskDefinition.addContainer('videoheadline', {

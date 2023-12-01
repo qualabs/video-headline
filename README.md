@@ -17,13 +17,15 @@ Alternatively, you can build the image locally to deploy a customized version of
 - AWS account (it's not necessary to have any profile configured locally).
 - Docker running on your machine.
 
-### Steps to deploy VideoHeadline Infrastructure
+### Steps to deploy VideoHeadline infrastructure
 
-1. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=deploy -it qualabs/video-headline-deploy`
+1. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e AWS_DEFAULT_REGION=... -e PROCESS=deploy -it qualabs/video-headline-deploy`
 
    - AWS_ACCESS_KEY_ID: AWS access key identifier.
    - AWS_SECRET_ACCESS_KEY: AWS secret access key.
    - AWS_SESSION_TOKEN: AWS session token (if required).
+   - AWS_DEFAULT_REGION: AWS region (optional)
+      - If you don't specify a region, the default AWS region will be used, which is "us-east-1."
 
    These variables can be found in AWS Command line or programmatic access.
 
@@ -36,6 +38,12 @@ Alternatively, you can build the image locally to deploy a customized version of
 ### Accessing the App
 
 Once the app is deployed you can access the web through the previously mentioned url. If you want to access the Admin web you need to add /admin to the app base URL.
+
+### Steps to destroy Videoheadline infrastructure
+
+1. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e AWS_DEFAULT_REGION=... -e PROCESS=destroy -it qualabs/video-headline-deploy`
+
+2. Once the destroy process has started through the console, you may be asked to confirm with a y/n, please confirm it.
 
 ## Table of extra contents
 
