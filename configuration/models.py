@@ -1,9 +1,6 @@
 from django.db import models
 from solo.models import SingletonModel
 from jsonfield import JSONField
-import json
-import os
-
 
 class Configuration(SingletonModel):
     slack_notifications_url = models.URLField(blank=True, null=True)
