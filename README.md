@@ -39,7 +39,7 @@ Alternatively, you can build the image locally to deploy a customized version of
 
 3. The deployment URL of the application will be displayed in the console.
 
-4. A superuser will be created to use in the application, you will be asked via console for the data you want to use. Don't forget the passowrd.
+4. A superuser will be created to use in the application, you will be asked via console for the data you want to use. Don't forget the password.
   
 
 ### Accessing the App
