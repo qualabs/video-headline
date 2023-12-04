@@ -27,7 +27,7 @@ Alternatively, you can build the image locally to deploy a customized version of
 
 ### Steps to deploy VideoHeadline Infrastructure
 
-1. Open a terminal and go to the `infrastructre` folder
+1. Open a terminal and go to the `infrastructure` folder
 
 2. Build deployment image: `docker build -t video-headline-deploy .`
 
