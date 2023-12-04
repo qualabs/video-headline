@@ -20,6 +20,10 @@ VideoHeadline is an open-source Content Management System (CMS), designed to hel
 Deploy a stable version of VideoHeadline using a pre-built docker-hub image for a quick and easy deployment process.
 Alternatively, you can build the image locally to deploy a customized version of VideoHeadline, changing the code and its configuration files (see [Table of extra contents](#table-of-extra-contents) for more information).
 
+The default deployment configures everything you need to run VideoHeadline in AWS using Fargate, S3, MediaServices and CloudFront.
+
+![Videoheadline Demo](docs/vh-default-deployment.png)
+
 ### Prerequisites
 
 - AWS account (it's not necessary to have any profile configured locally).
