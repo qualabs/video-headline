@@ -57,9 +57,9 @@ Once the app is deployed you can access the web through the previously mentioned
 ### Steps to remove VideoHeadline Infrastructure
 
 If you want to remove all the instrastructre in the AWS account just run: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=destroy -it video-headline-deploy`
-* AWS_ACCESS_KEY_ID: AWS access key identifier.
-* AWS_SECRET_ACCESS_KEY: AWS secret access key.
-* AWS_SESSION_TOKEN: AWS session token (if required).
+* `AWS_ACCESS_KEY_ID`: AWS access key identifier.
+* `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
+* `AWS_SESSION_TOKEN`: AWS session token (if required).
 
 
 ## Table of extra contents
