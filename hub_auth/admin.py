@@ -27,4 +27,3 @@ class AccountAdmin(UserAdmin):
 @admin.register(APIKey)
 class APIKeyAdmin(admin.ModelAdmin):
     list_display = ('name', 'account', 'api_key')
-

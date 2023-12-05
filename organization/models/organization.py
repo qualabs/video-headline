@@ -34,7 +34,7 @@ class Organization(models.Model):
     plan = models.ForeignKey(Plan,
                              models.PROTECT,
                              null=True,
-                             default=None,
+                             default=1,
                              related_name='organizations',
                              verbose_name='Plan')
     config = JSONField(blank=True,
@@ -102,7 +102,6 @@ def org_post_save_receiver(sender, instance, created, **kwargs):
     if created:
         # Create a default channel
         from organization.models import Channel
-        bucket_name = instance.bucket_name
         s3.create_bucket(instance)
 
         Channel.objects.create(organization=instance, name="Default")

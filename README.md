@@ -2,119 +2,74 @@
 
 ![¡](docs/videoheadline_banner.jpg)
 
-VideoHeadline is an open-source content management
-system (CMS). It is a deployable solution that leverages the power of AWS services to manage and deliver both Video on Demand (VOD) and live video content. Built on the Django web framework, this CMS offers a user-friendly interface for content creators and administrators, making it easy to organize, publish and monitor video content.
+VideoHeadline is an open-source Content Management System (CMS), designed to help you manage and monetize video content. It is a deployable solution that leverages the power of AWS services to manage and deliver both Video on Demand (VOD) and live video content. Built on the Django web framework, this CMS offers a user-friendly interface for content creators and administrators, making it easy to organize, publish and monitor video content.
 
-![Browsing the App](docs/dashboard.gif)
+![Videoheadline Demo](docs/videoheadline.gif)
 
-## Table of Contents
+## VideoHeadline Key features
+* Distribute VOD and Live videos in HLS format worldwide.
+* Uplode, transcode and publish VOD and Live content.
+* Embed your videos with the built-in video player.
+* VAST Support for Cient side AD insertion
+* AD blocker detection
+* Restful API
+* Easy to desploy in your AWS account with just 1 command.
 
-- [Getting started](#getting-started)
-  - [Global configuration (local and AWS environment)](#global-configuration-local-and-aws-environment)
-    - [Prerequisites](#prerequisites)
-    - [Create .env file](#create-.env-file)
-    - [AWS Configuration](#aws-configuration)
-  - [Running the application in local environment](#running-the-application-in-local-environment)
-    - [Set up and running the application](#set-up-and-running-the-application)
-    - [AWS Services Configuration in the Admin Web](#aws-services-configurationiin-the-admin-web)
-  - [Running the application in AWS environment](#running-the-application-in-aws-environment)
-  - [Production Environment Tasks (optional)](#production-environment-tasks)
-  - [Custom CSS Configuration for the Player in an Organization](#Custom-css-configuration-for-the-player-in-an-organization)
+## Deploy VideoHeadline
 
-## Getting started
-### Global configuration (local and AWS environment)
-#### Prerequisites
+Deploy a stable version of VideoHeadline using a pre-built docker-hub image for a quick and easy deployment process.
+Alternatively, you can build the image locally to deploy a customized version of VideoHeadline, changing the code and its configuration files (see [Table of extra contents](#table-of-extra-contents) for more information).
 
-- AWS Account: Necessary for hosting and delivering video content.
-- Docker and Docker compose: Video Headline runs inside Docker containers, so it is necessary to have Docker and Docker Compose installed.
-- Yarn and Node.js(v10): Required to deploy AWS configurations and build the playerReact component.
-- Python: Necessary for running Django and other Python-based tools.
-- AWS CLI: Useful for configuring and managing AWS services from the command line.
+The default deployment configures everything you need to run VideoHeadline in AWS using Fargate, S3, MediaServices and CloudFront.
 
-#### Create .env file
+![Videoheadline Demo](docs/vh-default-deployment.png)
 
-Create a .env file at the root of the project with all the variables defined in the .env-example file and their respective values.
+### Prerequisites
 
-#### AWS Configuration
-Video Headline requires some IAM roles and permissiones. To automate the configuration, there's CDK code to create a Stack with all the requirements.
+- AWS account (it's not necessary to have any profile configured locally).
+- Docker running on your machine.
 
-To deploy this stack, follow this steps:
-1. Navigate to the infrastructure directory.
-2. Run the command: `yarn cdk deploy AwsConfigurationStack`.
+### Steps to deploy VideoHeadline infrastructure
 
-This deployment will set up:
+1. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=deploy --rm -it qualabs/video-headline-deploy`
 
-- Api User with permissions for:
-  - S3
-  - Sns
-  - MediaConvert
-  - MediaLive
-  - Cloudfront
-  - Cloudwatch
-- Media Convert Role with permissions for:
-  - Api Gateway
-  - S3
-- Media Live Role with permissions for:
-  - MediaLive
-  - Cloudwatch
+   - `AWS_ACCESS_KEY_ID`: AWS access key identifier.
+   - `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
+   - `AWS_SESSION_TOKEN`: AWS session token (if required).
+   - `AWS_DEFAULT_REGION`: AWS region (optional)
+    - If you don't specify a region, the default AWS region will be used, which is "us-east-1."
 
-### Running the application in local environment
-To set up the project locally, follow the instructions provided below. For AWS deployment, refer to the README within the Infrastructure folder.
+   These variables can be found in AWS Command line or programmatic access.
 
-**Environment Variables:** Add `AWS_MEDIA_CONVERT_ROLE` and `AWS_MEDIA_LIVE_ROLE` with respective ARNs to your Docker Compose file based on your environment (`docker-compose.dev.yml` or `docker-compose.prod.yml`).
+2. Once the implementation process has started through the console, you may be asked to confirm with a y/n, please confirm it.
 
-#### Set up and running the application
+3. The deployment URL of the application will be displayed in the console.
 
-Follow these steps to set up and run the application locally:
+4. A superuser will be created to use in the application, you will be asked via console for the data you want to use. Don't forget the password.
+  
 
-1. Create a symbolic link to the appropriate Docker Compose file (`docker-compose.dev.yml` or `docker-compose.prod.yml`) for your environment using `ln -s docker-compose.dev.yml docker-compose.yml`.
-2. Run `docker-compose up`.
-3. Run `docker exec -it video-hub bash` to access the video-hub container.
-4. Create a superuser for admin access running `python manage.py createsuperuser`.
-5. Go to `http://localhost:8010/admin` and log in with the superuser credentials.
+### Accessing the App
 
-#### AWS Services Configuration in the Admin Web
+Once the app is deployed you can access the web through the previously mentioned url.
 
-1. **CloudFront Configuration:** In the Global configuration, inside is the `CloudFront Configuration, apply the settings located in `configuration/configuration.samples/cloud_front_configuration.sample`.
-2. **MediaConvert Configuration:** Create a `MediaConvert Configuration` named `default`, using the settings found in `configuration/configuration.samples/media_convert_configuration.sample`.
-3. **MediaLive Configuration:** Create `MediaLive Configuration`, also named `default`, and apply the following configurations:
-   - **Input Configuration:** `configuration/configuration.samples/media_live_input_attachments.sample`.
-   - **Destination Configuration:** `configuration/configuration.samples/media_live_destinations.sample`.
-   - **Encoder Configuration:** `configuration/configuration.samples/media_live_encoder_settings_economic.sample`.
+  * CMS UI:  `https://<deployment-url>/`
+  * Admin UI:  `https://<deployment-url>/admin/`
+  * API Docs:  `https://<deployment-url>/api/v1/swagger/`
 
-![¡](docs/aws-services-configuration.png)
+### Steps to remove VideoHeadline Infrastructure
 
-4. **Plan Creation:** Create a test `Plan`, using the MediaLive and MediaConvert configurations.
-5. **AWS Account:** Create a test `AWS Account`, and ensure it's equipped with the appropriate AWS credentials (These should be the API user's credentials created in AWS Configuration section which are available in AWS Secrets Manager).
-6. **Organization:** Create a test `Organization`. This step will create an s3 bucket with the name of the organization, the name must follow the bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html .
+If you want to remove all the instrastructre in the AWS account just run: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=destroy --rm -it qualabs/video-headline-deploy`
+   - `AWS_ACCESS_KEY_ID`: AWS access key identifier.
+   - `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
+   - `AWS_SESSION_TOKEN`: AWS session token (if required).
+   - `AWS_DEFAULT_REGION`: AWS region (optional)
+    - If you don't specify a region, the default AWS region will be used, which is "us-east-1."
 
-![¡](docs/orgs-and-channels.png)
+## Table of extra contents
 
-7. **Superuser Association:** Assign the newly created Organization to the superuser to enable authentication via the User web (`http://localhost:3000/`). This can be done from the user detail section in the admin panel.
-
-![¡](docs/auth.png)
-
-### Running the application in AWS environment
-For AWS deployment, refer to the [README](infrastructure/README.md) within the Infrastructure folder.
-
-### Production Environment Tasks (optional)
-
-1. Schedule the following `Periodic Tasks` for MediaLive, CloudFront, and bill renewals:
-   - `delete_channels` every hour.
-   - `delete_inputs` every hour.
-   - `check_live_cuts` every minute.
-   - `delete_distributions` daily.
-   - `bill_renewal` on the first day of every month.
-2. If enabling statistics, set up qtracking for the organization.
-3. If there are any modifications to the player, it’s essential to generate a new build.
-
-### Custom CSS Configuration for the Player in an Organization
-
-1. Have a URL ready with a CSS file to test (not a local path).
-2. In the Organization, add the following line in the organization configuration field:
-
-```
-  "playerCustomCss":"https://your-css-url/cssFile.css"
-```
-
-If you do not have a CSS URL, you can serve a folder using the npx serve command: 1. Navigate to the folder containing the CSS file you want to use. 2. Run the command 'npx serve .'. 3. Open the server from the browser (probably http://localhost:5000), find the file, and copy the URL.
+- Deploy VideoHeadline to AWS
+  - See [README.md](infrastructure/README.md) within the Infrastructure folder.
+- Want to develop locally and contribute?
+  - See [CONTRIBUTING.md](CONTRIBUTING.md).
+- Want to personalize the AWS Services configurations, users and other settings?
+  - See [Configuration.md](CONFIGURATION.md).

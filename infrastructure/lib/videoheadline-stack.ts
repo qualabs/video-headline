@@ -13,13 +13,13 @@ import {
     RemovalPolicy,
     aws_cloudfront,
     aws_cloudfront_origins,
+    CfnOutput,
 } from 'aws-cdk-lib';
 import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
 import { join } from 'path';
 import * as ecrdeploy from 'cdk-ecr-deployment';
 import { taskDefinitionEnvironment, videoHubtaskDefinitionEnvironment, qhubDevCertArn } from './utils/aws';
 import { RedisCluster } from './redis-cluster';
-import * as kms from 'aws-cdk-lib/aws-kms';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 const engineVersion = db.PostgresEngineVersion.of('11.21', '11');
@@ -30,6 +30,8 @@ export interface VideoheadlineStackProps extends StackProps {
     mediaLiveRole: iam.Role;
     awsConfigSecret: sm.ISecret;
 }
+
+const isProduction = process.env.VIDEOHEADLINE_IMAGE === 'production';
 
 export class VideoheadlineStack extends Stack {
     vpc: ec2.IVpc;
@@ -60,13 +62,10 @@ export class VideoheadlineStack extends Stack {
             vpc: this.vpc,
             sg: securityGroup,
         });
-        const ksmEncryptionKey = new kms.Key(this, 'ECSClusterKey', {
-            enableKeyRotation: true,
-        });
+
         const vhCluster = new ecs.Cluster(this, 'VideoheadlineCluster', {
             clusterName: 'Videoheadline-cluster',
             vpc: this.vpc,
-            executeCommandConfiguration: { kmsKey: ksmEncryptionKey },
         });
 
         //Task definitions
@@ -74,7 +73,7 @@ export class VideoheadlineStack extends Stack {
             this,
             'celeryTask',
             {
-                memoryLimitMiB: 2048,
+                memoryLimitMiB: 1024,
                 cpu: 512,
             }
         );
@@ -87,6 +86,21 @@ export class VideoheadlineStack extends Stack {
             }
         );
 
+        // Adding role to enable connection to containers
+        const ecsTaskRole = new iam.Role(this, "EcsTaskRole", {
+            roleName: "EcsTaskRole",
+            assumedBy: new iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+
+        })
+        ecsTaskRole.addToPolicy(
+            new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: ['ssmmessages:CreateControlChannel', 'ssmmessages:CreateDataChannel', 'ssmmessages:OpenControlChannel', 'ssmmessages:OpenDataChannel'],
+                resources: ['*']
+            })
+        );
+        ecsTaskRole.grantAssumeRole(new iam.ServicePrincipal("ecs-tasks.amazonaws.com"))
+
         // Adding policies to enable connection to containers
         videoHubTaskDefinition.addToTaskRolePolicy(
             new iam.PolicyStatement({
@@ -95,18 +109,12 @@ export class VideoheadlineStack extends Stack {
                 resources: ['*']
             }),
         );
-        videoHubTaskDefinition.addToTaskRolePolicy(
-            new iam.PolicyStatement({
-                effect: iam.Effect.ALLOW,
-                actions: ['kms:Decrypt'],
-                resources: [ksmEncryptionKey.keyArn]
-            }),
-        );
 
         // ECR (Elastic Container Registry) repository
         const vhEcr = new ecr.Repository(this, 'vhRepository', {
             repositoryName: 'vh-repository',
             removalPolicy: RemovalPolicy.DESTROY,
+            autoDeleteImages: true
         });
 
         const vhLoadBalancer = new elb.ApplicationLoadBalancer(
@@ -137,7 +145,10 @@ export class VideoheadlineStack extends Stack {
             },
             comment: 'Videoheadline',
         });
-
+        
+        console.log("Cloudfront URL: ", videoheadlineCF.domainName)
+        new CfnOutput(this, "CfnOutCloudfrontUrl", { value: videoheadlineCF.domainName, description: "CloudFront URL", });
+        process.env.VIDEO_HEADLINE_CDN_URL = videoheadlineCF.domainName
 
         // Containers
         videoHubTaskDefinition.addContainer('videoheadline', {
@@ -284,17 +295,17 @@ export class VideoheadlineStack extends Stack {
         });
 
         // Creation of the Docker image
-        const vhImage = new DockerImageAsset(this, 'MyBuildImage', {
+        const vhImage = isProduction ? 'qualabs/video-headline:latest' : new DockerImageAsset(this, 'VideoHeadlineImage', {
             directory: join(__dirname, '../../'),
             exclude: ['/infrastructure/cdk.out'],
-        });
+        }).imageUri;
 
         // Deploying Docker image to the ECR repository
         const vhImageDeploy = new ecrdeploy.ECRDeployment(
             this,
             'VideohealineDockerImage',
             {
-                src: new ecrdeploy.DockerImageName(vhImage.imageUri),
+                src: new ecrdeploy.DockerImageName(vhImage),
                 dest: new ecrdeploy.DockerImageName(
                     vhEcr.repositoryUriForTag('latest')
                 ),
