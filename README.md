@@ -29,13 +29,15 @@ The default deployment configures everything you need to run VideoHeadline in AW
 - AWS account (it's not necessary to have any profile configured locally).
 - Docker running on your machine.
 
-### Steps to deploy VideoHeadline Infrastructure
+### Steps to deploy VideoHeadline infrastructure
 
 1. Run deployment: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=deploy --rm -it qualabs/video-headline-deploy`
 
    - `AWS_ACCESS_KEY_ID`: AWS access key identifier.
    - `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
    - `AWS_SESSION_TOKEN`: AWS session token (if required).
+   - `AWS_DEFAULT_REGION`: AWS region (optional)
+    - If you don't specify a region, the default AWS region will be used, which is "us-east-1."
 
    These variables can be found in AWS Command line or programmatic access.
 
@@ -56,11 +58,12 @@ Once the app is deployed you can access the web through the previously mentioned
 
 ### Steps to remove VideoHeadline Infrastructure
 
-If you want to remove all the instrastructre in the AWS account just run: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=destroy -it video-headline-deploy`
-* `AWS_ACCESS_KEY_ID`: AWS access key identifier.
-* `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
-* `AWS_SESSION_TOKEN`: AWS session token (if required).
-
+If you want to remove all the instrastructre in the AWS account just run: `docker run -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... -e AWS_SESSION_TOKEN=... -e PROCESS=destroy --rm -it qualabs/video-headline-deploy`
+   - `AWS_ACCESS_KEY_ID`: AWS access key identifier.
+   - `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
+   - `AWS_SESSION_TOKEN`: AWS session token (if required).
+   - `AWS_DEFAULT_REGION`: AWS region (optional)
+    - If you don't specify a region, the default AWS region will be used, which is "us-east-1."
 
 ## Table of extra contents
 
