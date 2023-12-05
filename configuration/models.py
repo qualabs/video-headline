@@ -2,11 +2,11 @@ from django.db import models
 from solo.models import SingletonModel
 from jsonfield import JSONField
 
-
 class Configuration(SingletonModel):
     slack_notifications_url = models.URLField(blank=True, null=True)
-    cloud_front_configuration = JSONField(blank=True, default={},
-                                          verbose_name='CloudFront Configuration')
+    cloud_front_configuration = JSONField(
+        blank=True, default={}, verbose_name='CloudFront Configuration'
+    )
 
     class Meta:
         verbose_name = 'Global Configuration'
@@ -48,7 +48,6 @@ class MediaLiveConfiguration(models.Model):
     encoder_settings = JSONField(blank=True,
                                  default={},
                                  verbose_name='Encoder Settings')
-
     def __str__(self):
         return self.name
 

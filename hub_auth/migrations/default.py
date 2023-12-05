@@ -10,7 +10,6 @@ import boto3
 import os 
 import json 
 
-
 class Migration(migrations.Migration):
 
     initial = True
@@ -96,14 +95,21 @@ class Migration(migrations.Migration):
         
     def create_plan(apps, schema_editor):
         plan = apps.get_model('organization', 'Plan')
-        media_convert_settings_id = Migration.create_default_media_convert_settings(apps, schema_editor)
-        plan_default = {"name":'Default Plan',
-                            "medialive_configuration_id": Migration.create_default_media_live_settings(apps, schema_editor),
-                            "video_transcode_configuration_id":media_convert_settings_id,
-                            "audio_transcode_configuration_id" : media_convert_settings_id
-                        }
-                    
-        return plan.objects.create( **plan_default).id
+        plan_default = plan.objects.filter(name='Default Plan')
+        if plan_default.exists():
+            return plan_default[0].id
+        else :
+            from organization.models import Plan
+            media_convert_settings_id = Migration.create_default_media_convert_settings(apps, schema_editor)
+            new_plan = Plan()
+            new_plan.name = 'Default Plan'
+            new_plan.id = 1
+            new_plan.medialive_configuration_id = Migration.create_default_media_live_settings(apps, schema_editor)
+            new_plan.video_transcode_configuration_id = media_convert_settings_id
+            new_plan.audio_transcode_configuration_id = media_convert_settings_id
+            new_plan.save()
+                        
+            return new_plan.id
         
     def create_organization(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')
@@ -118,7 +124,6 @@ class Migration(migrations.Migration):
         import time
         new_organization = Organization()
         new_organization.name = f'Default Organization{math.floor(time.time())}'
-        os.environ['ORGANIZATION_NAME'] = new_organization.name
         new_organization.plan_id = Migration.create_plan(apps, schema_editor)
         new_organization.aws_account_id = aws_account_id
         new_organization.id = 1
@@ -179,14 +184,13 @@ class Migration(migrations.Migration):
             return None
 
     dependencies = [
-        ('organization', '0001_initial'),
         ('auth', '0009_alter_user_last_name_max_length'),
         ('hub_auth', '0001_initial'),
+        ('organization', '0001_initial'),
     ]
-    
-  
+
     operations = [
         migrations.RunPython(create_global_settings),
         migrations.RunPython(create_organization),
-        migrations.RunPython(create_periodic_tasks),
+        migrations.RunPython(create_periodic_tasks),     
     ]
