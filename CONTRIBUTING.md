@@ -32,15 +32,19 @@ To deploy this stack, follow this steps:
 This deployment will set up:
 
 - Api User with permissions for:
+
   - S3
   - Sns
   - MediaConvert
   - MediaLive
   - Cloudfront
   - Cloudwatch
+
 - Media Convert Role with permissions for:
+
   - Api Gateway
   - S3
+
 - Media Live Role with permissions for:
   - MediaLive
   - Cloudwatch
@@ -55,8 +59,7 @@ Create a .env file at the root of the project with all the variables defined in 
 
 ##### .env variables
 
-1. `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`: Database credentials for the PostgreSQL database.
-   **Note:** If you need to change the database credentials, you need to modify the values in the .env file and also the line 13 in the docker-commands/db_init/init.sh file (`CREATE USER qualabs WITH PASSWORD 'yVm=7>GQ';`) with your new values, since the file does not use the .env variables.
+1. `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`: Database user credentials for the PostgreSQL database.
 2. `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`: these variables can be found in AWS Console > AWS Secret Manager > Secrets > ApiUserSecret
 3. `AWS_MEDIA_CONVERT_ROLE`, `AWS_MEDIA_LIVE_ROLE`: these variables can be found in AWS Console > IAM > Roles > MediaConvertRole, MediaLiveAccessRole > ARN
 4. `AWS_MEDIA_CONVERT_ENDPOINT`: these variables can be found in AWS Console > AWS Elemental MediaConvert > Account
@@ -128,15 +131,16 @@ Follow the steps below to set up ESLint for linting React code in Visual Studio 
 <img src="docs/vsc_settings.png" alt="drawing" width="400"/>
 
 - Append the following configurations:
-  ```json
-  "editor.codeActionsOnSave": { "source.fixAll.eslint": true },
-  "editor.formatOnSave": true,
-  "[javascriptreact]": {
-  	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    },
-    "[json]": {
-  	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  }
-  ```
+
+```json
+"editor.codeActionsOnSave": { "source.fixAll.eslint": true },
+"editor.formatOnSave": true,
+"[javascriptreact]": {
+	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[json]": {
+	"editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+}
+```
 
 With these configurations, your React code will be automatically linted and formatted.
