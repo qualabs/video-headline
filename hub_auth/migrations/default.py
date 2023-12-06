@@ -17,13 +17,15 @@ class Migration(migrations.Migration):
     aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
     media_convert_role_arn = os.getenv('AWS_MEDIA_CONVERT_ROLE')
     media_live_role_arn = os.getenv('AWS_MEDIA_LIVE_ROLE')
+    media_convert_endpoint_url = os.getenv('AWS_MEDIA_CONVERT_ENDPOINT')
     account_id = media_convert_role_arn.split(':')[4]
     aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
     configuration_folder = os.path.join(os.path.dirname(__file__), 'configuration.samples/')
       
     def create_AWS_Account(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')
-        media_convert_endpoint_url = Migration.get_media_convert_endpoint_url()
+        described_endpoint_url = Migration.get_media_convert_endpoint_url()
+        media_convert_endpoint_url = described_endpoint_url if described_endpoint_url else Migration.media_convert_endpoint_url
         aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
 
         aws_account_defaults = {
@@ -181,6 +183,7 @@ class Migration(migrations.Migration):
         try:
             return mediaconvert_client.describe_endpoints()['Endpoints'][0]['Url']
         except Exception as e:
+            print(e)
             return None
 
     dependencies = [
