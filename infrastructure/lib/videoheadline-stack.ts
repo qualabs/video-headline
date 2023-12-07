@@ -31,6 +31,9 @@ export interface VideoheadlineStackProps extends StackProps {
     awsConfigSecret: sm.ISecret;
 }
 
+// isProduction will indicate whether 
+// we build a local image and upload it to ECR
+// or use the existing dockerhub image
 const isProduction = process.env.VIDEOHEADLINE_IMAGE === 'production';
 
 export class VideoheadlineStack extends Stack {
@@ -111,7 +114,7 @@ export class VideoheadlineStack extends Stack {
         );
 
         // ECR (Elastic Container Registry) repository
-        const vhEcr = new ecr.Repository(this, 'vhRepository', {
+        const vhEcr = isProduction ? null : new ecr.Repository(this, 'vhRepository', {
             repositoryName: 'vh-repository',
             removalPolicy: RemovalPolicy.DESTROY,
             autoDeleteImages: true
@@ -148,11 +151,10 @@ export class VideoheadlineStack extends Stack {
         
         console.log("Cloudfront URL: ", videoheadlineCF.domainName)
         new CfnOutput(this, "CfnOutCloudfrontUrl", { value: videoheadlineCF.domainName, description: "CloudFront URL", });
-        process.env.VIDEO_HEADLINE_CDN_URL = videoheadlineCF.domainName
 
         // Containers
         videoHubTaskDefinition.addContainer('videoheadline', {
-            image: new ecs.EcrImage(vhEcr, 'latest'),
+            image: vhEcr ? new ecs.EcrImage(vhEcr, 'latest') : ecs.ContainerImage.fromRegistry('docker.io/qualabs/video-headline:latest'),
             environment: videoHubtaskDefinitionEnvironment(
                 this.database.instanceEndpoint.hostname,
                 qhubRedisCluster.redisEndpoint,
@@ -188,7 +190,7 @@ export class VideoheadlineStack extends Stack {
             },
         });
         vhCeleryTaskDefinition.addContainer('vhCelery', {
-            image: new ecs.EcrImage(vhEcr, 'latest'),
+            image: vhEcr ? new ecs.EcrImage(vhEcr, 'latest') : ecs.ContainerImage.fromRegistry('docker.io/qualabs/video-headline:latest'),
             environment: taskDefinitionEnvironment(
                 this.database.instanceEndpoint.hostname,
                 qhubRedisCluster.redisEndpoint
@@ -223,7 +225,7 @@ export class VideoheadlineStack extends Stack {
             },
         });
         vhCeleryTaskDefinition.addContainer('vhCeleryTranscode', {
-            image: new ecs.EcrImage(vhEcr, 'latest'),
+            image: vhEcr ? new ecs.EcrImage(vhEcr, 'latest') : ecs.ContainerImage.fromRegistry('docker.io/qualabs/video-headline:latest'),
             environment: taskDefinitionEnvironment(
                 this.database.instanceEndpoint.hostname,
                 qhubRedisCluster.redisEndpoint
@@ -258,7 +260,7 @@ export class VideoheadlineStack extends Stack {
             },
         });
         vhCeleryTaskDefinition.addContainer('vhCeleryBeat', {
-            image: new ecs.EcrImage(vhEcr, 'latest'),
+            image: vhEcr ? new ecs.EcrImage(vhEcr, 'latest') : ecs.ContainerImage.fromRegistry('docker.io/qualabs/video-headline:latest'),
             environment: taskDefinitionEnvironment(
                 this.database.instanceEndpoint.hostname,
                 qhubRedisCluster.redisEndpoint
@@ -294,24 +296,6 @@ export class VideoheadlineStack extends Stack {
             },
         });
 
-        // Creation of the Docker image
-        const vhImage = isProduction ? 'qualabs/video-headline:latest' : new DockerImageAsset(this, 'VideoHeadlineImage', {
-            directory: join(__dirname, '../../'),
-            exclude: ['/infrastructure/cdk.out'],
-        }).imageUri;
-
-        // Deploying Docker image to the ECR repository
-        const vhImageDeploy = new ecrdeploy.ECRDeployment(
-            this,
-            'VideohealineDockerImage',
-            {
-                src: new ecrdeploy.DockerImageName(vhImage),
-                dest: new ecrdeploy.DockerImageName(
-                    vhEcr.repositoryUriForTag('latest')
-                ),
-            }
-        );
-
         // ECS services
         const vhCeleryService = new ecs.FargateService(
             this,
@@ -333,8 +317,31 @@ export class VideoheadlineStack extends Stack {
         });
         securityGroup.connections.allowInternally(ec2.Port.allTraffic(), 'Allow internal connections within the cluster');
 
-        vhCeleryService.node.addDependency(vhImageDeploy);
-        videoHubService.node.addDependency(vhImageDeploy);
+        if (!isProduction && vhEcr) {
+            // Create Docker Image
+
+            // Creation of the Docker image
+            let vhImage = new DockerImageAsset(this, 'VideoHeadlineImage', {
+                directory: join(__dirname, '../../'),
+                exclude: ['/infrastructure/cdk.out'],
+            }).imageUri;
+
+            // Deploying Docker image to the ECR repository
+            const vhImageDeploy = new ecrdeploy.ECRDeployment(
+                this,
+                'VideoHeadlineDockerImage',
+                {
+                    src: new ecrdeploy.DockerImageName(vhImage),
+                    dest: new ecrdeploy.DockerImageName(
+                        vhEcr.repositoryUriForTag('latest')
+                    ),
+                }
+            );
+
+            vhCeleryService.node.addDependency(vhImageDeploy);
+            videoHubService.node.addDependency(vhImageDeploy);
+        }
+        
 
         // Load Balancer configuration
 
@@ -385,8 +392,6 @@ export class VideoheadlineStack extends Stack {
                     elb.TargetGroupLoadBalancingAlgorithmType.ROUND_ROBIN,
             });
         }
-        vhCeleryService.node.addDependency(vhImageDeploy);
-        videoHubService.node.addDependency(vhImageDeploy);
 
     };
 
