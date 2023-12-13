@@ -29,8 +29,6 @@ class Migration(migrations.Migration):
                 ('media_convert_endpoint_url', models.URLField(max_length=254, verbose_name='MediaConvert Endpoint URL')),
                 ('media_live_role', models.CharField(max_length=254, verbose_name='MediaLive Role')),
                 ('account_id', models.CharField(max_length=64, null=True, verbose_name='Account Id')),
-                ('cf_private_key', fernet_fields.fields.EncryptedTextField(blank=True, null=True, verbose_name='CloudFront distributions private key')),
-                ('cf_key_pair_id', models.CharField(blank=True, max_length=100, null=True, verbose_name='CloudFront distributions key pair id')),
             ],
             options={
                 'verbose_name': 'AWS Account',
@@ -80,6 +78,7 @@ class Migration(migrations.Migration):
                 ('contact_email', models.CharField(blank=True, default='', max_length=254, verbose_name='Contact Email')),
                 ('bucket_name', models.CharField(default='', editable=False, max_length=100, verbose_name='Bucket')),
                 ('cf_id', models.CharField(default='', editable=False, max_length=100, verbose_name='Cf_id')),
+                ('key_group_id', models.CharField(default='', editable=False, max_length=100, verbose_name='Key_group_id')),
                 ('cf_domain', models.CharField(default='', editable=False, max_length=100, verbose_name='Cf_domain')),
                 ('config', jsonfield.fields.JSONField(blank=True, default=dict, verbose_name='Configuration')),
                 ('upload_enabled', models.BooleanField(default=True, verbose_name='Enabled to upload videos')),

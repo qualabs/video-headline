@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
     def create_AWS_Account(apps, schema_editor):
         aws_account = apps.get_model('organization', 'AWSAccount')
         described_endpoint_url = Migration.get_media_convert_endpoint_url()
-        media_convert_endpoint_url = described_endpoint_url if described_endpoint_url else Migration.media_convert_endpoint_url
+        media_convert_endpoint_url = Migration.media_convert_endpoint_url if Migration.media_convert_endpoint_url else Migration.get_media_convert_endpoint_url()
         aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
 
         aws_account_defaults = {

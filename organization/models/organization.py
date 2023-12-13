@@ -27,6 +27,10 @@ class Organization(models.Model):
                              editable=False,
                              default='',
                              verbose_name='Cf_id')
+    key_group_id = models.CharField(max_length=100,
+                             editable=False,
+                             default='',
+                             verbose_name='Key_group_id')
     cf_domain = models.CharField(max_length=100,
                                  editable=False,
                                  default='',
@@ -86,9 +90,6 @@ def org_pre_save_receiver(sender, instance, **kwargs):
     instance.bucket_name = s3.generate_bucket_name(instance.name)
 
     aws_account = instance.aws_account
-    if instance.security_enabled and not aws_account.cf_private_key and not aws_account.cf_key_pair_id:
-        raise IntegrityError(
-            'You must especified cf_private_key and cf_key_pair_id in AWS Account.')
 
 
 @receiver(post_save, sender=Organization, dispatch_uid='org_saved')

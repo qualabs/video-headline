@@ -37,11 +37,6 @@ class AWSAccount(models.Model):
                                                  verbose_name='MediaConvert Endpoint URL')
     media_live_role = models.CharField(max_length=254, verbose_name='MediaLive Role')
     account_id = models.CharField(max_length=64, verbose_name='Account Id', blank=False, null=True)
-    cf_private_key = EncryptedTextField(verbose_name='CloudFront distributions private key',
-                                        blank=True, null=True)
-    cf_key_pair_id = models.CharField(max_length=100,
-                                      verbose_name='CloudFront distributions key pair id',
-                                      blank=True, null=True)
 
     def __str__(self):
         return self.name
