@@ -21,6 +21,7 @@ import {clearVideo} from '../../actions/video'
 import LiveDetail from './LiveDetail'
 import BillDetail from './BillDetail'
 import Monitor from './Monitor'
+import {FASTChannelDashboard, CreateNewChannel, CreateAdConfiguration, Scheduler} from 'video-headline-fast-channels/dist'  
 export class OperatorRoutes extends Component {
   render () {
     return (
@@ -40,6 +41,39 @@ export class OperatorRoutes extends Component {
         <Route exact path='/video-groups/:id/' component={ChannelDetail} />
         <Route exact path='/video-groups/' component={ChannelList} />
 
+        <Route
+          exact
+          path='/fast-channels/'
+          render={(props) => (
+            <FASTChannelDashboard
+              // location={location}
+              routes={{
+                newChannel: '/fast-channels/channel/new',
+                newAd: '/fast-channels/ad/new',
+                scheduler: '/fast-channels/scheduler'
+              }}
+              aws_api_url={process.env.REACT_APP_API_URL_AWS}
+              api_url={`https:localhost:3000${process.env.REACT_APP_VIDEO_HUB_API}`}
+              {...props}
+            />
+          )}
+        />
+        <Route
+          exact
+          path='/fast-channels/channel/new/'
+          render={(props) => (
+            <CreateNewChannel aws_api_url={process.env.REACT_APP_API_URL_AWS} api_url={process.env.REACT_APP_VIDEO_HUB_API} {...props}/>
+          )}
+        />
+        <Route
+          exact
+          path='/fast-channels/ad/new/'
+          render={(props) => (
+            <CreateAdConfiguration aws_api_url={process.env.REACT_APP_API_URL_AWS} api_url={process.env.REACT_APP_VIDEO_HUB_API} {...props}/>
+          )}
+        />
+        <Route exact path='/fast-channels/scheduler/:id/' render={(props) => <Scheduler aws_api_url={process.env.REACT_APP_API_URL_AWS} api_url={process.env.REACT_APP_VIDEO_HUB_API} {...props}/>}/>
+        
         <Route exact path='/bills/:id/' component={BillDetail} />
         <Route exact path='/bills/' component={BillList} />
 
@@ -60,6 +94,7 @@ export class OperatorRoutes extends Component {
         <Route exact path='/change-password/' component={ChangePassword} />
         <Route exact path='/' component={DashboardOperator} />
         <Route path='*' render={() => <div>{history.push('/')}</div>} />
+
       </Switch>
     )
   }
