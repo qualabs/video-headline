@@ -27,10 +27,10 @@ class Organization(models.Model):
                              editable=False,
                              default='',
                              verbose_name='Cf_id')
-    key_group_id = models.CharField(max_length=100,
+    public_key_id = models.CharField(max_length=100,
                              editable=False,
                              default='',
-                             verbose_name='Key_group_id')
+                             verbose_name='Public_key_id')
     cf_domain = models.CharField(max_length=100,
                                  editable=False,
                                  default='',

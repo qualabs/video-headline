@@ -1,4 +1,5 @@
 from base64 import b64encode
+import json
 
 import datetime
 
@@ -38,20 +39,36 @@ class VideoLink(APIView):
                 # CloudFront distribution URL
                 cf_url = video.channel.cf_domain
 
-                resource_path = f'https://{cf_url}/{video_id}'
+                resource_path = f'https://{cf_url}/{video_id}/hls/output.m3u8'
 
                 # Expiry date for the signed URL
                 expire_date = datetime.datetime(2024, 1, 1)
 
                 # Create a CloudFrontSigner instance with the key group ID
-                cloudfront_signer = CloudFrontSigner(org.key_group_id, rsa_signer)
+                cloudfront_signer = CloudFrontSigner(org.public_key_id, rsa_signer)
+
+                policy = {
+                    "Statement": [
+                        {
+                            "Resource": resource_path,
+                            "Condition": {
+                                "DateLessThan": {
+                                    "AWS:EpochTime": int(expire_date.timestamp())
+                                }
+                            }
+                        }
+                    ]
+                }
+
+                policy_json_str = json.dumps(policy)
 
                 # Create a signed URL that will be valid until the specified expiry date
-                signed_url = cloudfront_signer.generate_presigned_url(resource_path, date_less_than=expire_date)
+                signed_url = cloudfront_signer.generate_presigned_url(resource_path, policy=policy_json_str)
+                print(signed_url)
 
                 base_url, query_params = signed_url.split('?')
 
-                embed_url = f'{settings.BASE_URL}player/embed/{video_id}?{query_params}'
+                embed_url = f'{settings.BASE_URL}player/embed/{video_id}/hls/*?{query_params}'
                 response = {
                     'embed_url': embed_url,
                     'embed_code': f"<iframe src='{embed_url}' width='560' height='315' frameBorder='0' scrolling='no' seamless='seamless' allow='autoplay;fullscreen'> </iframe>",

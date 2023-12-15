@@ -72,7 +72,7 @@ def enable_signed_url_security(modeladmin, request, queryset):
             update_cf_config_with_trusted_signer(cf, dist, key_group_id)
 
         org.security_enabled = True
-        org.key_group_id = key_group_id
+        org.public_key_id = public_key_id
         org.save()
 
 
