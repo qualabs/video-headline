@@ -38,6 +38,7 @@ class MediaSerializer(serializers.ModelSerializer):
             'has_thumbnail',
             'thumbnail_url',
             'media_url',
+            'protocol_type'
         )
 
     def get_job_percent_complete(self, obj):
@@ -68,6 +69,8 @@ class CreateMediaSerializer(serializers.ModelSerializer):
             'video_id',
             'media_type',
             'channel_id',
+            'protocol_type',
+            
         )
 
     def validate_channel_id(self, data):
@@ -119,6 +122,7 @@ class UpdateMediaSerializer(serializers.ModelSerializer):
             'enable_ads',
             'autoplay',
             'has_thumbnail',
+            'protocol_type'
         )
 
     def validate(self, data):

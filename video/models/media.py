@@ -40,6 +40,8 @@ class Media(models.Model):
     AUTOPLAY_CHOICES = (('c', 'Channel'), ('y', 'Yes'), ('n', 'No'))
 
     MEDIA_TYPE_CHOICES = (('audio', 'Audio'), ('video', 'Video'))
+    
+    
 
     video_id = models.CharField(max_length=36,
                                 default=uuid.uuid4,
@@ -119,6 +121,12 @@ class Media(models.Model):
         default=False,
         verbose_name='Has custom thumbnail?'
     )
+    
+    protocol_type = models.CharField(
+        max_length=5,
+        default='hls',
+        verbose_name='Protocol Type'
+    )
 
     storage = models.BigIntegerField(default=0,
                                   verbose_name='Size in bytes')
@@ -147,7 +155,10 @@ class Media(models.Model):
         poster_url = ''
 
         if self.media_type == 'video':
-            media_url = f'https://{channel.cf_domain}/{self.video_id}/hls/output.m3u8'
+            if self.protocol_type == "hls":
+                media_url = f'https://{channel.cf_domain}/{self.video_id}/hls/output.m3u8'
+            elif self.protocol_type == "dash":
+                media_url = f'https://{channel.cf_domain}/{self.video_id}/dash/output.mpd'
             poster_url = f'https://{channel.cf_domain}/{self.video_id}/thumbs/thumb_high.0000000.jpg'
 
         elif self.media_type == 'audio':
