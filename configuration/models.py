@@ -18,9 +18,13 @@ class MediaConvertConfiguration(models.Model):
     description = models.TextField(
         max_length=100, verbose_name='Description', null=True)
     settings = JSONField(blank=True, default={}, verbose_name='MediaConvert Configuration')
-    protocol_type = models.Choices(('hls', 'HLS'),('dash', 'DASH'), verbose_name='Protocol Type',default='hls')
-        
-        
+    protocol_CHOICES = (('hls', 'HLS'),('dash', 'DASH'))
+    streamingProtocol = models.CharField(
+        max_length=5,
+        default='hls',
+        choices=protocol_CHOICES,
+        verbose_name='Streaming Protocol'
+    )
 
     def __str__(self):
         return self.name
