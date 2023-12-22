@@ -8,8 +8,7 @@ from django_fsm import FSMField, transition
 
 from hub_auth.models import Account
 from jsonfield import JSONField
-from organization.models import Channel, Organization, Plan
-from configuration.models import MediaConvertConfiguration
+from organization.models import Channel, Organization
 from utils import cloudfront, mediaconvert, s3
 from . import Tag
 
@@ -117,26 +116,8 @@ class Media(models.Model):
         choices=MEDIA_TYPE_CHOICES,
         verbose_name='Content Type'
     )
-    
-    # created_type2 = models.ForeignKey(storage,
-    #                                models.SET_NULL,
-    #                                related_name='streamingProtocol',
-    #                                verbose_name='Streaming Protocol',
-    #                                null=True
-    # )
 
-    plan1 = models.ForeignKey(Plan,
-                            models.PROTECT,
-                            null=True,
-                            default=1,
-                            related_name='plan',
-                            verbose_name='Plan')
 
-    test = models.ForeignKey(Account,
-                                   models.CASCADE,
-                                   related_name='streamingProtocol',
-                                   verbose_name='test',
-    )
 
     has_thumbnail = models.BooleanField(
         default=False,
