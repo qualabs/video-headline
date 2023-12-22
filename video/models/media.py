@@ -118,7 +118,6 @@ class Media(models.Model):
     )
 
 
-
     has_thumbnail = models.BooleanField(
         default=False,
         verbose_name='Has custom thumbnail?'
