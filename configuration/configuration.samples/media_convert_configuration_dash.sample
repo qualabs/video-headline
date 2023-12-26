@@ -1,49 +1,57 @@
 {
-  "OutputGroups":[
-    {
-      "Name":"DASH ISO",
-      "Outputs":[
-        {
-          "Preset":"System-Ott_Hls_Ts_Avc_Aac_16x9_640x360p_30Hz_0.6Mbps",
-          "NameModifier":"_600"
-        },
-        {
-          "Preset":"System-Ott_Hls_Ts_Avc_Aac_16x9_640x360p_30Hz_1.2Mbps",
-          "NameModifier":"_1200"
-        },
-        {
-          "Preset":"System-Ott_Hls_Ts_Avc_Aac_16x9_1280x720p_30Hz_3.5Mbps",
-          "NameModifier":"_3500"
-        },
-        {
-          "Preset":"System-Ott_Hls_Ts_Avc_Aac_16x9_1280x720p_30Hz_5.0Mbps",
-          "NameModifier":"_5000"
+    "OutputGroups": [
+      {
+        "CustomName": "DASH-ISO-GROUP-SETTINGS",
+        "Name": "DASH ISO",
+        "Outputs": [
+          {
+            "ContainerSettings": {
+              "Container": "MPD"
+            },
+            "VideoDescription": {
+              "Width": 640,
+              "Height": 360,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "MaxBitrate": 800000,
+                  "RateControlMode": "QVBR",
+                  "SceneChangeDetect": "TRANSITION_DETECTION"
+                }
+              }
+            },
+            "NameModifier": "_640x360"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "MPD"
+            },
+            "AudioDescriptions": [
+              {
+                "AudioSourceName": "Audio Selector 1",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 96000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "_audio"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "DASH_ISO_GROUP_SETTINGS",
+          "DashIsoGroupSettings": {
+            "SegmentLength": 30,
+            "Destination": "",
+            "FragmentLength": 2
+          }
         }
-      ],
-      "OutputGroupSettings":{
-        "Type":"Dash_ISO_Group_Settings",
-        "Dash_ISO_Group_Settings":{
-          "ManifestDurationFormat":"INTEGER",
-          "SegmentLength":10,
-          "TimedMetadataId3Period":10,
-          "CaptionLanguageSetting":"OMIT",
-          "Destination":"",
-          "TimedMetadataId3Frame":"PRIV",
-          "CodecSpecification":"RFC_4281",
-          "OutputSelection":"MANIFESTS_AND_SEGMENTS",
-          "ProgramDateTimePeriod":600,
-          "MinSegmentLength":0,
-          "MinFinalSegmentLength":0,
-          "DirectoryStructure":"SINGLE_DIRECTORY",
-          "ProgramDateTime":"EXCLUDE",
-          "SegmentControl":"SEGMENTED_FILES",
-          "ManifestCompression":"NONE",
-          "ClientCache":"ENABLED",
-          "StreamInfResolution":"INCLUDE"
-        }
-      }
-    },
-    {
+      },
+       {
       "CustomName":"Thumbs",
       "Name":"File Group",
       "Outputs":[
@@ -107,28 +115,18 @@
         }
       }
     }
-  ],
-  "AdAvailOffset":0,
-  "Inputs":[
-    {
-      "AudioSelectors":{
-        "Audio Selector 1":{
-          "Offset":0,
-          "DefaultSelection":"DEFAULT",
-          "ProgramSelection":1
-        }
-      },
-      "VideoSelector":{
-        "ColorSpace":"FOLLOW",
-        "Rotate":"AUTO"
-      },
-      "FilterEnable":"AUTO",
-      "PsiControl":"USE_PSI",
-      "FilterStrength":0,
-      "DeblockFilter":"DISABLED",
-      "DenoiseFilter":"DISABLED",
-      "TimecodeSource":"EMBEDDED",
-      "FileInput":""
-    }
-  ]
-}
+    ],
+    "Inputs": [
+      {
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "DefaultSelection": "DEFAULT"
+          }
+        },
+        "VideoSelector": {},
+        "TimecodeSource": "ZEROBASED",
+        "FileInput": ""
+      }
+    ]
+  }
+  

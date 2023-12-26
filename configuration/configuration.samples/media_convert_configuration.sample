@@ -38,8 +38,7 @@
           "ProgramDateTime":"EXCLUDE",
           "SegmentControl":"SEGMENTED_FILES",
           "ManifestCompression":"NONE",
-          "ClientCache":"ENABLED",
-          "StreamInfResolution":"INCLUDE"
+          "ClientCache":"ENABLED"
         }
       }
     },

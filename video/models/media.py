@@ -74,6 +74,12 @@ class Media(models.Model):
                                   related_name='media',
                                   verbose_name='Tags',
                                   blank=True)
+    
+    protocol_type = models.CharField(
+        max_length=5,
+        default='hls',
+        verbose_name='Protocol Type'
+    )
 
     state = FSMField(default=State.WAITING_FILE,
                      verbose_name='Video State',

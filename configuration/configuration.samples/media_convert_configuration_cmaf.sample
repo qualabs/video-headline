@@ -1,0 +1,54 @@
+{
+  "OutputGroups":[
+    {
+      "Name":"CMAF",
+      "Outputs": [
+          {
+            "Preset": "System-Ott_Cmaf_Cmfc_Avc_16x9_Sdr_640x360p_30Hz_0.8Mbps_Cbr",
+            "NameModifier": "_800"
+          },
+          {
+            "Preset": "System-Ott_Cmaf_Cmfc_Avc_16x9_Sdr_1920x1080p_30Hz_8Mbps_Cbr",
+            "NameModifier": "_8000"
+          },
+          {
+            "Preset": "System-Ott_Cmaf_Cmfc_Avc_16x9_Sdr_768x432p_30Hz_1.2Mbps_Cbr",
+            "NameModifier": "_1200"
+          }
+      ],
+      "OutputGroupSettings": {
+          "Type": "CMAF_GROUP_SETTINGS",
+          "CmafGroupSettings": {
+            "SegmentLength": 5,
+            "Destination": "",
+            "FragmentLength": 2,
+            "SegmentControl": "SEGMENTED_FILES"
+          }
+      }
+    }
+  ],
+  "AdAvailOffset":0,
+    "Inputs": [
+      {
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "Offset": 0,
+            "DefaultSelection": "DEFAULT",
+            "ProgramSelection": 1
+          }
+        },
+        "VideoSelector": {
+          "ColorSpace": "FOLLOW",
+          "Rotate": "AUTO"
+        },
+        "FilterEnable": "AUTO",
+        "PsiControl": "USE_PSI",
+        "FilterStrength": 0,
+        "DeblockFilter": "DISABLED",
+        "DenoiseFilter": "DISABLED",
+        "TimecodeSource": "EMBEDDED",
+        "FileInput": ""
+      }
+    ]
+  }
+

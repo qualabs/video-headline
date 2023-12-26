@@ -112,6 +112,9 @@ def set_video_transcode_output_location(conf_cont, organization, media):
         if entry['Name'] == 'Apple HLS':
             entry['OutputGroupSettings']['HlsGroupSettings'][
                 'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/hls/output'
+        elif entry['Name'] == 'DASH ISO':
+            entry['OutputGroupSettings']['DashIsoGroupSettings'][
+                'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/dash/output'
 
         # generated thumbnails location
         elif entry['CustomName'] == 'Thumbs':

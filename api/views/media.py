@@ -58,7 +58,9 @@ class MediaViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
         organization = user.organization
-
+        aws_account = organization.aws_account
+        protocol_type = organization.plan.video_transcode_configuration.streamingProtocol
+        
         if not organization.upload_enabled:
             raise PermissionDenied()
 
@@ -69,6 +71,7 @@ class MediaViewSet(viewsets.ModelViewSet):
             media = Media.objects.create(
                 created_by=user,
                 organization=organization,
+                protocol_type=protocol_type,
                 **input_serializer.validated_data
             )
         except IntegrityError:
