@@ -146,6 +146,7 @@ def create_bucket(organization):
                 "Action": "s3:GetObject",
                 "Resource": [
                     f"arn:aws:s3:::{organization.bucket_name}/*/hls/*",
+                    f"arn:aws:s3:::{organization.bucket_name}/*/dash/*",
                     f"arn:aws:s3:::{organization.bucket_name}/live/*",
                     f"arn:aws:s3:::{organization.bucket_name}/*/thumbs/*",
                     f"arn:aws:s3:::{organization.bucket_name}/*/audio/*",
