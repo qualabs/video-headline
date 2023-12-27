@@ -158,14 +158,16 @@ class Media(models.Model):
         media_url = ''
 
         # Default mime type for video
-        mime_type = 'application/x-mpegURL'
+        
         poster_url = ''
 
         if self.media_type == 'video':
             if self.protocol_type == "hls":
                 media_url = f'https://{channel.cf_domain}/{self.video_id}/hls/output.m3u8'
+                mime_type = 'application/x-mpegURL'
             elif self.protocol_type == "dash":
                 media_url = f'https://{channel.cf_domain}/{self.video_id}/dash/output.mpd'
+                mime_type = 'application/dash+xml'
             poster_url = f'https://{channel.cf_domain}/{self.video_id}/thumbs/thumb_high.0000000.jpg'
 
         elif self.media_type == 'audio':

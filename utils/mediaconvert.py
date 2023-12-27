@@ -115,6 +115,9 @@ def set_video_transcode_output_location(conf_cont, organization, media):
         elif entry['Name'] == 'DASH ISO':
             entry['OutputGroupSettings']['DashIsoGroupSettings'][
                 'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/dash/output'
+        elif entry['Name'] == 'CMAF':   
+            entry['OutputGroupSettings']['CmafGroupSettings'][
+                'Destination'] = f's3://{organization.bucket_name}/{media.video_id}/dash/output'
 
         # generated thumbnails location
         elif entry['CustomName'] == 'Thumbs':
