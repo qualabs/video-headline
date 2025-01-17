@@ -32,6 +32,8 @@ def main():
     password = input("Enter admin password: ")
 
     region_name = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
+    if not region_name:
+        region_name = "us-east-1"
     client = boto3.client("ecs", region_name=region_name)
 
     cluster = "Videoheadline-cluster"
