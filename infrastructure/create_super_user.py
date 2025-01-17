@@ -31,7 +31,8 @@ def main():
     email = input("Enter admin email: ")
     password = input("Enter admin password: ")
 
-    client = boto3.client("ecs", region_name="us-east-1")
+    region_name = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
+    client = boto3.client("ecs", region_name=region_name)
 
     cluster = "Videoheadline-cluster"
     # Get cluster tasks
@@ -61,7 +62,7 @@ def main():
         f'unbuffer aws ecs execute-command --cluster {cluster} \
         --task {task_arn} \
         --container video-hub --interactive \
-        --command "./create_super_user.sh {username} {email} {password}"  --region us-east-1'
+        --command "./create_super_user.sh {username} {email} {password}" --region {region_name}'
     )
     show_message(username, email, password)
 

@@ -33,6 +33,11 @@ ENV AWS_DEFAULT_REGION=""
 ENV VIDEOHEADLINE_IMAGE="production"
 ENV VIDEO_HEADLINE_CDN_URL=""
 
+RUN chmod +x django_shell.sh && \
+    chmod +x create_super_user.sh && \
+    chmod +x start_bash.sh && \
+    chmod +x django_migrate.sh
+
 CMD /bin/bash -c ' \
     export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID && \
     export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY && \
@@ -44,7 +49,15 @@ CMD /bin/bash -c ' \
         python3 create_super_user.py; \
     elif [ "$PROCESS" = "destroy" ]; then \
         yarn cdk destroy "*"; \
+    elif [ "$PROCESS" = "create_super_user" ]; then \
+        python3 create_super_user.py; \   
+    elif [ "$PROCESS" = "django_shell" ]; then \
+        ./django_shell.sh; \     
+    elif [ "$PROCESS" = "django_migrate" ]; then \
+        ./django_migrate.sh; \     
+    elif [ "$PROCESS" = "start_bash" ]; then \
+        ./start_bash.sh; \                           
     else \
-        echo "Error: Unknown value for PROCESS. Please set it to 'deploy' or 'destroy'."; \
+        echo "Error: Unknown value for PROCESS. Please set it to 'deploy', 'destroy', 'create_super_user', 'django_shell', 'django_migrate' or 'start_bash'."; \
     fi \
     '

@@ -22,7 +22,7 @@ import { taskDefinitionEnvironment, videoHubtaskDefinitionEnvironment, qhubDevCe
 import { RedisCluster } from './redis-cluster';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
-const engineVersion = db.PostgresEngineVersion.of('11.21', '11');
+const engineVersion = db.PostgresEngineVersion.of('12.22', '12');
 const storageTypes = db.StorageType.GP2;
 
 export interface VideoheadlineStackProps extends StackProps {
@@ -407,7 +407,7 @@ export class VideoheadlineStack extends Stack {
                 {
                     cidrMask: 24,
                     name: 'VideoheadlineHub/Private',
-                    subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
+                    subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
                 },
             ],
         });
